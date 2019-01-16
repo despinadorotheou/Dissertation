@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">UniFood</string>
+    <string name="email_address">abc123@student.le.ac.uk</string>
+    <string name="password">Password</string>
+    <string name="login_btn">Login</string>
+    <string name="signup_btn">Signup</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="date_of_birth">1998-01-01</string>
+    <string name="back_btn">Back</string>
+    <string name="title_activity_main">Main</string>
+    <string name="title_home">Home</string>
+    <string name="title_search">Search</string>
+    <string name="title_account">Account</string>
+    <string name="title_order">Order</string>
+    <string name="product_list">Product List</string>
+    <string name="error_login">Invalid Email or Password!</string>
+
+</resources>

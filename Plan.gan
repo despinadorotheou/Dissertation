@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="An Android Application of a Canteen Ordering System" company="" webLink="http://" view-date="2018-09-24" view-index="0" gantt-divider-location="571" resource-divider-location="300" version="2.8.9" locale="en_GB">
+    <description><![CDATA[The main purpose of the project is to develop an android application which will be used by students and staff, so they can purchase food from the university’s canteen fast and easy.The main purpose of the project is to develop an android application which will be used by students and staff, so they can purchase food from the university’s canteen fast and easy.]]></description>
+    <view zooming-state="default:7" id="gantt-chart">
+        <field id="tpd3" name="Name" width="257" order="0"/>
+        <field id="tpd4" name="Begin date" width="155" order="1"/>
+        <field id="tpd5" name="End date" width="155" order="2"/>
+        <option id="color.recent"><![CDATA[#cc0099 #ffff00 #ff6600 #ffcccc #ff6666 #660000 #ff0000 #333333]]></option>
+    </view>
+    <view id="resource-table">
+        <field id="0" name="Name" width="210" order="0"/>
+        <field id="1" name="Default role" width="86" order="1"/>
+    </view>
+    <!-- -->
+    <calendars>
+        <day-types>
+            <day-type id="0"/>
+            <day-type id="1"/>
+            <default-week id="1" name="default" sun="0" mon="0" tue="0" wed="0" thu="0" fri="0" sat="0"/>
+            <only-show-weekends value="false"/>
+            <overriden-day-types/>
+            <days/>
+        </day-types>
+    </calendars>
+    <tasks empty-milestones="true">
+        <taskproperties>
+            <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+            <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+            <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+            <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+            <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+            <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+            <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+            <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+            <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+            <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+        </taskproperties>
+        <task id="0" name="Plan" color="#660000" meeting="true" start="2018-10-11" duration="0" complete="0" thirdDate="2018-10-16" thirdDate-constraint="0" expand="true">
+            <notes><![CDATA[Purpose
+ A (5-7 pages) document defining and motivating
+(who will benefit from) the project
+ Your aims: major goals you want to achieve
+ Your objectives: significant measurable
+achievements towards the aims of your project
+ A set of requirements and deliverables
+Project Planning
+Work breakdown, time estimates, milestone
+identification, activity sequencing, scheduling
+ Gantt chart for a diagrammatic workplan]]></notes>
+            <task id="4" name="Purpose" color="#660000" meeting="false" start="2018-10-11" duration="5" complete="0" thirdDate="2018-10-16" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[ A (5-7 pages) document defining and motivating
+(who will benefit from) the project
+ Your aims: major goals you want to achieve
+ Your objectives: significant measurable
+achievements towards the aims of your project
+ A set of requirements and deliverables ]]></notes>
+                <depend id="7" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="7" name="Project Planning" color="#660000" meeting="false" start="2018-10-16" duration="2" complete="0" thirdDate="2018-10-02" thirdDate-constraint="0" expand="true">
+                <notes><![CDATA[Gantt Chart]]></notes>
+                <depend id="13" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="9" name="Research" color="#ff0000" meeting="true" start="2018-10-18" duration="0" complete="0" thirdDate="2018-10-16" thirdDate-constraint="0" expand="true">
+            <task id="13" name="Market Research" color="#ff0000" meeting="false" start="2018-10-18" duration="1" complete="0" thirdDate="2018-10-02" thirdDate-constraint="0" expand="true">
+                <depend id="15" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="15" name="Research on similar apps" color="#ff0000" meeting="false" start="2018-10-19" duration="1" complete="0" thirdDate="2018-10-02" thirdDate-constraint="0" expand="true">
+                <depend id="19" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="19" name="Research on android apps" color="#ff0000" meeting="false" start="2018-10-20" duration="2" complete="0" thirdDate="2018-10-02" thirdDate-constraint="0" expand="true">
+                <depend id="25" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="21" name="Implementation" color="#ff6666" meeting="true" start="2018-10-22" duration="0" complete="0" thirdDate="2018-10-02" thirdDate-constraint="0" expand="true">
+            <task id="25" name="Protype" color="#ff6666" meeting="false" start="2018-10-22" duration="25" complete="0" thirdDate="2018-10-08" thirdDate-constraint="0" expand="true">
+                <depend id="41" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="47" name="Final Prototype Changes" color="#ff6666" meeting="false" start="2018-11-23" duration="3" complete="0" thirdDate="2018-10-20" thirdDate-constraint="0" expand="true">
+                <depend id="52" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="52" name="Finalise sw system" color="#ff6666" meeting="false" start="2018-11-26" duration="151" complete="0" thirdDate="2018-09-10" thirdDate-constraint="0" expand="true"/>
+        </task>
+        <task id="37" name="Testing" color="#ffcccc" meeting="true" start="2018-11-16" duration="0" complete="0" thirdDate="2018-10-08" thirdDate-constraint="0" expand="true">
+            <task id="41" name="Prototype Testing" color="#ffcccc" meeting="false" start="2018-11-16" duration="7" complete="0" thirdDate="2018-10-08" thirdDate-constraint="0" expand="true">
+                <depend id="47" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="54" name="SW testing" color="#ffcccc" meeting="false" start="2018-11-30" duration="152" complete="0" thirdDate="2018-10-01" thirdDate-constraint="0" expand="true"/>
+        </task>
+        <task id="48" name="Interim Report" color="#ff6600" meeting="false" start="2018-11-29" duration="8" complete="0" thirdDate="2018-09-10" thirdDate-constraint="0" expand="true"/>
+        <task id="55" name="Dissertation" color="#ffff00" meeting="false" start="2019-01-21" duration="101" complete="0" thirdDate="2018-10-01" thirdDate-constraint="0" expand="true"/>
+        <task id="56" name="Presentation" color="#cc0099" meeting="false" start="2019-04-26" duration="12" complete="0" thirdDate="2018-10-01" thirdDate-constraint="0" expand="true"/>
+    </tasks>
+    <resources/>
+    <allocations/>
+    <vacations/>
+    <previous/>
+    <roles roleset-name="Default"/>
+</project>
