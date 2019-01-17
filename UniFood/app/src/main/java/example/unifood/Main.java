@@ -35,7 +35,10 @@ public class Main extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
-        products = (List<Product>) intent.getExtras().getSerializable("products");
+        if( intent.getExtras().getSerializable("products") != null){
+            products = (List<Product>) intent.getExtras().getSerializable("products");
+        } else
+            products = null;
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
         loadFragment(new HomeFragment());
