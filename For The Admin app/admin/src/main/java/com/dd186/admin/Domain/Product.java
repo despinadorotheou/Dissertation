@@ -3,6 +3,7 @@ package com.dd186.admin.Domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Entity
@@ -21,6 +22,10 @@ public class Product {
     private Double price;
     @Column(name = "quantity", nullable = false)
     private int quantity;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "productID"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Category category;
 
     public Product() {
     }
@@ -75,6 +80,14 @@ public class Product {
                 ", price=" + price +
                 ", quantity=" + quantity +
                 '}';
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
 

@@ -4,6 +4,7 @@ import com.dd186.admin.Domain.Product;
 import com.dd186.admin.Domain.User;
 import com.dd186.admin.Repositories.ProductRepository;
 import com.dd186.admin.Repositories.UserRepository;
+import com.dd186.admin.Services.ProductService;
 import com.dd186.admin.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,7 +23,8 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
-    @Autowired ProductRepository productRepo;
+    @Autowired
+    private ProductService productService;
 
     @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
@@ -31,42 +33,12 @@ public class LoginController {
         return modelAndView;
     }
 
-//    @RequestMapping(value="/registration", method = RequestMethod.GET)
-//    public ModelAndView registration(){
-//        ModelAndView modelAndView = new ModelAndView();
-//        User user = new User();
-//        modelAndView.addObject("user", user);
-//        modelAndView.setViewName("registration");
-//        return modelAndView;
-//    }
-//
-//    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-//    public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        User userExists = userService.findUserByEmail(user.getEmail());
-//        if (userExists != null) {
-//            bindingResult
-//                    .rejectValue("email", "error.user",
-//                            "There is already a user registered with the email provided");
-//        }
-//        if (bindingResult.hasErrors()) {
-//            modelAndView.setViewName("registration");
-//        } else {
-//            userService.saveUser(user);
-//            modelAndView.addObject("successMessage", "User has been registered successfully");
-//            modelAndView.addObject("user", new User());
-//            modelAndView.setViewName("registration");
-//
-//        }
-//        return modelAndView;
-//    }
-
     @RequestMapping(value="/main", method = RequestMethod.GET)
     public ModelAndView home(){
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
-        List<Product> products = productRepo.findAll();
+        List<Product> products = productService.findAll();
         modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
         modelAndView.addObject("products",products);
         modelAndView.setViewName("main");
