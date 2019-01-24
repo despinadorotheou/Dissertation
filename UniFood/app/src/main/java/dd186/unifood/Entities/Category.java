@@ -1,6 +1,8 @@
 package dd186.unifood.Entities;
 
-public class Category {
+import java.io.Serializable;
+
+public class Category implements Serializable {
 
     private int id;
     private String category;
@@ -19,5 +21,14 @@ public class Category {
 
     public Category() {
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
 }

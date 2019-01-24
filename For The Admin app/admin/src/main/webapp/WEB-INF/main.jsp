@@ -24,6 +24,7 @@
                 <option value="2">Description</option>
                 <option value="3">Price</option>
                 <option value="4">Quantity</option>
+                <option value="5">Category</option>
             </select>
         </div>
         <input type="text" id="searchValue" class="form-control" onkeyup="searchFunction()" placeholder="Search...">
@@ -42,6 +43,7 @@
             <td><h3>Description</h3></td>
             <td><h3>Price</h3></td>
             <td><h3>Quantity</h3></td>
+            <td><h3>Category</h3></td>
             <td><h3></h3></td>
             <td><h3></h3></td>
         </tr>
@@ -53,6 +55,7 @@
                 <td><c:out value="${product.getDescription()}"/></td>
                 <td><c:out value="${product.getPrice()}"/></td>
                 <td><c:out value="${product.getQuantity()}"/></td>
+                <td><c:out value="${product.getCategory().getCategory()}"/></td>
                 <td><a class="btn btn-success" href="/main/edit?productId=${product.getId()}">Edit</a></td>
                 <td><a class="btn btn-danger" href="/main/delete?productId=${product.getId()}">Delete</a></td>
             </tr>

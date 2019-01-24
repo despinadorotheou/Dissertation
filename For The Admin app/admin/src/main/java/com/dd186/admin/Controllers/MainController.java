@@ -36,9 +36,9 @@ public class MainController {
             product.setPrice(product2.getPrice());
             product.setQuantity(product2.getQuantity());
             product.setCategory(product2.getCategory());
-            modelAndView.addObject("categories", productService.findAllCategories());
             modelAndView.addObject("product", product);
         }
+        modelAndView.addObject("categories", productService.findAllCategories());
         modelAndView.setViewName("editProduct");
         return modelAndView;
     }
@@ -70,8 +70,10 @@ public class MainController {
     public ModelAndView productMaster(@RequestParam(value="productId", required=false, defaultValue="-1") int productId) {
         ModelAndView modelAndView = new ModelAndView();
         Product p = productService.findById(productId);
-        if (p != null)
+        if (p != null) {
+            p.setCategory(null);
             productService.delete(p);
+        }
         modelAndView.addObject("products",(List<Product>)productService.findAll());
         modelAndView.setViewName("main");
         return modelAndView;
