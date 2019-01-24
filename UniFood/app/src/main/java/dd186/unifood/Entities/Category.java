@@ -1,4 +1,4 @@
-package Entities;
+package dd186.unifood.Entities;
 
 public class Category {
 

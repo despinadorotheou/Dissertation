@@ -14,8 +14,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import Adapters.ProductAdapter;
-import Entities.Product;
+import dd186.unifood.Adapters.ProductAdapter;
+import dd186.unifood.Entities.Product;
 import dd186.unifood.Main;
 import dd186.unifood.R;
 

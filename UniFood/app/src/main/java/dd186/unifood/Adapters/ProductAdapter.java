@@ -1,4 +1,4 @@
-package Adapters;
+package dd186.unifood.Adapters;
 
 import android.content.*;
 import android.content.res.Resources;
@@ -9,7 +9,7 @@ import android.widget.*;
 
 import java.util.*;
 
-import Entities.Product;
+import dd186.unifood.Entities.Product;
 import dd186.unifood.R;
 
 public class ProductAdapter extends BaseAdapter {

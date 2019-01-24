@@ -1,6 +1,4 @@
-package Entities;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package dd186.unifood.Entities;
 
 import java.io.Serializable;
 

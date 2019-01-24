@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import Entities.Product;
+import dd186.unifood.Entities.Product;
 
 public class Login extends AppCompatActivity {
 
