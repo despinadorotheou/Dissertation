@@ -59,6 +59,7 @@ public class ProductAdapter extends BaseAdapter {
             priceTextView.setText("£" + Double.toString(products.get(position).getPrice()));
             view.addView(priceTextView);
             return view;
+            //check whether it works
 //            View itemView = convertView;
 //            Product selectedProduct = products.get(position);
 //            itemView = (itemView == null) ? inflater.inflate(R.layout.product_grid_layout, null) : itemView;

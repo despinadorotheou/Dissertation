@@ -11,6 +11,8 @@ public class Product implements Serializable {
     private String description;
     private double price;
     private int quantity;
+    private Category category;
+
 
     public int getId() {
         return id;
@@ -55,12 +57,13 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(int id, String name, String description, double price, int quantity) {
+    public Product(int id, String name, String description, double price, int quantity, Category category) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
+        this.category = category;
     }
 
     @Override
