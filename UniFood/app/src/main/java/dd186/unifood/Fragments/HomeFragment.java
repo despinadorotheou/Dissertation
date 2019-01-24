@@ -1,4 +1,4 @@
-package example.unifood.Fragments;
+package dd186.unifood.Fragments;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -16,8 +16,8 @@ import java.util.List;
 
 import Adapters.ProductAdapter;
 import Entities.Product;
-import example.unifood.Main;
-import example.unifood.R;
+import dd186.unifood.Main;
+import dd186.unifood.R;
 
 public class HomeFragment extends Fragment {
 

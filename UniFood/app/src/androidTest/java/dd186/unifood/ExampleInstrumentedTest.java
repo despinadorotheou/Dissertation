@@ -1,4 +1,4 @@
-package example.unifood;
+package dd186.unifood;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

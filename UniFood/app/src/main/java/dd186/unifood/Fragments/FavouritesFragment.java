@@ -1,4 +1,4 @@
-package example.unifood.Fragments;
+package dd186.unifood.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import example.unifood.R;
+import dd186.unifood.R;
 
 public class FavouritesFragment extends Fragment {
     @Nullable

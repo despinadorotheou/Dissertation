@@ -1,4 +1,4 @@
-package example.unifood;
+package dd186.unifood;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

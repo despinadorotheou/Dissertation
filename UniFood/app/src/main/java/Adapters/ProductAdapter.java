@@ -1,9 +1,7 @@
 package Adapters;
 
-import android.app.Activity;
 import android.content.*;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,7 @@ import android.widget.*;
 import java.util.*;
 
 import Entities.Product;
-import example.unifood.R;
+import dd186.unifood.R;
 
 public class ProductAdapter extends BaseAdapter {
 

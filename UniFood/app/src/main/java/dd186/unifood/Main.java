@@ -1,4 +1,4 @@
-package example.unifood;
+package dd186.unifood;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,19 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import Adapters.ProductAdapter;
 import Entities.Product;
-import example.unifood.Fragments.AccountFragment;
-import example.unifood.Fragments.FavouritesFragment;
-import example.unifood.Fragments.HomeFragment;
-import example.unifood.Fragments.OrderHistoryFragment;
-import example.unifood.Fragments.OrderStatusFragment;
-import example.unifood.Fragments.SearchFragment;
+import dd186.unifood.Fragments.AccountFragment;
+import dd186.unifood.Fragments.FavouritesFragment;
+import dd186.unifood.Fragments.HomeFragment;
+import dd186.unifood.Fragments.OrderHistoryFragment;
+import dd186.unifood.Fragments.OrderStatusFragment;
+import dd186.unifood.Fragments.SearchFragment;
 
 public class Main extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {

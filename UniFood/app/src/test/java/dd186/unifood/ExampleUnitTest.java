@@ -1,4 +1,4 @@
-package example.unifood;
+package dd186.unifood;
 
 import org.junit.Test;
 

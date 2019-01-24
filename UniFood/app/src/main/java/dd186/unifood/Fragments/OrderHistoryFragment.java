@@ -1,8 +1,5 @@
-package example.unifood.Fragments;
+package dd186.unifood.Fragments;
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,14 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import example.unifood.R;
+import dd186.unifood.R;
 
-public class AccountFragment extends Fragment {
+public class OrderHistoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_account, null );
+        return inflater.inflate(R.layout.fragment_order_history, null );
     }
-
-
 }
+

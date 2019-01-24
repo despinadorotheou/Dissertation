@@ -1,4 +1,4 @@
-package example.unifood.Fragments;
+package dd186.unifood.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import example.unifood.R;
+import dd186.unifood.R;
 
-public class OrderHistoryFragment extends Fragment {
+public class OrderStatusFragment extends Fragment {
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_order_history, null );
+        return inflater.inflate(R.layout.fragment_order_status, null );
     }
 }
-
