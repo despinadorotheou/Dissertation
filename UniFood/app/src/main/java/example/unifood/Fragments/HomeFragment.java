@@ -1,5 +1,6 @@
 package example.unifood.Fragments;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,7 +32,8 @@ public class HomeFragment extends Fragment {
         Main main = (Main) getActivity();
         assert main != null;
         products = main.getProducts();
-        gridView.setAdapter(new ProductAdapter(main,products));
+        Resources resources = getResources();
+        gridView.setAdapter(new ProductAdapter(main,products, resources));
         gridView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(main, "click on item"+position,Toast.LENGTH_SHORT).show());
         return rootView;
     }
