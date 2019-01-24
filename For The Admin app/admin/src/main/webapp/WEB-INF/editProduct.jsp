@@ -60,10 +60,34 @@
        <tr>
            <td><label for="quantity">Quantity</label></td>
            <% if (condition){%>
-           <td><input id="quantity" name="quantity" type="number" min="0" value="<%=product.getQuantity()%> "/></td>
+           <td><input id="quantity" name="quantity" type="number" min="0" value="<%=product.getQuantity()%>"/></td>
            <%}else{%>
            <td><input id="quantity" type="number" min="0" name="quantity"/></td>
            <%}%>
+       </tr>
+       <tr>
+           <td><label for="category">Category</label></td>
+          <td>
+              <select id="category" name="category">
+              <% if (condition){%>
+                  <c:set var="previous" value="<%=product.getCategory()%>"/>
+                  <c:forEach var="category" items="${categories}">
+                      <c:choose>
+                        <c:when test="${ previous == category}">
+                             <option selected value="<%=product.getCategory().getCategory()%>"><%=product.getCategory().getCategory()%></option>
+                          </c:when>
+                          <c:otherwise>
+                              <option value="${category.getCategory()}">${category.getCategory()}</option>
+                          </c:otherwise>
+                      </c:choose>
+                  </c:forEach>
+              <%}else{%>
+                  <c:forEach var="category" items="${categories}">
+                      <option value="${category.getCategory()}">${category.getCategory()}</option>
+                  </c:forEach>
+                  <%}%>
+              </select>
+          </td>
        </tr>
     <tr>
         <td colspan="2">

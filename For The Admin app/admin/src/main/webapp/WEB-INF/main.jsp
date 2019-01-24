@@ -13,7 +13,7 @@
 </head>
 <body>
 <div class="container-fluid">
-<h2><%=mes%></h2>
+<%--<h2><%=mes%></h2>--%>
 <h2>Product Information</h2>
     <br>
     <div class="input-group mb-3">
@@ -27,7 +27,7 @@
             </select>
         </div>
         <input type="text" id="searchValue" class="form-control" onkeyup="searchFunction()" placeholder="Search...">
-    </div>+
+    </div>
 <section>
     <a class="btn btn-primary" href="/main/edit">Add new product</a>
 </section>
