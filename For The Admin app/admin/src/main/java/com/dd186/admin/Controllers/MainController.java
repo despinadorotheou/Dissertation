@@ -11,9 +11,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.mock.web.MockMultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 
 @Controller
@@ -36,6 +42,7 @@ public class MainController {
             product.setPrice(product2.getPrice());
             product.setQuantity(product2.getQuantity());
             product.setCategory(product2.getCategory());
+            product.setImage(product2.getImage());
             modelAndView.addObject("product", product);
         }
         modelAndView.addObject("categories", productService.findAllCategories());
@@ -49,7 +56,8 @@ public class MainController {
                                   @RequestParam(name ="description", required = false) String description,
                                   @RequestParam(name ="price") double price,
                                   @RequestParam(name = "quantity") int quantity,
-                                  @RequestParam(name = "category") String cat){
+                                  @RequestParam(name = "category") String cat,
+                                  @RequestParam(name = "image", required = false)MultipartFile image) throws IOException, SQLException {
         ModelAndView modelAndView = new ModelAndView();
         Product product = new Product();
         if (id != -1){
@@ -60,6 +68,13 @@ public class MainController {
         product.setPrice(price);
         product.setQuantity(quantity);
         product.setCategory(productService.findByCategory(cat));
+        if (!image.isEmpty()){
+            Blob blob = new javax.sql.rowset.serial.SerialBlob(image.getBytes());
+            product.setImage(blob);
+        } else if(id!=-1){
+            Product lastProduct = productService.findById(id);
+            product.setImage(lastProduct.getImage());
+        }
         productService.save(product);
         modelAndView.addObject("products",(List<Product>)productService.findAll());
         modelAndView.setViewName("main");

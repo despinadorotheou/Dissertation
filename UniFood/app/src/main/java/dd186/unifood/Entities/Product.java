@@ -1,6 +1,7 @@
 package dd186.unifood.Entities;
 
 import java.io.Serializable;
+import java.sql.Blob;
 
 public class Product implements Serializable {
 
@@ -10,6 +11,7 @@ public class Product implements Serializable {
     private double price;
     private int quantity;
     private Category category;
+    private Blob image;
 
 
     public int getId() {
@@ -58,6 +60,14 @@ public class Product implements Serializable {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public Blob getImage() {
+        return image;
+    }
+
+    public void setImage(Blob image) {
+        this.image = image;
     }
 
     public Product() {

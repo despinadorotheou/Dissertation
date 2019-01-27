@@ -44,6 +44,7 @@
             <td><h3>Price</h3></td>
             <td><h3>Quantity</h3></td>
             <td><h3>Category</h3></td>
+            <%--<td><h3>Image</h3></td>--%>
             <td><h3></h3></td>
             <td><h3></h3></td>
         </tr>
@@ -56,6 +57,7 @@
                 <td><c:out value="${product.getPrice()}"/></td>
                 <td><c:out value="${product.getQuantity()}"/></td>
                 <td><c:out value="${product.getCategory().getCategory()}"/></td>
+                <%--<td><c:out value="${product.getImage().}"/></td>--%>
                 <td><a class="btn btn-success" href="/main/edit?productId=${product.getId()}">Edit</a></td>
                 <td><a class="btn btn-danger" href="/main/delete?productId=${product.getId()}">Delete</a></td>
             </tr>

@@ -100,4 +100,5 @@ public class Product {
     public void setImage(Blob image) {
         this.image = image;
     }
+
 }

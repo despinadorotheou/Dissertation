@@ -2,11 +2,14 @@ package dd186.unifood.Adapters;
 
 import android.content.*;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import dd186.unifood.Entities.Product;
@@ -46,9 +49,19 @@ public class ProductAdapter extends BaseAdapter {
             Context context = parent.getContext();
             GridLayout view = new GridLayout(context);
             view.setOrientation(GridLayout.VERTICAL);
-            ImageView image = new ImageView(context);
-            image.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_border_white_24dp));
-            view.addView(image);
+//            ImageView image = new ImageView(context);
+//            image.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_border_white_24dp));
+//            view.addView(image);
+            try {
+                ImageView image = new ImageView(context);
+                byte[] img = products.get(position).getImage().getBytes(1, (int) products.get(position).getImage().length());
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
+                image.setImageBitmap(bitmap);
+                view.addView(image);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
             TextView nameTextView = new TextView(context);
             nameTextView.setText(products.get(position).getName());
             nameTextView.setPadding(0, 0, 10, 0);
@@ -57,15 +70,6 @@ public class ProductAdapter extends BaseAdapter {
             priceTextView.setText("£" + Double.toString(products.get(position).getPrice()));
             view.addView(priceTextView);
             return view;
-            //check whether it works
-//            View itemView = convertView;
-//            Product selectedProduct = products.get(position);
-//            itemView = (itemView == null) ? inflater.inflate(R.layout.product_grid_layout, null) : itemView;
-////        TextView textViewName = (TextView) itemView.findViewById(R.id.textViewName);
-//        String name = selectedProduct.getName();
-//        textViewName.setText(name);
-
-//            return itemView;
         }
         return convertView;
 

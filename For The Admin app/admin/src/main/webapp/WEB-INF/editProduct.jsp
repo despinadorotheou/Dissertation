@@ -1,9 +1,12 @@
 <%@ page import="com.dd186.admin.Domain.Product" %>
+<%@ page import="org.springframework.web.multipart.MultipartFile" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="org.springframework.mock.web.MockMultipartFile" %>
 <!DOCTYPE HTML>
 <% Product product = null;
-    boolean condition= false;
+    boolean editProduct = false;
     if (request.getAttribute("product") != null ){
-        condition=true;
+        editProduct =true;
         product = (Product) request.getAttribute("product");
     }
     %>
@@ -21,19 +24,17 @@
 <body>
     <div class="container-fluid">
         <h2>New/edit Product Information</h2>
-        <form method="POST"  action="/main/add">
+        <form method="POST" enctype="multipart/form-data" action="/main/add">
         <table>
-            <% if (condition){%>
+            <% if (editProduct){%>
             <tr>
                 <td><label for="id">Id</label></td>
                 <td><input id="id" name="id" value="<%=product.getId()%>" readonly="true"/></td>
-       <%--<%}else{%>--%>
-        <%--<td><input id="id" name="id" readonly="true"/></td>--%>
             </tr>
             <%}%>
             <tr>
                 <td><label for="name">Name</label></td>
-                <% if (condition){%>
+                <% if (editProduct){%>
                     <td><input id="name" name="name" value="<%=product.getName()%>"/></td>
                 <%}else{%>
                     <td><input id="name" name="name"/></td>
@@ -41,7 +42,7 @@
             </tr>
             <tr>
                 <td><label for="description">Description</label></td>
-                <% if (condition){%>
+                <% if (editProduct){%>
                     <td><input id="description" name="description" value="<%=product.getDescription()%>" /></td>
                 <%}else{%>
                     <td><input id="description" name="description"/></td>
@@ -49,7 +50,7 @@
             </tr>
             <tr>
                 <td><label for="price">Price</label></td>
-                <% if (condition){%>
+                <% if (editProduct){%>
                     <td><input id="price"  type="number" step="0.01" min="0.00" name="price"  value="<%=product.getPrice()%>" /></td>
                 <%}else{%>
                     <td><input id="price"  type="number" step="0.01" min="0.00" name="price"/></td>
@@ -57,7 +58,7 @@
             </tr>
             <tr>
                 <td><label for="quantity">Quantity</label></td>
-                <% if (condition){%>
+                <% if (editProduct){%>
                     <td><input id="quantity" name="quantity" type="number" min="0" value="<%=product.getQuantity()%>"/></td>
                 <%}else{%>
                     <td><input id="quantity" type="number" min="0" name="quantity"/></td>
@@ -67,7 +68,7 @@
                 <td><label for="category">Category</label></td>
                 <td>
                     <select id="category" name="category">
-                        <% if (condition){%>
+                        <% if (editProduct){%>
                             <c:set var="previous" value="<%=product.getCategory()%>"/>
                             <c:forEach var="category" items="${categories}">
                                 <c:choose>
@@ -85,6 +86,23 @@
                             </c:forEach>
                         <%}%>
                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="image">Photo</label></td>
+                <td>
+                    <%--<% if (editProduct){--%>
+                        <%--try {--%>
+                            <%--byte[] img = product.getImage().getBytes(1,(int) product.getImage().length());--%>
+                            <%--String imgName = product.getImageName();--%>
+                            <%--MultipartFile file = new MockMultipartFile(imgName, img);%>--%>
+                    <%--<p><input type="file" name="image" id="image" value="<%=file%>"/></p>--%>
+                    <%--<% }catch (SQLException e) {--%>
+                        <%--e.printStackTrace();--%>
+                        <%--}--%>
+                    <%--} else {%>--%>
+                    <p><input type="file" name="image" id="image"/></p>
+                    <%--<% }%>--%>
                 </td>
             </tr>
             <tr>
