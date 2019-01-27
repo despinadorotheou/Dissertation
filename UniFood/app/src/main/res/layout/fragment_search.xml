@@ -4,32 +4,76 @@
 
 
     <Button
+        android:id="@+id/button8"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="291dp"
+        android:background="@color/colorPrimary"
+        android:onClick="drinks"
+        android:text="Drinks"
+        android:textColor="@color/colorBackground" />
+
+    <Button
         android:id="@+id/button7"
         android:layout_width="match_parent"
         android:layout_height="74dp"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginTop="220dp"
-        android:text="Button" />
+        android:background="@color/colorPrimary"
+        android:onClick="coffee"
+        android:text="COFFEE"
+        android:textColor="@color/colorBackground" />
 
     <Button
         android:id="@+id/button6"
         android:layout_width="match_parent"
         android:layout_height="74dp"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginTop="146dp"
-        android:text="Button" />
+        android:background="@color/colorPrimary"
+        android:onClick="snacks"
+        android:text="Snacks"
+        android:textColor="@color/colorBackground" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="74dp"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginTop="74dp"
-        android:text="Button" />
+        android:background="@color/colorPrimary"
+        android:onClick="sandwiches"
+        android:text="Sandwiches"
+        android:textColor="@color/colorBackground" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="273dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="109dp"
+        android:layout_marginRight="109dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Search..." />
 </RelativeLayout>

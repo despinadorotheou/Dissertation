@@ -10,12 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import dd186.unifood.Adapters.ProductAdapter;
 import dd186.unifood.Entities.Product;
 import dd186.unifood.Fragments.AccountFragment;
+import dd186.unifood.Fragments.CategoryFragment;
 import dd186.unifood.Fragments.FavouritesFragment;
 import dd186.unifood.Fragments.HomeFragment;
 import dd186.unifood.Fragments.OrderHistoryFragment;
@@ -98,17 +100,69 @@ public class Main extends AppCompatActivity
         startActivity(intent);
     }
 
-//    public void createListView(){
-//        productsView = (GridView) findViewById(R.id.product_list);
-//        productAdapter = new ProductAdapter(this,products);
-//        productsView.setAdapter(productAdapter);
-//        productsView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(Main.this, "click on item"+position,Toast.LENGTH_SHORT).show());
-//
-//
-//
-//    }
     public List<Product> getProducts() {
         return products;
+    }
+
+    //method to display all the sandwiches
+    public void sandwiches(View view){
+        List<Product> sandwiches = new ArrayList<>();
+        for (Product p:products) {
+            if (p.getCategory().getCategory().equals("Sandwiches")){
+                sandwiches.add(p);
+            }
+        }
+
+        Fragment fragment = new CategoryFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("products", (Serializable) sandwiches);
+        fragment.setArguments(args);
+        loadFragment(fragment);
+    }
+
+    //method to display all the snacks
+    public void snacks(View view){
+        List<Product> snacks = new ArrayList<>();
+        for (Product p:products) {
+            if (p.getCategory().getCategory().equals("Snacks")){
+                snacks.add(p);
+            }
+        }
+        Fragment fragment = new CategoryFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("products", (Serializable) snacks);
+        fragment.setArguments(args);
+        loadFragment(fragment);
+    }
+
+    //method to display all the drinks
+    public void drinks(View view){
+        List<Product> drinks = new ArrayList<>();
+        for (Product p:products) {
+            if (p.getCategory().getCategory().equals("Drinks")){
+                drinks.add(p);
+            }
+        }
+        Fragment fragment = new CategoryFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("products", (Serializable) drinks);
+        fragment.setArguments(args);
+        loadFragment(fragment);
+    }
+
+    //method to display all the sandwiches
+    public void coffee(View view){
+        List<Product> coffee = new ArrayList<>();
+        for (Product p:products) {
+            if (p.getCategory().getCategory().equals("Coffee")){
+                coffee.add(p);
+            }
+        }
+        Fragment fragment = new CategoryFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("products", (Serializable) coffee);
+        fragment.setArguments(args);
+        loadFragment(fragment);
     }
 
 

@@ -3,6 +3,7 @@ package com.dd186.admin.Domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.Set;
 
 @Data
@@ -22,6 +23,8 @@ public class Product {
     private Double price;
     @Column(name = "quantity", nullable = false)
     private int quantity;
+    @Column(name = "image")
+    private Blob image;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "productID"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
@@ -90,6 +93,11 @@ public class Product {
         this.category = category;
     }
 
+    public Blob getImage() {
+        return image;
+    }
 
-
+    public void setImage(Blob image) {
+        this.image = image;
+    }
 }
