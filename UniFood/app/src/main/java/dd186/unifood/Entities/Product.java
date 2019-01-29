@@ -10,8 +10,9 @@ public class Product implements Serializable {
     private String description;
     private double price;
     private int quantity;
+    private String image;
     private Category category;
-    private Blob image;
+
 
 
     public int getId() {
@@ -62,11 +63,11 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
-    public Blob getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Blob image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

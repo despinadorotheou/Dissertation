@@ -1,5 +1,8 @@
 <%@ page import="com.dd186.admin.Domain.Product" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.awt.image.BufferedImage" %>
+<%@ page import="javax.imageio.ImageIO" %>
+<%@ page import="java.io.ByteArrayInputStream" %>
 <!DOCTYPE HTML>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -57,6 +60,9 @@
                 <td><c:out value="${product.getPrice()}"/></td>
                 <td><c:out value="${product.getQuantity()}"/></td>
                 <td><c:out value="${product.getCategory().getCategory()}"/></td>
+                <c:set var="bytes" value="${product.getImage().getBytes(1,product.getImage().length())}"/>
+                <%--<% BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));--%>
+                <%--%>--%>
                 <%--<td><c:out value="${product.getImage().}"/></td>--%>
                 <td><a class="btn btn-success" href="/main/edit?productId=${product.getId()}">Edit</a></td>
                 <td><a class="btn btn-danger" href="/main/delete?productId=${product.getId()}">Delete</a></td>

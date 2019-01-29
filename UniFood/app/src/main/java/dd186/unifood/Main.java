@@ -6,13 +6,18 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import dd186.unifood.Adapters.ProductAdapter;
 import dd186.unifood.Entities.Product;
@@ -26,8 +31,6 @@ import dd186.unifood.Fragments.SearchFragment;
 
 public class Main extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private ProductAdapter productAdapter;
-    private GridView productsView;
     List<Product> products = new ArrayList<>();
 
 
@@ -35,11 +38,16 @@ public class Main extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = getIntent();
-        if( intent.getExtras().getSerializable("products") != null){
-            products = (List<Product>) intent.getExtras().getSerializable("products");
-        } else
-            products = null;
+        HttpRequest httpRequest1 = new HttpRequest();
+        httpRequest1.setLink("http://10.0.2.2:8080/rest/products");
+        httpRequest1.execute();
+        try {
+            products = extractProductsFromJson(httpRequest1.get());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
         loadFragment(new HomeFragment());
@@ -102,6 +110,25 @@ public class Main extends AppCompatActivity
 
     public List<Product> getProducts() {
         return products;
+    }
+
+    public List<Product> extractProductsFromJson(String productString) {
+        //if the json string is empty or null, the return early.
+        ObjectMapper mapper = new ObjectMapper();
+        if (TextUtils.isEmpty(productString)) {
+            return null;
+        }
+        try {
+            List<Product> products = new ArrayList<>();
+            products = mapper.readValue(productString, new TypeReference<List<Product>>() {
+            });
+
+            return products;
+        } catch (Exception e) {
+            System.out.println("Something wrong with the deserialisation of products ");
+            e.printStackTrace();
+            return null;
+        }
     }
 
     //method to display all the sandwiches

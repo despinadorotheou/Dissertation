@@ -49,18 +49,7 @@ public class Login extends AppCompatActivity {
         } else{
             try {
                 if (httpRequest.get().contains("ok")){
-                    HttpRequest httpRequest1 = new HttpRequest();
-                    httpRequest1.setLink("http://10.0.2.2:8080/rest/products");
-                    httpRequest1.execute();
-                    try {
-                        products = extractProductsFromJson(httpRequest1.get());
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     Intent intent = new Intent(this, Main.class);
-                    intent.putExtra("products", (Serializable) products);
                     startActivity(intent);
                 } else {
                     error.setText(R.string.error_login);
@@ -74,24 +63,6 @@ public class Login extends AppCompatActivity {
         }
     }
 
-        public List<Product> extractProductsFromJson(String productString) {
-            //if the json string is empty or null, the return early.
-            ObjectMapper mapper = new ObjectMapper();
-            if (TextUtils.isEmpty(productString)) {
-                return null;
-            }
-            try {
-                List<Product> products = new ArrayList<>();
-                products = mapper.readValue(productString, new TypeReference<List<Product>>() {
-                });
-
-                return products;
-            } catch (Exception e) {
-                System.out.println("Something wrong with the deserialisation of products ");
-                e.printStackTrace();
-                return null;
-            }
-        }
 
     public void signup(View view) {
         Intent intent = new Intent(this, Signup.class);

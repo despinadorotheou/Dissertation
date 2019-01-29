@@ -4,6 +4,7 @@ import android.content.*;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,8 @@ import android.widget.*;
 
 import java.sql.SQLException;
 import java.util.*;
-
+//import org.apache.commons.codec.binary.Base64;
 import dd186.unifood.Entities.Product;
-import dd186.unifood.R;
 
 public class ProductAdapter extends BaseAdapter {
 
@@ -49,19 +49,16 @@ public class ProductAdapter extends BaseAdapter {
             Context context = parent.getContext();
             GridLayout view = new GridLayout(context);
             view.setOrientation(GridLayout.VERTICAL);
-//            ImageView image = new ImageView(context);
-//            image.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_border_white_24dp));
-//            view.addView(image);
-            try {
-                ImageView image = new ImageView(context);
-                byte[] img = products.get(position).getImage().getBytes(1, (int) products.get(position).getImage().length());
-                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
-                image.setImageBitmap(bitmap);
-                view.addView(image);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            ImageView image = new ImageView(context);
+//            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) image.getLayoutParams();
+//            params.width = 120;
+//            params.height = 120;
+//            image.setLayoutParams(params);
+            byte[] img = Base64.decode(products.get(position).getImage(), Base64.DEFAULT);
 
+            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
+            image.setImageBitmap(bitmap);
+            view.addView(image);
             TextView nameTextView = new TextView(context);
             nameTextView.setText(products.get(position).getName());
             nameTextView.setPadding(0, 0, 10, 0);
