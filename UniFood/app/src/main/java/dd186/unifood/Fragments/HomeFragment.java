@@ -8,9 +8,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +36,17 @@ public class HomeFragment extends Fragment {
         products = main.getProducts();
         Resources resources = getResources();
         gridView.setAdapter(new ProductAdapter(main,products, resources));
-        gridView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(main, "click on item"+position,Toast.LENGTH_SHORT).show());
+//        gridView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(main, "click on item"+position,Toast.LENGTH_SHORT).show());
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+            Fragment productView = new ProductInfoFragment();
+            Bundle args =  new Bundle();
+            args.putSerializable("product", (Serializable) products.get(position));
+            productView.setArguments(args);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, productView, "findThisFragment")
+                    .addToBackStack(null)
+                    .commit();
+        });
         return rootView;
     }
 

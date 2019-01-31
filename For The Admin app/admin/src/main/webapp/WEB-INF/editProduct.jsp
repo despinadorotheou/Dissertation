@@ -35,9 +35,9 @@
             <tr>
                 <td><label for="name">Name</label></td>
                 <% if (editProduct){%>
-                    <td><input id="name" name="name" value="<%=product.getName()%>"/></td>
+                    <td><input id="name" name="name" value="<%=product.getName()%>" required/></td>
                 <%}else{%>
-                    <td><input id="name" name="name"/></td>
+                    <td><input id="name" name="name" required/></td>
                 <%}%>
             </tr>
             <tr>
@@ -45,23 +45,23 @@
                 <% if (editProduct){%>
                     <td><input id="description" name="description" value="<%=product.getDescription()%>" /></td>
                 <%}else{%>
-                    <td><input id="description" name="description"/></td>
+                    <td><input id="description" name="description" /></td>
                 <%}%>
             </tr>
             <tr>
                 <td><label for="price">Price</label></td>
                 <% if (editProduct){%>
-                    <td><input id="price"  type="number" step="0.01" min="0.00" name="price"  value="<%=product.getPrice()%>" /></td>
+                    <td><input id="price"  type="number" step="0.01" min="0.00" name="price"  value="<%=product.getPrice()%>" required/></td>
                 <%}else{%>
-                    <td><input id="price"  type="number" step="0.01" min="0.00" name="price"/></td>
+                    <td><input id="price"  type="number" step="0.01" min="0.00" name="price" required/></td>
                 <%}%>
             </tr>
             <tr>
                 <td><label for="quantity">Quantity</label></td>
                 <% if (editProduct){%>
-                    <td><input id="quantity" name="quantity" type="number" min="0" value="<%=product.getQuantity()%>"/></td>
+                    <td><input id="quantity" name="quantity" type="number" min="0" value="<%=product.getQuantity()%>" required/></td>
                 <%}else{%>
-                    <td><input id="quantity" type="number" min="0" name="quantity"/></td>
+                    <td><input id="quantity" type="number" min="0" name="quantity" required/></td>
                 <%}%>
             </tr>
             <tr>
@@ -91,18 +91,7 @@
             <tr>
                 <td><label for="image">Photo</label></td>
                 <td>
-                    <%--<% if (editProduct){--%>
-                        <%--try {--%>
-                            <%--byte[] img = product.getImage().getBytes(1,(int) product.getImage().length());--%>
-                            <%--String imgName = product.getImageName();--%>
-                            <%--MultipartFile file = new MockMultipartFile(imgName, img);%>--%>
-                    <%--<p><input type="file" name="image" id="image" value="<%=file%>"/></p>--%>
-                    <%--<% }catch (SQLException e) {--%>
-                        <%--e.printStackTrace();--%>
-                        <%--}--%>
-                    <%--} else {%>--%>
                     <p><input type="file" name="image" id="image"/></p>
-                    <%--<% }%>--%>
                 </td>
             </tr>
             <tr>

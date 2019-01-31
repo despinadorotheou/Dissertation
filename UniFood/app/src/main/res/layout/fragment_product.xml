@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/product_img"
+        android:layout_width="201dp"
+        android:layout_height="182dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="87dp"
+        android:layout_marginLeft="87dp"
+        android:layout_marginTop="24dp"
+        app:srcCompat="@drawable/account" />
+
+    <TextView
+        android:id="@+id/product_name"
+        android:layout_width="200dp"
+        android:layout_height="38dp"
+        android:layout_below="@+id/product_img"
+        android:layout_alignStart="@+id/product_img"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="15dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/product_descriptiom"
+        android:layout_width="299dp"
+        android:layout_height="96dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginBottom="110dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="87dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/product_descriptiom"
+        android:layout_below="@+id/product_price"
+        android:layout_alignStart="@+id/product_descriptiom"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="-1dp"
+        android:text="Description" />
+
+    <TextView
+        android:id="@+id/product_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/product_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-17dp"
+        android:layout_marginBottom="39dp"
+        android:layout_toEndOf="@+id/textView14"
+        android:text="Add to the Basket" />
+
+</RelativeLayout>

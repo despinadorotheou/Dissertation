@@ -32,6 +32,7 @@ public class Login extends AppCompatActivity {
         email = (EditText) findViewById(R.id.email_login);
         pass = (EditText) findViewById(R.id.pass_login);
         error = findViewById(R.id.error_login);
+
     }
 
     public void login(View view){

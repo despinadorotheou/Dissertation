@@ -49,22 +49,22 @@ public class ProductAdapter extends BaseAdapter {
             Context context = parent.getContext();
             GridLayout view = new GridLayout(context);
             view.setOrientation(GridLayout.VERTICAL);
+            view.setUseDefaultMargins(true);
+            view.setAlignmentMode(GridLayout.ALIGN_MARGINS);
             ImageView image = new ImageView(context);
-//            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) image.getLayoutParams();
-//            params.width = 120;
-//            params.height = 120;
-//            image.setLayoutParams(params);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(150,150);
+            image.setLayoutParams(params);
             byte[] img = Base64.decode(products.get(position).getImage(), Base64.DEFAULT);
-
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
             image.setImageBitmap(bitmap);
             view.addView(image);
             TextView nameTextView = new TextView(context);
             nameTextView.setText(products.get(position).getName());
-            nameTextView.setPadding(0, 0, 10, 0);
+            nameTextView.setPadding(0, 0, 0, 0);
             view.addView(nameTextView);
             TextView priceTextView = new TextView(context);
             priceTextView.setText("£" + Double.toString(products.get(position).getPrice()));
+            priceTextView.setPadding(0,0,0,30);
             view.addView(priceTextView);
             return view;
         }
