@@ -1,5 +1,6 @@
 package dd186.unifood.Fragments;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import dd186.unifood.Entities.Product;
 import dd186.unifood.R;
 
 public class ProductInfoFragment extends Fragment {
+
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,7 +34,7 @@ public class ProductInfoFragment extends Fragment {
             TextView name = view.findViewById(R.id.product_name);
             name.setText(product.getName());
             TextView price = view.findViewById(R.id.product_price);
-            price.setText("£"+ product.getPrice());
+            price.setText("£"+ Double.toString(product.getPrice()));
             TextView description = view.findViewById(R.id.product_descriptiom);
             description.setText(product.getDescription());
         }

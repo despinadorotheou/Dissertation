@@ -21,6 +21,7 @@
         <activity android:name="dd186.unifood.Signup" />
         <activity
             android:name="dd186.unifood.Main" ></activity>
+
     </application>
 
 </manifest>

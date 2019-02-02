@@ -30,7 +30,6 @@
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:hint="@string/search_hint"
-        android:inputType="text"
-        android:autofillHints="" />
+        android:inputType="text"/>
 
 </RelativeLayout>
