@@ -7,9 +7,9 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridView;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,15 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import dd186.unifood.Adapters.ProductAdapter;
 import dd186.unifood.Entities.Product;
 import dd186.unifood.Fragments.AccountFragment;
 import dd186.unifood.Fragments.CategoryFragment;
 import dd186.unifood.Fragments.FavouritesFragment;
-import dd186.unifood.Fragments.HomeFragment;
+import dd186.unifood.Fragments.SearchFragment;
 import dd186.unifood.Fragments.OrderHistoryFragment;
 import dd186.unifood.Fragments.OrderStatusFragment;
-import dd186.unifood.Fragments.SearchFragment;
+import dd186.unifood.Fragments.HomeFragment;
 
 public class Main extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -54,6 +53,21 @@ public class Main extends AppCompatActivity
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.basket:
+                //todo basket page
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private boolean loadFragment(Fragment fragment){
         if (fragment != null){
@@ -84,19 +98,19 @@ public class Main extends AppCompatActivity
         return loadFragment(fragment);
     }
 
-    //method for the order status button in the account fragment
+    //method for the order status button in the account fragment_search
     public void orderStatus(View view){
         Fragment fragment = new OrderStatusFragment();
         loadFragment(fragment);
     }
 
-    //method for the order history button in the account fragment
+    //method for the order history button in the account fragment_search
     public void orderHistory(View view){
         Fragment fragment = new OrderHistoryFragment();
         loadFragment(fragment);
     }
 
-    //method for the favourites button in the account fragment
+    //method for the favourites button in the account fragment_search
     public void favourites(View view){
         Fragment fragment = new FavouritesFragment();
         loadFragment(fragment);

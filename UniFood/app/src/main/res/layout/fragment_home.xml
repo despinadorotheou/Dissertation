@@ -1,36 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="dd186.unifood.Main">
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
 
-    <GridView
-        android:id="@+id/product_list"
+    <Button
+        android:id="@+id/button8"
         android:layout_width="match_parent"
-        android:layout_height="462dp"
+        android:layout_height="74dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="49dp"
-        android:columnWidth="90dp"
-        android:horizontalSpacing="10dp"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp" />
+        android:layout_marginTop="390dp"
+        android:background="@color/colorPrimary"
+        android:onClick="drinks"
+        android:text="Drinks"
+        android:textColor="@color/colorBackground" />
 
-    <EditText
-        android:id="@+id/search_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="@string/search_hint"
-        android:inputType="text"
-        android:autofillHints="" />
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="316dp"
+        android:background="@color/colorPrimary"
+        android:onClick="coffee"
+        android:text="COFFEE"
+        android:textColor="@color/colorBackground" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="242dp"
+        android:background="@color/colorPrimary"
+        android:onClick="snacks"
+        android:text="Snacks"
+        android:textColor="@color/colorBackground" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="168dp"
+        android:background="@color/colorPrimary"
+        android:onClick="sandwiches"
+        android:text="Sandwiches"
+        android:textColor="@color/colorBackground" />
 
 </RelativeLayout>
