@@ -1,5 +1,6 @@
 package dd186.unifood.Fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,14 +8,25 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import dd186.unifood.Entities.User;
+import dd186.unifood.Main;
 import dd186.unifood.R;
 
 public class AccountFragment extends Fragment {
+
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_account, null );
+        View view = inflater.inflate(R.layout.fragment_account, null );
+        Main main = (Main) getActivity();
+        assert main != null;
+        User user = main.getUser();
+        TextView name = view.findViewById(R.id.name_account);
+        name.setText(user.getName() + " " + user.getLastName());
+        return view;
     }
 
 

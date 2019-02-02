@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import dd186.unifood.Entities.Product;
+import dd186.unifood.Entities.User;
 import dd186.unifood.Fragments.AccountFragment;
 import dd186.unifood.Fragments.CategoryFragment;
 import dd186.unifood.Fragments.FavouritesFragment;
@@ -31,12 +32,23 @@ import dd186.unifood.Fragments.HomeFragment;
 public class Main extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
     List<Product> products = new ArrayList<>();
+    User user;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        String extra = getIntent().getStringExtra("user");
+        ObjectMapper objectMapper =  new ObjectMapper();
+        try {
+            user = objectMapper.readValue(extra, new TypeReference<User>() {
+            });
+
+        } catch (Exception e) {
+            System.out.println("Something wrong with the deserialisation of products ");
+            e.printStackTrace();
+        }
         HttpRequest httpRequest1 = new HttpRequest();
         httpRequest1.setLink("http://10.0.2.2:8080/rest/products");
         httpRequest1.execute();
@@ -50,6 +62,7 @@ public class Main extends AppCompatActivity
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
         loadFragment(new HomeFragment());
+
 
     }
 
@@ -124,6 +137,10 @@ public class Main extends AppCompatActivity
 
     public List<Product> getProducts() {
         return products;
+    }
+
+    public  User getUser(){
+        return user;
     }
 
     public List<Product> extractProductsFromJson(String productString) {

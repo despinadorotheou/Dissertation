@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import dd186.unifood.Entities.Product;
+import dd186.unifood.Entities.User;
 
 public class Login extends AppCompatActivity {
 
@@ -49,8 +50,10 @@ public class Login extends AppCompatActivity {
 
         } else{
             try {
-                if (httpRequest.get().contains("ok")){
+                String response = httpRequest.get();
+                if (!response.contains("invalid")){
                     Intent intent = new Intent(this, Main.class);
+                    intent.putExtra("user", response);
                     startActivity(intent);
                 } else {
                     error.setText(R.string.error_login);

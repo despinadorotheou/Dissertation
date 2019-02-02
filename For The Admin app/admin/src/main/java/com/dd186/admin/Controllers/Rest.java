@@ -34,10 +34,7 @@ public class Rest {
 
     @GetMapping(value = "/products")
         public String sendProducts() throws SQLException, IOException {
-//        Gson gsonBuilder = new GsonBuilder().create();
         List<Product> products = productService.findAll();
-//        String jsonForProducts = gsonBuilder.toJson(products);
-//        return jsonForProducts;
         JsonArray result = new JsonArray();
         for (Product p:products) {
             JsonObject product = new JsonObject();
@@ -46,10 +43,7 @@ public class Rest {
             product.addProperty("description",p.getDescription());
             product.addProperty("price",p.getPrice());
             product.addProperty("quantity",p.getQuantity());
-//            product.addProperty("image", new String(IOUtils.toByteArray(p.getImage().getBinaryStream())));
             product.addProperty("image", Base64.encodeBase64String(p.getImage().getBytes(1, (int) p.getImage().length())));
-
-//            product.addProperty("image", new String(p.getImage().getBytes(1,(int) p.getImage().length())));
             JsonObject category = new JsonObject();
             category.addProperty("id",p.getCategory().getId());
             category.addProperty("category",p.getCategory().getCategory());
@@ -59,13 +53,6 @@ public class Rest {
         return result.toString();
 
     }
-    //method for testing proposes
-//    @RequestMapping(value = "/image", method = RequestMethod.GET)
-//    public void getImageAsByteArray(HttpServletResponse response) throws IOException, SQLException {
-//        InputStream in = productService.findAll().get(1).getImage().getBinaryStream();
-//        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-//        IOUtils.copy(in, response.getOutputStream());
-//    }
 
     @RequestMapping(value = "/image", method = RequestMethod.GET)
     public @ResponseBody byte[] getImageAsByteArray() throws IOException, SQLException {
@@ -79,9 +66,15 @@ public class Rest {
         User user = userService.findUserByEmail(userEmail);
         if (user!=null){
             if (userService.passMatch(userPass, user.getPassword())){
-                return "ok";
-            } else return "invalid password";
-        } else return "invalid username";
+                JsonObject product = new JsonObject();
+                product.addProperty("id",user.getId());
+                product.addProperty("name",user.getName());
+                product.addProperty("lastName",user.getLastName());
+                product.addProperty("email",user.getEmail());
+                product.addProperty("password",user.getPassword());
+                return product.toString();
+            } else return "invalid";
+        } else return "invalid";
     }
 
     //httpRequest.setLink("http://10.0.2.2:8080/rest/signup/"+useremail+"/" +userName+"/" +last+"/" +userdob+"/" +password1);
