@@ -36,7 +36,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public void saveUser(User user) {
+    public void saveUserCustom(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(1);
         Role userRole = roleRepository.findByRole("USER");
@@ -48,6 +48,10 @@ public class UserService {
 
     public boolean passMatch(String raw, String bcrypted){
         return bCryptPasswordEncoder.matches(raw,bcrypted);
+    }
+
+    public void saveUser(User user){
+        userRepository.save(user);
     }
 
 

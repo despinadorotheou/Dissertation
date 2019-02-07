@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.List;
 
 import dd186.unifood.Adapters.ProductAdapter;
@@ -32,7 +33,15 @@ public class CategoryFragment extends Fragment {
         User user =  main.getUser();
         List<Product> products = (List<Product>) args.getSerializable("products");
         gridView.setAdapter(new ProductAdapter(main,products, user));
-        gridView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(main, "click on item"+position,Toast.LENGTH_SHORT).show());
-        return rootView;
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+            Fragment productView = new ProductInfoFragment();
+            Bundle args1 =  new Bundle();
+            args1.putSerializable("product", (Serializable) products.get(position));
+            productView.setArguments(args1);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, productView, "findThisFragment")
+                    .addToBackStack(null)
+                    .commit();
+        });        return rootView;
     }
 }

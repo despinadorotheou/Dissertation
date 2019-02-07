@@ -150,6 +150,10 @@ public class Main extends AppCompatActivity
         return user;
     }
 
+    public List<Product> getFavourites() {
+        return favourites;
+    }
+
     public List<Product> extractProductsFromJson(String productString) {
         //if the json string is empty or null, the return early.
         ObjectMapper mapper = new ObjectMapper();

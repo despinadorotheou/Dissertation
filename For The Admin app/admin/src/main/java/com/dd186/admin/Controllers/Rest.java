@@ -73,10 +73,11 @@ public class Rest {
     public void addFavourite(@PathVariable("userID") int user_id, @PathVariable("productID") int product_id){
         User user = userService.findById(user_id);
         Product product =  productService.findById(product_id);
-//        List<Product> favourites = new ArrayList<>(user.getFavourites());
-//        favourites.add(product);
-//        user.setFavourites(new HashSet<>(favourites));
-        user.setFavourites(new HashSet<>(Arrays.asList(product)));
+        List<Product> favourites = new ArrayList<>(user.getFavourites());
+        favourites.add(product);
+        user.setFavourites(new HashSet<>(favourites));
+        userService.saveUser(user);
+//        user.setFavourites(new HashSet<>(Arrays.asList(product)));
     }
 
     //http://10.0.2.2:8080/rest/favourites

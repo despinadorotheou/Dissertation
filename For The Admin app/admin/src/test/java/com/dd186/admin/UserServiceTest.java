@@ -65,7 +65,7 @@ public class UserServiceTest {
 //        final String email = "test@test.com";
 //
 //        // Run the test
-//        User result = userServiceUnderTest.saveUser(User.builder().build());
+//        User result = userServiceUnderTest.saveUserCustom(User.builder().build());
 //
 //        // Verify the results
 //        assertEquals(email, result.getEmail());
