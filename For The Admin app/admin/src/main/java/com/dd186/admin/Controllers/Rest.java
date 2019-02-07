@@ -10,8 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.codec.binary.Base64;
 
+import javax.jws.soap.SOAPBinding;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -27,22 +31,8 @@ public class Rest {
     @RequestMapping(value = "/products")
     public String sendProducts() throws SQLException, IOException {
         List<Product> products = productService.findAll();
-        JsonArray result = new JsonArray();
-        for (Product p:products) {
-            JsonObject product = new JsonObject();
-            product.addProperty("id",p.getId());
-            product.addProperty("name",p.getName());
-            product.addProperty("description",p.getDescription());
-            product.addProperty("price",p.getPrice());
-            product.addProperty("quantity",p.getQuantity());
-            product.addProperty("image", Base64.encodeBase64String(p.getImage().getBytes(1, (int) p.getImage().length())));
-            JsonObject category = new JsonObject();
-            category.addProperty("id",p.getCategory().getId());
-            category.addProperty("category",p.getCategory().getCategory());
-            product.add("category",category);
-            result.add(product);
-        }
-        return result.toString();
+
+        return createList(products);
 
     }
 
@@ -76,6 +66,51 @@ public class Rest {
             return "ok";
         }
         return "Already existing user";
+    }
+
+    //http://10.0.2.2:8080/rest/addFavourite/"+userID+"/" +productID
+    @RequestMapping(value = "/addFavourite/{userID}/{productID}")
+    public void addFavourite(@PathVariable("userID") int user_id, @PathVariable("productID") int product_id){
+        User user = userService.findById(user_id);
+        Product product =  productService.findById(product_id);
+//        List<Product> favourites = new ArrayList<>(user.getFavourites());
+//        favourites.add(product);
+//        user.setFavourites(new HashSet<>(favourites));
+        user.setFavourites(new HashSet<>(Arrays.asList(product)));
+    }
+
+    //http://10.0.2.2:8080/rest/favourites
+    @RequestMapping(value = "/favourites/{userID}")
+    public String sendFavourites(@PathVariable("userID") int user_id) throws SQLException {
+        List<Product> favourites = new ArrayList<>();
+        User user = userService.findById(user_id);
+        favourites.addAll(user.getFavourites());
+        return createList(favourites);
+
+
+    }
+
+    //method for creating Json Array for the android app
+    private String createList(List<Product> products) throws SQLException {
+        JsonArray result = new JsonArray();
+        if (!products.isEmpty()) {
+            for (Product p : products) {
+                JsonObject product = new JsonObject();
+                product.addProperty("id", p.getId());
+                product.addProperty("name", p.getName());
+                product.addProperty("description", p.getDescription());
+                product.addProperty("price", p.getPrice());
+                product.addProperty("quantity", p.getQuantity());
+                product.addProperty("image", Base64.encodeBase64String(p.getImage().getBytes(1, (int) p.getImage().length())));
+                JsonObject category = new JsonObject();
+                category.addProperty("id", p.getCategory().getId());
+                category.addProperty("category", p.getCategory().getCategory());
+                product.add("category", category);
+                result.add(product);
+            }
+            return result.toString();
+        }
+        return "";
     }
 
 

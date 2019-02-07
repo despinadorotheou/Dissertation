@@ -33,7 +33,6 @@ public class User {
     @Column(name = "active")
     private int active;
     @ManyToMany(cascade = CascadeType.ALL)
-    @Column(name = "favourites")
     @JoinTable(name = "user_favourite", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "productID"))
     private Set<Product> favourites;
     @ManyToMany(cascade = CascadeType.ALL)

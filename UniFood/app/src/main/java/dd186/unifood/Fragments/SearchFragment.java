@@ -20,12 +20,14 @@ import java.util.regex.Pattern;
 
 import dd186.unifood.Adapters.ProductAdapter;
 import dd186.unifood.Entities.Product;
+import dd186.unifood.Entities.User;
 import dd186.unifood.Main;
 import dd186.unifood.R;
 
 public class SearchFragment extends Fragment {
 
     List<Product> products = new ArrayList<>();
+    User user ;
 
     @Nullable
     @Override
@@ -36,9 +38,9 @@ public class SearchFragment extends Fragment {
         Main main = (Main) getActivity();
         assert main != null;
         products = main.getProducts();
-        Resources resources = getResources();
+        user = main.getUser();
         EditText searchInput = rootView.findViewById(R.id.search_input);
-        gridView.setAdapter(new ProductAdapter(main,products, resources));
+        gridView.setAdapter(new ProductAdapter(main,products, user));
         gridView.setOnItemClickListener((parent, view, position, id) -> {
             Fragment productView = new ProductInfoFragment();
             Bundle args =  new Bundle();
@@ -64,7 +66,7 @@ public class SearchFragment extends Fragment {
                         result.add(p);
                     }
                 }
-                gridView.setAdapter(new ProductAdapter(main,result, resources));
+                gridView.setAdapter(new ProductAdapter(main,result, user));
             }
 
             @Override

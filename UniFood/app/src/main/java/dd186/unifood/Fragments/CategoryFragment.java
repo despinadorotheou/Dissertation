@@ -15,6 +15,7 @@ import java.util.List;
 
 import dd186.unifood.Adapters.ProductAdapter;
 import dd186.unifood.Entities.Product;
+import dd186.unifood.Entities.User;
 import dd186.unifood.Main;
 import dd186.unifood.R;
 
@@ -28,9 +29,9 @@ public class CategoryFragment extends Fragment {
         Bundle args = getArguments();
         Main main = (Main) getActivity();
         assert main != null;
+        User user =  main.getUser();
         List<Product> products = (List<Product>) args.getSerializable("products");
-        Resources resources = getResources();
-        gridView.setAdapter(new ProductAdapter(main,products, resources));
+        gridView.setAdapter(new ProductAdapter(main,products, user));
         gridView.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(main, "click on item"+position,Toast.LENGTH_SHORT).show());
         return rootView;
     }

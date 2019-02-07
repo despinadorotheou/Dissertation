@@ -14,18 +14,22 @@ import java.sql.SQLException;
 import java.util.*;
 //import org.apache.commons.codec.binary.Base64;
 import dd186.unifood.Entities.Product;
+import dd186.unifood.Entities.User;
+import dd186.unifood.HttpRequest;
+import dd186.unifood.Main;
+import dd186.unifood.R;
 
 public class ProductAdapter extends BaseAdapter {
 
     private Context context;
     private List<Product> products;
-    private Resources resources;
     private static LayoutInflater inflater = null;
+    private User user;
 
-    public ProductAdapter(Context context, List<Product> products, Resources resources){
+    public ProductAdapter(Context context, List<Product> products, User user){
        this.context= context;
        this.products = products;
-       this.resources = resources;
+       this.user = user;
        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -58,6 +62,19 @@ public class ProductAdapter extends BaseAdapter {
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
             image.setImageBitmap(bitmap);
             view.addView(image);
+            ImageView favouriteIcon = new ImageView(context);
+            favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
+            favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
+            favouriteIcon.setOnClickListener(v -> {
+
+                HttpRequest httpRequest = new HttpRequest();
+                httpRequest.setLink("http://10.0.2.2:8080/rest/addFavourite/" + user.getId() +"/" + products.get(position).getId());
+                httpRequest.execute();
+                favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
+                favouriteIcon.setEnabled(false);
+
+            });
+            view.addView(favouriteIcon);
             TextView nameTextView = new TextView(context);
             nameTextView.setText(products.get(position).getName());
             nameTextView.setPadding(0, 0, 0, 0);

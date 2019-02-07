@@ -34,6 +34,8 @@ public class Main extends AppCompatActivity
     List<Product> products = new ArrayList<>();
     User user;
     List<Product> basket = new ArrayList<>();
+    List<Product> favourites = new ArrayList<>();
+
 
 
     @Override
@@ -50,11 +52,15 @@ public class Main extends AppCompatActivity
             System.out.println("Something wrong with the deserialisation of products ");
             e.printStackTrace();
         }
+        HttpRequest httpRequest = new HttpRequest();
+        httpRequest.setLink("http://10.0.2.2:8080/rest/products");
+        httpRequest.execute();
         HttpRequest httpRequest1 = new HttpRequest();
-        httpRequest1.setLink("http://10.0.2.2:8080/rest/products");
+        httpRequest1.setLink("http://10.0.2.2:8080/rest/favourites/" + user.getId());
         httpRequest1.execute();
         try {
-            products = extractProductsFromJson(httpRequest1.get());
+            products = extractProductsFromJson(httpRequest.get());
+            favourites = extractProductsFromJson(httpRequest1.get());
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
