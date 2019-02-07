@@ -6,15 +6,11 @@ import com.dd186.admin.Services.ProductService;
 import com.dd186.admin.Services.UserService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.codec.binary.Base64;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -48,13 +44,6 @@ public class Rest {
         }
         return result.toString();
 
-    }
-
-    @RequestMapping(value = "/image", method = RequestMethod.GET)
-    public void getImageAsByteArray(HttpServletResponse response) throws IOException, SQLException {
-        InputStream in = productService.findAll().get(1).getImage().getBinaryStream();
-        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-        IOUtils.copy(in, response.getOutputStream());
     }
 
     //http://10.0.2.2:8080/rest/login/"+email.getText().toString()+"/" +pass.getText().toString()
