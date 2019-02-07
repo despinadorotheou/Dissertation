@@ -33,6 +33,7 @@ public class Main extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
     List<Product> products = new ArrayList<>();
     User user;
+    List<Product> basket = new ArrayList<>();
 
 
     @Override

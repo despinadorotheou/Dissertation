@@ -2,15 +2,17 @@ package com.dd186.admin.Controllers;
 
 import com.dd186.admin.Domain.Product;
 import com.dd186.admin.Services.ProductService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
@@ -85,6 +87,14 @@ public class MainController {
         modelAndView.addObject("products",(List<Product>)productService.findAll());
         modelAndView.setViewName("main");
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/image", method = RequestMethod.GET)
+    public void getImageAsByteArray(@RequestParam( name = "productId") int id, HttpServletResponse response) throws IOException, SQLException {
+        Product product= productService.findById(id);
+        InputStream in = product.getImage().getBinaryStream();
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        IOUtils.copy(in, response.getOutputStream());
     }
 
 }

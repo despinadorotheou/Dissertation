@@ -1,5 +1,6 @@
 package com.dd186.admin.Services;
 
+import com.dd186.admin.Domain.Product;
 import com.dd186.admin.Domain.Role;
 import com.dd186.admin.Domain.User;
 import com.dd186.admin.Repositories.RoleRepository;
@@ -36,6 +37,8 @@ public class UserService {
         user.setActive(1);
         Role userRole = roleRepository.findByRole("USER");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+//        user.setRoles(userRole);
+        user.setFavourites(new HashSet<Product>());
         userRepository.save(user);
     }
 

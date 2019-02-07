@@ -23,21 +23,19 @@ public class User {
     @Column(name = "id")
     private int id;
     @Column(name = "FirstName")
-//    @NotEmpty(message = "*Please provide your name")
     private String name;
     @Column(name = "LastName")
-//    @NotEmpty(message = "*Please provide your last name")
     private String lastName;
     @Column(name = "Email")
-//    @Email(message = "*Please provide a valid Email")
-//    @NotEmpty(message = "*Please provide an email")
     private String email;
     @Column(name = "Password")
-//    @Length(min = 5, message = "*Your password must have at least 5 characters")
-//    @NotEmpty(message = "*Please provide your password")
     private String password;
     @Column(name = "active")
     private int active;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @Column(name = "favourites")
+    @JoinTable(name = "user_favourite", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "productID"))
+    private Set<Product> favourites;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
@@ -53,33 +51,7 @@ public class User {
 
     }
 
-    public @Length(min = 5, message = "*Your password must have at least 5 characters") @NotEmpty(message = "*Please provide your password") String getPassword() {
-        return password;
-    }
-
-    public void setPassword(@Length(min = 5, message = "*Your password must have at least 5 characters") @NotEmpty(message = "*Please provide your password") String password) {
-        this.password = password;
-    }
-
-    public void setRoles(HashSet<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public @NotEmpty(message = "*Please provide your name") String getName() {
-        return name;
-    }
-
-    public @NotEmpty(message = "*Please provide your last name") String getLastName() {
-        return lastName;
-    }
-
-    public @Email(message = "*Please provide a valid Email") @NotEmpty(message = "*Please provide an email") String getEmail() {
-        return email;
-    }
+    //setters and getters
 
     public int getId() {
         return id;
@@ -87,6 +59,59 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Set<Product> getFavourites() {
+        return favourites;
+    }
+
+    public void setFavourites(Set<Product> favourites) {
+        this.favourites = favourites;
+    }
+
+    public int getActive() {
+        return active;
     }
 
     public void setActive(int active) {

@@ -2,21 +2,16 @@ package com.dd186.admin.Controllers;
 
 import com.dd186.admin.Domain.Product;
 import com.dd186.admin.Domain.User;
-import com.dd186.admin.Repositories.ProductRepository;
-import com.dd186.admin.Repositories.UserRepository;
 import com.dd186.admin.Services.ProductService;
 import com.dd186.admin.Services.UserService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.IOUtils;
-
-//import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.codec.binary.Base64;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,8 +27,9 @@ public class Rest {
     @Autowired
     UserService userService;
 
-    @GetMapping(value = "/products")
-        public String sendProducts() throws SQLException, IOException {
+    //http://10.0.2.2:8080/rest/products
+    @RequestMapping(value = "/products")
+    public String sendProducts() throws SQLException, IOException {
         List<Product> products = productService.findAll();
         JsonArray result = new JsonArray();
         for (Product p:products) {
@@ -55,13 +51,14 @@ public class Rest {
     }
 
     @RequestMapping(value = "/image", method = RequestMethod.GET)
-    public @ResponseBody byte[] getImageAsByteArray() throws IOException, SQLException {
+    public void getImageAsByteArray(HttpServletResponse response) throws IOException, SQLException {
         InputStream in = productService.findAll().get(1).getImage().getBinaryStream();
-        return IOUtils.toByteArray(in);
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        IOUtils.copy(in, response.getOutputStream());
     }
 
     //http://10.0.2.2:8080/rest/login/"+email.getText().toString()+"/" +pass.getText().toString()
-    @GetMapping(value = "/login/{email}/{pass}")
+    @RequestMapping(value = "/login/{email}/{pass}")
     public String validateLogin(@PathVariable("email") String userEmail, @PathVariable("pass") String userPass){
         User user = userService.findUserByEmail(userEmail);
         if (user!=null){
@@ -77,8 +74,8 @@ public class Rest {
         } else return "invalid";
     }
 
-    //httpRequest.setLink("http://10.0.2.2:8080/rest/signup/"+useremail+"/" +userName+"/" +last+"/" +userdob+"/" +password1);
-    @GetMapping(value = "/signup/{email}/{name}/{lastname}/{password}")
+    //http://10.0.2.2:8080/rest/signup/"+useremail+"/" +userName+"/" +last+"/" +userdob+"/" +password1
+    @RequestMapping(value = "/signup/{email}/{name}/{lastname}/{password}")
     public String validateSignup(@PathVariable("email") String userEmail,
                                  @PathVariable("name") String userName,
                                  @PathVariable("lastname") String userlast,

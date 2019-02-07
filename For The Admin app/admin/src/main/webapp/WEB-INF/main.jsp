@@ -61,10 +61,10 @@
                 <td><c:out value="${product.getQuantity()}"/></td>
                 <td><c:out value="${product.getCategory().getCategory()}"/></td>
                 <c:if test="${product.getImage() != null}">
-                    <td><c:out value="Yes"/></td>
+                    <td><a class="btn btn-primary" href="/main/image?productId=${product.getId()}">See Image</a></td>
                 </c:if>
                 <c:if test="${product.getImage() == null}">
-                    <td><c:out value="No"/></td>
+                    <td><c:out value="No Image"/></td>
                 </c:if>
                 <td><a class="btn btn-success" href="/main/edit?productId=${product.getId()}">Edit</a></td>
                 <td><a class="btn btn-danger" href="/main/delete?productId=${product.getId()}">Delete</a></td>
