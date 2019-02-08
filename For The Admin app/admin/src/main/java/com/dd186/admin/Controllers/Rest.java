@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.codec.binary.Base64;
 
-import javax.jws.soap.SOAPBinding;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -62,7 +60,7 @@ public class Rest {
         User user = userService.findUserByEmail(userEmail);
         if (user==null){
             User newuser = new User(userName,userlast,userEmail,pass);
-            userService.saveUser(newuser);
+            userService.saveUserCustom(newuser);
             return "ok";
         }
         return "Already existing user";
@@ -73,11 +71,11 @@ public class Rest {
     public void addFavourite(@PathVariable("userID") int user_id, @PathVariable("productID") int product_id){
         User user = userService.findById(user_id);
         Product product =  productService.findById(product_id);
-        List<Product> favourites = new ArrayList<>(user.getFavourites());
+        List<Product> favourites = new ArrayList<>(user.getFavProduct());
         favourites.add(product);
-        user.setFavourites(new HashSet<>(favourites));
+        user.setFavProduct(new HashSet<>(favourites));
         userService.saveUser(user);
-//        user.setFavourites(new HashSet<>(Arrays.asList(product)));
+//        user.setFavProduct(new HashSet<>(Arrays.asList(product)));
     }
 
     //http://10.0.2.2:8080/rest/favourites
@@ -85,7 +83,7 @@ public class Rest {
     public String sendFavourites(@PathVariable("userID") int user_id) throws SQLException {
         List<Product> favourites = new ArrayList<>();
         User user = userService.findById(user_id);
-        favourites.addAll(user.getFavourites());
+        favourites.addAll(user.getFavProduct());
         return createList(favourites);
 
 

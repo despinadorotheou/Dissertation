@@ -42,7 +42,7 @@ public class UserService {
         Role userRole = roleRepository.findByRole("USER");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 //        user.setRoles(userRole);
-        user.setFavourites(new HashSet<Product>());
+        user.setFavProduct(new HashSet<Product>());
         userRepository.save(user);
     }
 

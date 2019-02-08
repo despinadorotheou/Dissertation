@@ -2,15 +2,8 @@ package com.dd186.admin.Domain;
 
 
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
-import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -34,7 +27,7 @@ public class User {
     private int active;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_favourite", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "productID"))
-    private Set<Product> favourites;
+    private Set<Product> favProduct;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
@@ -101,12 +94,12 @@ public class User {
         this.roles = roles;
     }
 
-    public Set<Product> getFavourites() {
-        return favourites;
+    public Set<Product> getFavProduct() {
+        return favProduct;
     }
 
-    public void setFavourites(Set<Product> favourites) {
-        this.favourites = favourites;
+    public void setFavProduct(Set<Product> favProduct) {
+        this.favProduct = favProduct;
     }
 
     public int getActive() {
