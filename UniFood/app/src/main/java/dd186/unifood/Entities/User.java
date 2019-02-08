@@ -1,18 +1,23 @@
 package dd186.unifood.Entities;
 
+import java.util.List;
+import java.util.Set;
+
 public class User {
     private int id;
     private String name;
     private String lastName;
     private String email;
     private String password;
+    private List<Product> favouriteProducts;
 
-    public User(int id, String name, String lastName, String email, String password) {
+    public User(int id, String name, String lastName, String email, String password, List<Product> favouriteProducts) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.favouriteProducts = favouriteProducts;
     }
 
     public User() {
@@ -58,5 +63,11 @@ public class User {
         this.password = password;
     }
 
+    public List<Product> getFavouriteProducts() {
+        return favouriteProducts;
+    }
 
+    public void setFavouriteProducts(List<Product> favouriteProducts) {
+        this.favouriteProducts = favouriteProducts;
+    }
 }

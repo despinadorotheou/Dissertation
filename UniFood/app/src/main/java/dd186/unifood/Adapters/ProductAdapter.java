@@ -63,17 +63,38 @@ public class ProductAdapter extends BaseAdapter {
             image.setImageBitmap(bitmap);
             view.addView(image);
             ImageView favouriteIcon = new ImageView(context);
-            favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
-            favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
-            favouriteIcon.setOnClickListener(v -> {
-
-                HttpRequest httpRequest = new HttpRequest();
-                httpRequest.setLink("http://10.0.2.2:8080/rest/addFavourite/" + user.getId() +"/" + products.get(position).getId());
-                httpRequest.execute();
+            boolean productInFavourites = false;
+            Main main = new Main();
+            for (Product p: user.getFavouriteProducts()) {
+                if (p.getId()==products.get(position).getId()){
+                    productInFavourites = true;
+                }
+            }
+            if(productInFavourites){
                 favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
-                favouriteIcon.setEnabled(false);
+                favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
+                favouriteIcon.setOnClickListener(v -> {
+                    user.getFavouriteProducts().remove(products.get(position));
+                    HttpRequest httpRequest = new HttpRequest();
+                    httpRequest.setLink("http://10.0.2.2:8080/rest/removeFavourite/" + user.getId() +"/" + products.get(position).getId());
+                    httpRequest.execute();
+                    favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
+                    main.setUser(user);
 
-            });
+                });
+            }else{
+                favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
+                favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
+                favouriteIcon.setOnClickListener(v -> {
+                    user.getFavouriteProducts().add(products.get(position));
+                    HttpRequest httpRequest = new HttpRequest();
+                    httpRequest.setLink("http://10.0.2.2:8080/rest/addFavourite/" + user.getId() +"/" + products.get(position).getId());
+                    httpRequest.execute();
+                    favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
+                    main.setUser(user);
+
+                });
+            }
             view.addView(favouriteIcon);
             TextView nameTextView = new TextView(context);
             nameTextView.setText(products.get(position).getName());
@@ -87,6 +108,10 @@ public class ProductAdapter extends BaseAdapter {
         }
         return convertView;
 
+    }
+
+    public User getUser(){
+        return user;
     }
 
 

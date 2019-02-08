@@ -52,20 +52,15 @@ public class Main extends AppCompatActivity
             System.out.println("Something wrong with the deserialisation of products ");
             e.printStackTrace();
         }
-        HttpRequest httpRequest = new HttpRequest();
-        httpRequest.setLink("http://10.0.2.2:8080/rest/products");
-        httpRequest.execute();
-        HttpRequest httpRequest1 = new HttpRequest();
-        httpRequest1.setLink("http://10.0.2.2:8080/rest/favourites/" + user.getId());
-        httpRequest1.execute();
         try {
-            products = extractProductsFromJson(httpRequest.get());
-            favourites = extractProductsFromJson(httpRequest1.get());
+            products = extractProductsFromJson(makeHttpRequest("http://10.0.2.2:8080/rest/products"));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+//            favourites = extractProductsFromJson(makeHttpRequest("http://10.0.2.2:8080/rest/favourites/" + user.getId()));
+        favourites = user.getFavouriteProducts();
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
         loadFragment(new HomeFragment());
@@ -142,18 +137,27 @@ public class Main extends AppCompatActivity
         startActivity(intent);
     }
 
+    //method used to send the list of products to the fragments
     public List<Product> getProducts() {
         return products;
     }
 
+    //method used to send the user to the fragments
     public  User getUser(){
         return user;
     }
 
+    //method used to receive the updated user from the fragments
+    public  void setUser(User user){
+        this.user =  user;
+    }
+
+    //method used to send the user's favourite products
     public List<Product> getFavourites() {
         return favourites;
     }
 
+    //method used to extract the products for the given json string
     public List<Product> extractProductsFromJson(String productString) {
         //if the json string is empty or null, the return early.
         ObjectMapper mapper = new ObjectMapper();
@@ -232,6 +236,14 @@ public class Main extends AppCompatActivity
         args.putSerializable("products", (Serializable) coffee);
         fragment.setArguments(args);
         loadFragment(fragment);
+    }
+
+    //method used to do http requests
+    public String makeHttpRequest(String link) throws ExecutionException, InterruptedException {
+        HttpRequest httpRequest = new HttpRequest();
+        httpRequest.setLink(link);
+        httpRequest.execute();
+        return httpRequest.get();
     }
 
 

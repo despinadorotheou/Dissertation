@@ -29,24 +29,29 @@ public class Rest {
     @RequestMapping(value = "/products")
     public String sendProducts() throws SQLException, IOException {
         List<Product> products = productService.findAll();
-
-        return createList(products);
-
+        JsonArray toRet = createList(products);
+        if (toRet.isJsonNull())
+            return "";
+        else
+            return createList(products).toString();
     }
 
     //http://10.0.2.2:8080/rest/login/"+email.getText().toString()+"/" +pass.getText().toString()
     @RequestMapping(value = "/login/{email}/{pass}")
-    public String validateLogin(@PathVariable("email") String userEmail, @PathVariable("pass") String userPass){
+    public String validateLogin(@PathVariable("email") String userEmail, @PathVariable("pass") String userPass) throws SQLException {
         User user = userService.findUserByEmail(userEmail);
         if (user!=null){
             if (userService.passMatch(userPass, user.getPassword())){
-                JsonObject product = new JsonObject();
-                product.addProperty("id",user.getId());
-                product.addProperty("name",user.getName());
-                product.addProperty("lastName",user.getLastName());
-                product.addProperty("email",user.getEmail());
-                product.addProperty("password",user.getPassword());
-                return product.toString();
+                JsonObject userProperties = new JsonObject();
+                userProperties.addProperty("id",user.getId());
+                userProperties.addProperty("name",user.getName());
+                userProperties.addProperty("lastName",user.getLastName());
+                userProperties.addProperty("email",user.getEmail());
+                userProperties.addProperty("password",user.getPassword());
+                List<Product> favourites = new ArrayList<>();
+                favourites.addAll(user.getFavProduct());
+                userProperties.add("favouriteProducts", createList(favourites));
+                return userProperties.toString();
             } else return "invalid";
         } else return "invalid";
     }
@@ -75,22 +80,33 @@ public class Rest {
         favourites.add(product);
         user.setFavProduct(new HashSet<>(favourites));
         userService.saveUser(user);
-//        user.setFavProduct(new HashSet<>(Arrays.asList(product)));
+
     }
 
-    //http://10.0.2.2:8080/rest/favourites
-    @RequestMapping(value = "/favourites/{userID}")
-    public String sendFavourites(@PathVariable("userID") int user_id) throws SQLException {
-        List<Product> favourites = new ArrayList<>();
+    //http://10.0.2.2:8080/rest/removeFavourite/"+userID+"/" +productID
+    @RequestMapping(value = "/removeFavourite/{userID}/{productID}")
+    public void removeFavourite(@PathVariable("userID") int user_id, @PathVariable("productID") int product_id){
         User user = userService.findById(user_id);
-        favourites.addAll(user.getFavProduct());
-        return createList(favourites);
-
-
+        Product product =  productService.findById(product_id);
+        List<Product> favourites = new ArrayList<>(user.getFavProduct());
+        favourites.remove(product);
+        user.setFavProduct(new HashSet<>(favourites));
+        userService.saveUser(user);
     }
+
+//    //http://10.0.2.2:8080/rest/favourites
+//    @RequestMapping(value = "/favourites/{userID}")
+//    public String sendFavourites(@PathVariable("userID") int user_id) throws SQLException {
+//        List<Product> favourites = new ArrayList<>();
+//        User user = userService.findById(user_id);
+//        favourites.addAll(user.getFavProduct());
+//        return createList(favourites);
+//
+//
+//    }
 
     //method for creating Json Array for the android app
-    private String createList(List<Product> products) throws SQLException {
+    private JsonArray createList(List<Product> products) throws SQLException {
         JsonArray result = new JsonArray();
         if (!products.isEmpty()) {
             for (Product p : products) {
@@ -107,9 +123,8 @@ public class Rest {
                 product.add("category", category);
                 result.add(product);
             }
-            return result.toString();
         }
-        return "";
+        return result;
     }
 
 

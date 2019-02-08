@@ -25,13 +25,13 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_category, null );
-        GridView gridView;
-        gridView = (GridView) rootView.findViewById(R.id.product_list);
         Bundle args = getArguments();
         Main main = (Main) getActivity();
         assert main != null;
         User user =  main.getUser();
         List<Product> products = (List<Product>) args.getSerializable("products");
+        GridView gridView;
+        gridView = (GridView) rootView.findViewById(R.id.product_list);
         gridView.setAdapter(new ProductAdapter(main,products, user));
         gridView.setOnItemClickListener((parent, view, position, id) -> {
             Fragment productView = new ProductInfoFragment();
