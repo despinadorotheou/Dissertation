@@ -14,11 +14,11 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="87dp"
-        android:layout_marginLeft="87dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
+        android:layout_marginStart="86dp"
+        android:layout_marginLeft="86dp"
+        android:layout_marginTop="104dp"
+        android:layout_marginEnd="73dp"
+        android:layout_marginRight="73dp"
         app:srcCompat="@drawable/account" />
 
     <TextView
@@ -42,11 +42,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="49dp"
-        android:layout_marginLeft="49dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginRight="36dp"
-        android:layout_marginBottom="27dp"
+        android:layout_marginStart="41dp"
+        android:layout_marginLeft="41dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginRight="44dp"
+        android:layout_marginBottom="10dp"
         android:text="TextView" />
 
     <TextView
@@ -54,8 +54,12 @@
         android:layout_width="95dp"
         android:layout_height="22dp"
         android:layout_above="@+id/product_descriptiom"
+        android:layout_below="@+id/product_price"
         android:layout_alignStart="@+id/product_descriptiom"
-        android:text="Description" />
+        android:layout_marginTop="9dp"
+        android:text="Description"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/product_price"
@@ -70,11 +74,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="-33dp"
-        android:layout_marginBottom="58dp"
+        android:layout_marginStart="-37dp"
+        android:layout_marginLeft="-37dp"
+        android:layout_marginBottom="123dp"
         android:layout_toEndOf="@+id/textView14"
-        android:text="Add to the Basket"
-        android:layout_marginLeft="-33dp"
-        android:layout_toRightOf="@+id/textView14" />
+        android:layout_toRightOf="@+id/textView14"
+        android:onClick="addToBasket"
+        android:backgroundTint="@color/colorBackground"
+        android:textColor="@color/colorPrimary"
+        android:text="Add to the Basket" />
 
 </RelativeLayout>

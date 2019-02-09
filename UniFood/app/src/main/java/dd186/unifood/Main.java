@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import dd186.unifood.Entities.Product;
 import dd186.unifood.Entities.User;
 import dd186.unifood.Fragments.AccountFragment;
+import dd186.unifood.Fragments.BasketFragment;
 import dd186.unifood.Fragments.CategoryFragment;
 import dd186.unifood.Fragments.FavouritesFragment;
 import dd186.unifood.Fragments.SearchFragment;
@@ -59,7 +61,6 @@ public class Main extends AppCompatActivity
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//            favourites = extractProductsFromJson(makeHttpRequest("http://10.0.2.2:8080/rest/favourites/" + user.getId()));
         favourites = user.getFavouriteProducts();
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
@@ -76,12 +77,13 @@ public class Main extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Fragment fragment = null;
         switch (item.getItemId()){
             case R.id.basket:
-                //todo basket page
-                return true;
+                fragment = new BasketFragment();
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return loadFragment(fragment);
     }
 
     private boolean loadFragment(Fragment fragment){
@@ -140,6 +142,11 @@ public class Main extends AppCompatActivity
     //method used to send the list of products to the fragments
     public List<Product> getProducts() {
         return products;
+    }
+
+    //method used to send the list of products that are in the basket to the fragments
+    public List<Product> getBasketProducts() {
+        return basket;
     }
 
     //method used to send the user to the fragments
@@ -246,7 +253,18 @@ public class Main extends AppCompatActivity
         return httpRequest.get();
     }
 
-
+    //method for the button add to the basket
+    public void addToBasket(View view){
+        TextView productName = findViewById(R.id.product_name);
+        Product product = new Product();
+        for (Product p:products) {
+            if (p.getName().contentEquals(productName.getText())){
+                product = p;
+                break;
+            }
+        }
+        basket.add(product);
+    }
 
 
 }

@@ -44,7 +44,7 @@ public class Signup extends AppCompatActivity {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
                 } else {
-                    //todo pass or username wrong
+                    //todo pass or username already exists
                 }
             } catch (ExecutionException e) {
                 e.printStackTrace();
@@ -52,6 +52,8 @@ public class Signup extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+        }else {
+            //todo when password are not matching
         }
 
     }
