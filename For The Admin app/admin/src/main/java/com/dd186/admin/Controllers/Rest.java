@@ -94,16 +94,6 @@ public class Rest {
         userService.saveUser(user);
     }
 
-//    //http://10.0.2.2:8080/rest/favourites
-//    @RequestMapping(value = "/favourites/{userID}")
-//    public String sendFavourites(@PathVariable("userID") int user_id) throws SQLException {
-//        List<Product> favourites = new ArrayList<>();
-//        User user = userService.findById(user_id);
-//        favourites.addAll(user.getFavProduct());
-//        return createList(favourites);
-//
-//
-//    }
 
     //method for creating Json Array for the android app
     private JsonArray createList(List<Product> products) throws SQLException {

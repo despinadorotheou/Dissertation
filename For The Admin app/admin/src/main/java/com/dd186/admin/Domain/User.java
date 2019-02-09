@@ -14,9 +14,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private int id;
+    public int id;
     @Column(name = "FirstName")
-    private String name;
+    public String name;
     @Column(name = "LastName")
     private String lastName;
     @Column(name = "Email")
@@ -31,6 +31,9 @@ public class User {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_order", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
+    private Set<Order> orders;
 
     public User(String name, String lastName, String email, String password){
         this.name = name;
@@ -108,5 +111,13 @@ public class User {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 }
