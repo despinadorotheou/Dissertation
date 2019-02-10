@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.List;
@@ -31,16 +34,38 @@ public class BasketFragment extends Fragment {
         User user =  main.getUser();
         List<Product> products = main.getBasketProducts();
         ListView listView = rootView.findViewById(R.id.basket_list);
-        listView.setAdapter(new CheckoutProductAdapter(main,products));
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            Fragment productView = new ProductInfoFragment();
-            Bundle args1 =  new Bundle();
-            args1.putSerializable("product", (Serializable) products.get(position));
-            productView.setArguments(args1);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, productView, "findThisFragment")
-                    .addToBackStack(null)
-                    .commit();
-        });        return rootView;
+        Button payByCard = rootView.findViewById(R.id.card_checkout_btn);
+        Button payByCash = rootView.findViewById(R.id.cash_checkout_btn);
+        TextView total = rootView.findViewById(R.id.total_basket);
+        TextView totalHeader =  rootView.findViewById(R.id.total_header);
+        TextView empty = rootView.findViewById(R.id.empty_basket);
+        if (!products.isEmpty()) {
+            listView.setAdapter(new CheckoutProductAdapter(main, products));
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                Fragment productView = new ProductInfoFragment();
+                Bundle args1 = new Bundle();
+                args1.putSerializable("product", (Serializable) products.get(position));
+                productView.setArguments(args1);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, productView, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+            });
+            double totalPrice = 0;
+            for (Product p : products) {
+                totalPrice += p.getPrice();
+            }
+            total.setText(Double.toString(totalPrice));
+            empty.setVisibility(View.INVISIBLE);
+        } else {
+            listView.setVisibility(View.INVISIBLE);
+            payByCard.setVisibility(View.INVISIBLE);
+            payByCash.setVisibility(View.INVISIBLE);
+            total.setVisibility(View.INVISIBLE);
+            totalHeader.setVisibility(View.INVISIBLE);
+        }
+        return rootView;
     }
+
+
 }

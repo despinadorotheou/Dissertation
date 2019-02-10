@@ -1,5 +1,6 @@
 package dd186.unifood;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -149,6 +152,11 @@ public class Main extends AppCompatActivity
         return basket;
     }
 
+    //method used to update the products in the basket
+    public void setBasketProducts(List<Product> basketProducts){
+        basket = basketProducts;
+    }
+
     //method used to send the user to the fragments
     public  User getUser(){
         return user;
@@ -264,6 +272,22 @@ public class Main extends AppCompatActivity
             }
         }
         basket.add(product);
+    }
+
+ //method used to reload the empty basket page
+    public void reloadEmptyBasketPage(){
+//        ListView listView = findViewById(R.id.basket_list);
+        Button payByCard = findViewById(R.id.card_checkout_btn);
+        Button payByCash = findViewById(R.id.cash_checkout_btn);
+        TextView total = findViewById(R.id.total_basket);
+        TextView totalHeader =  findViewById(R.id.total_header);
+        TextView empty = findViewById(R.id.empty_basket);
+//        listView.setVisibility(View.INVISIBLE);
+        payByCard.setVisibility(View.INVISIBLE);
+        payByCash.setVisibility(View.INVISIBLE);
+        total.setVisibility(View.INVISIBLE);
+        totalHeader.setVisibility(View.INVISIBLE);
+        empty.setVisibility(View.VISIBLE);
     }
 
 

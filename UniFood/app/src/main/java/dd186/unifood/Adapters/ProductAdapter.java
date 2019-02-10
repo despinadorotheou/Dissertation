@@ -54,6 +54,7 @@ public class ProductAdapter extends BaseAdapter {
             GridLayout view = new GridLayout(context);
             view.setOrientation(GridLayout.VERTICAL);
             view.setUseDefaultMargins(true);
+            view.setLayoutParams(new ViewGroup.LayoutParams(250,450));
             view.setAlignmentMode(GridLayout.ALIGN_MARGINS);
             ImageView image = new ImageView(context);
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(150,150);
