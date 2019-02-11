@@ -3,10 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/basket"
-        android:checkable="true"
+        android:id="@+id/basket_actionbar"
         android:icon="@drawable/ic_shopping_cart_24dp"
-        android:title="basket"
+        android:actionLayout="@layout/basket_count"
+        android:title="@string/basket"
         android:visible="true"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        />
 </menu>

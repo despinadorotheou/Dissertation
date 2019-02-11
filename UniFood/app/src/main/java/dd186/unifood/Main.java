@@ -1,22 +1,25 @@
 package dd186.unifood;
 
-import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,11 +39,12 @@ import dd186.unifood.Fragments.HomeFragment;
 
 public class Main extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
-    List<Product> products = new ArrayList<>();
-    User user;
-    List<Product> basket = new ArrayList<>();
-    List<Product> favourites = new ArrayList<>();
-
+    private List<Product> products = new ArrayList<>();
+    private User user;
+    private List<Product> basket = new ArrayList<>();
+    private List<Product> favourites = new ArrayList<>();
+    int basketItemsNum = 0;
+    TextView basketNumTextView;
 
 
     @Override
@@ -48,7 +52,7 @@ public class Main extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String extra = getIntent().getStringExtra("user");
-        ObjectMapper objectMapper =  new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
             user = objectMapper.readValue(extra, new TypeReference<User>() {
             });
@@ -74,23 +78,55 @@ public class Main extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.actionbar_menu,menu);
+        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.basket_actionbar);
+        menuItem.setActionView(R.layout.basket_count);
+        View view = menuItem.getActionView();
+        basketNumTextView = (TextView) view.findViewById(R.id.basket_num);
+        setBasketBadgeNum(basketItemsNum);
+        ImageView basket = view.findViewById(R.id.basket_img);
+        basket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new BasketFragment();
+                loadFragment(fragment);
+            }
+        });
+//        new MyMenuItemStuffListener(view, "Show Message") {
+//            @Override
+//            public void onClick(View v) {
+//            }
+//        };
         return true;
     }
+
+    public void setBasketBadgeNum(int num) {
+        basketItemsNum = num;
+        if (basketNumTextView == null) return;
+        runOnUiThread(() -> {
+            if (basketItemsNum == 0) {
+                basketNumTextView.setVisibility(View.INVISIBLE);
+            } else {
+                basketNumTextView.setVisibility(View.VISIBLE);
+                basketNumTextView.setText(Integer.toString(basketItemsNum));
+            }
+        });
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Fragment fragment = null;
-        switch (item.getItemId()){
-            case R.id.basket:
+        switch (item.getItemId()) {
+            case R.id.basket_actionbar:
                 fragment = new BasketFragment();
                 break;
         }
         return loadFragment(fragment);
     }
 
-    private boolean loadFragment(Fragment fragment){
-        if (fragment != null){
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, fragment)
@@ -104,7 +140,7 @@ public class Main extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Fragment fragment = null;
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.navigation_home:
                 fragment = new HomeFragment();
                 break;
@@ -119,19 +155,19 @@ public class Main extends AppCompatActivity
     }
 
     //method for the order status button in the account fragment_search
-    public void orderStatus(View view){
+    public void orderStatus(View view) {
         Fragment fragment = new OrderStatusFragment();
         loadFragment(fragment);
     }
 
     //method for the order history button in the account fragment_search
-    public void orderHistory(View view){
+    public void orderHistory(View view) {
         Fragment fragment = new OrderHistoryFragment();
         loadFragment(fragment);
     }
 
     //method for the favourites button in the account fragment_search
-    public void favourites(View view){
+    public void favourites(View view) {
         Fragment fragment = new FavouritesFragment();
         loadFragment(fragment);
     }
@@ -153,18 +189,19 @@ public class Main extends AppCompatActivity
     }
 
     //method used to update the products in the basket
-    public void setBasketProducts(List<Product> basketProducts){
+    public void removeFromBasket(List<Product> basketProducts) {
         basket = basketProducts;
+        setBasketBadgeNum(basket.size());
     }
 
     //method used to send the user to the fragments
-    public  User getUser(){
+    public User getUser() {
         return user;
     }
 
     //method used to receive the updated user from the fragments
-    public  void setUser(User user){
-        this.user =  user;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     //method used to send the user's favourite products
@@ -193,10 +230,10 @@ public class Main extends AppCompatActivity
     }
 
     //method to display all the sandwiches
-    public void sandwiches(View view){
+    public void sandwiches(View view) {
         List<Product> sandwiches = new ArrayList<>();
-        for (Product p:products) {
-            if (p.getCategory().getCategory().equals("Sandwiches")){
+        for (Product p : products) {
+            if (p.getCategory().getCategory().equals("Sandwiches")) {
                 sandwiches.add(p);
             }
         }
@@ -209,10 +246,10 @@ public class Main extends AppCompatActivity
     }
 
     //method to display all the snacks
-    public void snacks(View view){
+    public void snacks(View view) {
         List<Product> snacks = new ArrayList<>();
-        for (Product p:products) {
-            if (p.getCategory().getCategory().equals("Snacks")){
+        for (Product p : products) {
+            if (p.getCategory().getCategory().equals("Snacks")) {
                 snacks.add(p);
             }
         }
@@ -224,10 +261,10 @@ public class Main extends AppCompatActivity
     }
 
     //method to display all the drinks
-    public void drinks(View view){
+    public void drinks(View view) {
         List<Product> drinks = new ArrayList<>();
-        for (Product p:products) {
-            if (p.getCategory().getCategory().equals("Drinks")){
+        for (Product p : products) {
+            if (p.getCategory().getCategory().equals("Drinks")) {
                 drinks.add(p);
             }
         }
@@ -239,10 +276,10 @@ public class Main extends AppCompatActivity
     }
 
     //method to display all the sandwiches
-    public void coffee(View view){
+    public void coffee(View view) {
         List<Product> coffee = new ArrayList<>();
-        for (Product p:products) {
-            if (p.getCategory().getCategory().equals("Coffee")){
+        for (Product p : products) {
+            if (p.getCategory().getCategory().equals("Coffee")) {
                 coffee.add(p);
             }
         }
@@ -262,33 +299,17 @@ public class Main extends AppCompatActivity
     }
 
     //method for the button add to the basket
-    public void addToBasket(View view){
+    public void addToBasket(View view) {
         TextView productName = findViewById(R.id.product_name);
         Product product = new Product();
-        for (Product p:products) {
-            if (p.getName().contentEquals(productName.getText())){
+        for (Product p : products) {
+            if (p.getName().contentEquals(productName.getText())) {
                 product = p;
                 break;
             }
         }
         basket.add(product);
+        setBasketBadgeNum(basket.size());
     }
-
- //method used to reload the empty basket page
-    public void reloadEmptyBasketPage(){
-//        ListView listView = findViewById(R.id.basket_list);
-        Button payByCard = findViewById(R.id.card_checkout_btn);
-        Button payByCash = findViewById(R.id.cash_checkout_btn);
-        TextView total = findViewById(R.id.total_basket);
-        TextView totalHeader =  findViewById(R.id.total_header);
-        TextView empty = findViewById(R.id.empty_basket);
-//        listView.setVisibility(View.INVISIBLE);
-        payByCard.setVisibility(View.INVISIBLE);
-        payByCash.setVisibility(View.INVISIBLE);
-        total.setVisibility(View.INVISIBLE);
-        totalHeader.setVisibility(View.INVISIBLE);
-        empty.setVisibility(View.VISIBLE);
-    }
-
 
 }

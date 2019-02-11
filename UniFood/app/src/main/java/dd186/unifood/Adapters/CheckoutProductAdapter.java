@@ -3,8 +3,6 @@ package dd186.unifood.Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +16,27 @@ import android.widget.TextView;
 import java.util.List;
 
 import dd186.unifood.Entities.Product;
-import dd186.unifood.Fragments.BasketFragment;
 import dd186.unifood.Main;
 import dd186.unifood.R;
 
 public class CheckoutProductAdapter  extends BaseAdapter {
 
-    private Context context;
     private List<Product> products;
+    private ListView listView;
+    private Button payByCard;
+    private Button payByCash;
+    private TextView total;
+    private TextView totalHeader;
+    private TextView empty;
 
-    public CheckoutProductAdapter(Context context, List<Product> products) {
+    public CheckoutProductAdapter(List<Product> products, ListView listView, Button payByCard, Button payByCash,TextView total, TextView totalHeader, TextView empty) {
         this.products = products;
-        this.context = context;
+        this.listView= listView;
+        this.payByCard = payByCard;
+        this.payByCash =  payByCash;
+        this.empty =  empty;
+        this.total =  total;
+        this.totalHeader= totalHeader;
     }
 
     @Override
@@ -78,9 +85,20 @@ public class CheckoutProductAdapter  extends BaseAdapter {
 
             removeIcon.setOnClickListener(v -> {
                 products.remove(products.get(position));
-                main.setBasketProducts(products);
+                main.removeFromBasket(products);
                 if (products.isEmpty()){
-//                main.reloadEmptyBasketPage();
+                    listView.setVisibility(View.INVISIBLE);
+                    payByCard.setVisibility(View.INVISIBLE);
+                    payByCash.setVisibility(View.INVISIBLE);
+                    total.setVisibility(View.INVISIBLE);
+                    totalHeader.setVisibility(View.INVISIBLE);
+                    empty.setVisibility(View.VISIBLE);
+                } else {
+                    double updateTotal = 0;
+                    for (Product p : products) {
+                        updateTotal += p.getPrice();
+                    }
+                    total.setText(Double.toString(updateTotal));
                 }
                 notifyDataSetChanged();
 

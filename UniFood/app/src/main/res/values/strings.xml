@@ -17,5 +17,6 @@
     <string name="error_login">Invalid Email or Password!</string>
     <string name="search">Search</string>
     <string name="search_hint">Search...</string>
+    <string name="basket">basket</string>
 
 </resources>

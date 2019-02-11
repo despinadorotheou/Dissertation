@@ -40,7 +40,7 @@ public class BasketFragment extends Fragment {
         TextView totalHeader =  rootView.findViewById(R.id.total_header);
         TextView empty = rootView.findViewById(R.id.empty_basket);
         if (!products.isEmpty()) {
-            listView.setAdapter(new CheckoutProductAdapter(main, products));
+            listView.setAdapter(new CheckoutProductAdapter(products, listView,payByCard,payByCash,total,totalHeader,empty));
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 Fragment productView = new ProductInfoFragment();
                 Bundle args1 = new Bundle();
