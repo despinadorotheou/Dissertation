@@ -12,7 +12,8 @@
         android:layout_below="@+id/order_history_btn"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="2dp"
+        android:layout_gravity="start"
+        android:layout_marginTop="-1dp"
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
         android:background="@color/colorBackground"
@@ -20,10 +21,9 @@
         android:onClick="exit"
         android:paddingLeft="30dp"
         android:text="  Sign Out"
-        android:textColor="@color/colorPrimary"
-        android:textSize="17sp"
         android:textAlignment="textStart"
-        android:layout_gravity="start"/>
+        android:textColor="@color/colorPrimary"
+        android:textSize="17sp" />
 
     <Button
         android:id="@+id/orderStatus_btn"
@@ -32,7 +32,8 @@
         android:layout_below="@+id/order_history_btn"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="-135dp"
+        android:layout_gravity="start"
+        android:layout_marginTop="-136dp"
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
         android:background="@color/colorBackground"
@@ -40,10 +41,9 @@
         android:onClick="orderStatus"
         android:paddingLeft="30dp"
         android:text="  Order Status"
-        android:textColor="@color/colorPrimary"
-        android:textSize="17sp"
         android:textAlignment="textStart"
-        android:layout_gravity="start"/>
+        android:textColor="@color/colorPrimary"
+        android:textSize="17sp" />
 
     <Button
         android:id="@+id/favourites_btn"
@@ -103,12 +103,13 @@
         android:id="@+id/name_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginRight="100dp"
+        android:layout_marginStart="126dp"
+        android:layout_marginLeft="126dp"
+        android:layout_marginTop="62dp"
+        android:text="Despina Dorotheou"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/colorPrimary"
         android:textSize="24sp" />

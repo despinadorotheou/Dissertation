@@ -33,16 +33,6 @@ public class FavouritesFragment extends Fragment {
         favourites = main.getFavourites();
         User user =  main.getUser();
         gridView.setAdapter(new ProductAdapter(main,favourites, user));
-        gridView.setOnItemClickListener((parent, view, position, id) -> {
-            Fragment productView = new ProductInfoFragment();
-            Bundle args =  new Bundle();
-            args.putSerializable("product", (Serializable) favourites.get(position));
-            productView.setArguments(args);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, productView, "findThisFragment")
-                    .addToBackStack(null)
-                    .commit();
-        });
         return rootView;
 
     }

@@ -41,17 +41,6 @@ public class SearchFragment extends Fragment {
         user = main.getUser();
         EditText searchInput = rootView.findViewById(R.id.search_input);
         gridView.setAdapter(new ProductAdapter(main,products, user));
-        gridView.setOnItemClickListener((parent, view, position, id) -> {
-            Fragment productView = new ProductInfoFragment();
-            Bundle args =  new Bundle();
-            args.putSerializable("product", (Serializable) products.get(position));
-            productView.setArguments(args);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, productView, "findThisFragment")
-                    .addToBackStack(null)
-                    .commit();
-        });
-
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {

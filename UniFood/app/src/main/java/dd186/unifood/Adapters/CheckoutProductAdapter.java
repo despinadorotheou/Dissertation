@@ -28,8 +28,9 @@ public class CheckoutProductAdapter  extends BaseAdapter {
     private TextView total;
     private TextView totalHeader;
     private TextView empty;
+    private TextView badge;
 
-    public CheckoutProductAdapter(List<Product> products, ListView listView, Button payByCard, Button payByCash,TextView total, TextView totalHeader, TextView empty) {
+    public CheckoutProductAdapter(List<Product> products, ListView listView, Button payByCard, Button payByCash,TextView total, TextView totalHeader, TextView empty, TextView badge) {
         this.products = products;
         this.listView= listView;
         this.payByCard = payByCard;
@@ -37,6 +38,7 @@ public class CheckoutProductAdapter  extends BaseAdapter {
         this.empty =  empty;
         this.total =  total;
         this.totalHeader= totalHeader;
+        this.badge = badge;
     }
 
     @Override
@@ -57,25 +59,30 @@ public class CheckoutProductAdapter  extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             Main main = new Main();
+            Product product = products.get(position);
             Context context = parent.getContext();
             LinearLayout view =  new LinearLayout(context);
             view.setOrientation(LinearLayout.HORIZONTAL);
             ImageView image = new ImageView(context);
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(150,100);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(150,150);
             image.setLayoutParams(params);
-            byte[] img = Base64.decode(products.get(position).getImage(), Base64.DEFAULT);
+            byte[] img = Base64.decode(product.getImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
             image.setImageBitmap(bitmap);
             view.addView(image);
             LinearLayout view2 =  new LinearLayout(context);
             view2.setOrientation(LinearLayout.VERTICAL);
-            view2.setLayoutParams(new ViewGroup.LayoutParams(500,100));
+            view2.setLayoutParams(new ViewGroup.LayoutParams(500,150));
             TextView nameTextView = new TextView(context);
-            nameTextView.setText(products.get(position).getName());
+            nameTextView.setText(product.getName());
             nameTextView.setPadding(0, 0, 0, 0);
             view2.addView(nameTextView);
+            TextView quantityTextView = new TextView(context);
+            quantityTextView.setText("Quantity: "+Integer.toString(product.getQuantityInBasket()));
+            quantityTextView.setPadding(0, 0, 0, 0);
+            view2.addView(quantityTextView);
             TextView priceTextView = new TextView(context);
-            priceTextView.setText("£" + Double.toString(products.get(position).getPrice()));
+            priceTextView.setText("£" + Double.toString(product.getPrice()));
             priceTextView.setPadding(0,0,0,30);
             view2.addView(priceTextView);
             view.addView(view2);
@@ -84,8 +91,10 @@ public class CheckoutProductAdapter  extends BaseAdapter {
             removeIcon.setLayoutParams(new ViewGroup.LayoutParams(40,40));
 
             removeIcon.setOnClickListener(v -> {
-                products.remove(products.get(position));
-                main.removeFromBasket(products);
+                products.remove(product);
+                product.setQuantity(product.getQuantity()+product.getQuantityInBasket());
+                product.setQuantityInBasket(0);
+                main.removeFromBasket(products, badge);
                 if (products.isEmpty()){
                     listView.setVisibility(View.INVISIBLE);
                     payByCard.setVisibility(View.INVISIBLE);
@@ -96,7 +105,7 @@ public class CheckoutProductAdapter  extends BaseAdapter {
                 } else {
                     double updateTotal = 0;
                     for (Product p : products) {
-                        updateTotal += p.getPrice();
+                        updateTotal += (p.getPrice() * p.getQuantityInBasket());
                     }
                     total.setText(Double.toString(updateTotal));
                 }

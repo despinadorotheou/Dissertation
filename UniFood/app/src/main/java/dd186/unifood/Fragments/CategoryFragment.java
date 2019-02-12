@@ -33,15 +33,6 @@ public class CategoryFragment extends Fragment {
         GridView gridView;
         gridView = (GridView) rootView.findViewById(R.id.product_list);
         gridView.setAdapter(new ProductAdapter(main,products, user));
-        gridView.setOnItemClickListener((parent, view, position, id) -> {
-            Fragment productView = new ProductInfoFragment();
-            Bundle args1 =  new Bundle();
-            args1.putSerializable("product", (Serializable) products.get(position));
-            productView.setArguments(args1);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, productView, "findThisFragment")
-                    .addToBackStack(null)
-                    .commit();
-        });        return rootView;
+        return rootView;
     }
 }

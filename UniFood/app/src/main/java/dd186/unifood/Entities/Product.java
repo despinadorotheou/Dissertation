@@ -12,6 +12,7 @@ public class Product implements Serializable {
     private int quantity;
     private String image;
     private Category category;
+    private int quantityInBasket;
 
 
 
@@ -69,6 +70,14 @@ public class Product implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getQuantityInBasket() {
+        return quantityInBasket;
+    }
+
+    public void setQuantityInBasket(int quantityInBasket) {
+        this.quantityInBasket = quantityInBasket;
     }
 
     public Product() {

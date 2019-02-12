@@ -43,8 +43,9 @@ public class Main extends AppCompatActivity
     private User user;
     private List<Product> basket = new ArrayList<>();
     private List<Product> favourites = new ArrayList<>();
-    int basketItemsNum = 0;
-    TextView basketNumTextView;
+    public int basketItemsNum = 0;
+    public TextView basketNumTextView;
+    int minteger=1;
 
 
     @Override
@@ -117,7 +118,7 @@ public class Main extends AppCompatActivity
 //        return loadFragment(fragment);
 //    }
 
-    private boolean loadFragment(Fragment fragment) {
+    public boolean loadFragment(Fragment fragment) {
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -180,11 +181,6 @@ public class Main extends AppCompatActivity
         return basket;
     }
 
-    //method used to update the products in the basket
-    public void removeFromBasket(List<Product> basketProducts) {
-        basket = basketProducts;
-        setBasketBadgeNum(basket.size());
-    }
 
     //method used to send the user to the fragments
     public User getUser() {
@@ -293,6 +289,8 @@ public class Main extends AppCompatActivity
     //method for the button add to the basket
     public void addToBasket(View view) {
         TextView productName = findViewById(R.id.product_name);
+        TextView quantity = (TextView) findViewById(
+                R.id.amount_quantity);
         Product product = new Product();
         for (Product p : products) {
             if (p.getName().contentEquals(productName.getText())) {
@@ -300,8 +298,58 @@ public class Main extends AppCompatActivity
                 break;
             }
         }
+        int quantityInBasket = Integer.parseInt(quantity.getText().toString());
+        product.setQuantityInBasket(quantityInBasket);
+        product.setQuantity(product.getQuantity()-quantityInBasket);
         basket.add(product);
-        setBasketBadgeNum(basket.size());
+        int num=0;
+        for (Product p:basket) {
+            num += p.getQuantityInBasket();
+        }
+        setBasketBadgeNum(num);
+    }
+
+    //method used to update the products in the basket
+    public void removeFromBasket(List<Product> basketProducts, TextView basketNumTextView) {
+        this.basketNumTextView = basketNumTextView;
+        basket = basketProducts;
+        int num=0;
+        for (Product p:basket) {
+            num += p.getQuantityInBasket();
+        }
+        setBasketBadgeNum(num);
+    }
+
+    public TextView getBasketNumTextView(){
+        return basketNumTextView;
+    }
+
+    //methods used to increase and decrease the quantity of the items in the basket
+    public void increaseInteger(View view) {
+        TextView productName = findViewById(R.id.product_name);
+        Product product = new Product();
+        for (Product p : products) {
+            if (p.getName().contentEquals(productName.getText())) {
+                product = p;
+                break;
+            }
+        }
+        minteger ++;
+        if(product.getQuantity()< minteger)
+            minteger--;
+        display(minteger);
+    }
+
+    public void decreaseInteger(View view) {
+        if (minteger > 1)
+            minteger = minteger - 1;
+        display(minteger);
+    }
+
+    private void display(int number) {
+        TextView displayInteger = (TextView) findViewById(
+                R.id.amount_quantity);
+        displayInteger.setText("" + number);
     }
 
 }

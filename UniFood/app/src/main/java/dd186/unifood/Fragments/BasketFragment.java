@@ -24,6 +24,7 @@ import dd186.unifood.Main;
 import dd186.unifood.R;
 
 public class BasketFragment extends Fragment {
+    TextView badge;
 
     @Nullable
     @Override
@@ -32,6 +33,7 @@ public class BasketFragment extends Fragment {
         Main main = (Main) getActivity();
         assert main != null;
         User user =  main.getUser();
+        badge = main.getBasketNumTextView();
         List<Product> products = main.getBasketProducts();
         ListView listView = rootView.findViewById(R.id.basket_list);
         Button payByCard = rootView.findViewById(R.id.card_checkout_btn);
@@ -40,7 +42,7 @@ public class BasketFragment extends Fragment {
         TextView totalHeader =  rootView.findViewById(R.id.total_header);
         TextView empty = rootView.findViewById(R.id.empty_basket);
         if (!products.isEmpty()) {
-            listView.setAdapter(new CheckoutProductAdapter(products, listView,payByCard,payByCash,total,totalHeader,empty));
+            listView.setAdapter(new CheckoutProductAdapter(products, listView,payByCard,payByCash,total,totalHeader,empty,badge));
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 Fragment productView = new ProductInfoFragment();
                 Bundle args1 = new Bundle();
@@ -53,7 +55,7 @@ public class BasketFragment extends Fragment {
             });
             double totalPrice = 0;
             for (Product p : products) {
-                totalPrice += p.getPrice();
+                totalPrice += (p.getPrice()* p.getQuantityInBasket()) ;
             }
             total.setText(Double.toString(totalPrice));
             empty.setVisibility(View.INVISIBLE);

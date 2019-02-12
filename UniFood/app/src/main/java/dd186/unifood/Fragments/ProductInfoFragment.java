@@ -40,4 +40,6 @@ public class ProductInfoFragment extends Fragment {
         }
         return view;
     }
+
+
 }

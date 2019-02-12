@@ -4,33 +4,35 @@ import android.content.*;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.*;
 //import org.apache.commons.codec.binary.Base64;
 import dd186.unifood.Entities.Product;
 import dd186.unifood.Entities.User;
+import dd186.unifood.Fragments.ProductInfoFragment;
 import dd186.unifood.HttpRequest;
 import dd186.unifood.Main;
 import dd186.unifood.R;
 
 public class ProductAdapter extends BaseAdapter {
 
-    private Context context;
     private List<Product> products;
-    private static LayoutInflater inflater = null;
     private User user;
+    private Main main;
 
-    public ProductAdapter(Context context, List<Product> products, User user){
-       this.context= context;
-       this.products = products;
-       this.user = user;
-       inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public ProductAdapter(Main main, List<Product> products, User user){
+        this.main =main;
+        this.products = products;
+        this.user = user;
     }
 
     @Override
@@ -50,6 +52,7 @@ public class ProductAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
+            Product product = getItem(position);
             Context context = parent.getContext();
             GridLayout view = new GridLayout(context);
             view.setOrientation(GridLayout.VERTICAL);
@@ -59,15 +62,14 @@ public class ProductAdapter extends BaseAdapter {
             ImageView image = new ImageView(context);
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(150,150);
             image.setLayoutParams(params);
-            byte[] img = Base64.decode(products.get(position).getImage(), Base64.DEFAULT);
+            byte[] img = Base64.decode(product.getImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
             image.setImageBitmap(bitmap);
             view.addView(image);
             ImageView favouriteIcon = new ImageView(context);
             boolean productInFavourites = false;
-            Main main = new Main();
             for (Product p: user.getFavouriteProducts()) {
-                if (p.getId()==products.get(position).getId()){
+                if (p.getId()==product.getId()){
                     productInFavourites = true;
                 }
             }
@@ -75,9 +77,9 @@ public class ProductAdapter extends BaseAdapter {
                 favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
                 favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
                 favouriteIcon.setOnClickListener(v -> {
-                    user.getFavouriteProducts().remove(products.get(position));
+                    user.getFavouriteProducts().remove(product);
                     HttpRequest httpRequest = new HttpRequest();
-                    httpRequest.setLink("http://10.0.2.2:8080/rest/removeFavourite/" + user.getId() +"/" + products.get(position).getId());
+                    httpRequest.setLink("http://10.0.2.2:8080/rest/removeFavourite/" + user.getId() +"/" + product.getId());
                     httpRequest.execute();
                     favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
                     main.setUser(user);
@@ -87,9 +89,9 @@ public class ProductAdapter extends BaseAdapter {
                 favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
                 favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
                 favouriteIcon.setOnClickListener(v -> {
-                    user.getFavouriteProducts().add(products.get(position));
+                    user.getFavouriteProducts().add(product);
                     HttpRequest httpRequest = new HttpRequest();
-                    httpRequest.setLink("http://10.0.2.2:8080/rest/addFavourite/" + user.getId() +"/" + products.get(position).getId());
+                    httpRequest.setLink("http://10.0.2.2:8080/rest/addFavourite/" + user.getId() +"/" +product.getId());
                     httpRequest.execute();
                     favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
                     main.setUser(user);
@@ -98,24 +100,35 @@ public class ProductAdapter extends BaseAdapter {
             }
             view.addView(favouriteIcon);
             TextView nameTextView = new TextView(context);
-            nameTextView.setText(products.get(position).getName());
+            nameTextView.setText(product.getName());
             nameTextView.setPadding(0, 0, 0, 0);
             view.addView(nameTextView);
             TextView priceTextView = new TextView(context);
-            priceTextView.setText("£" + Double.toString(products.get(position).getPrice()));
+            priceTextView.setText("£" + Double.toString(product.getPrice()));
             priceTextView.setPadding(0,0,0,30);
             view.addView(priceTextView);
+            if (product.getQuantity()<=0){
+                view.setAlpha(0.4f);
+                priceTextView.setVisibility(View.GONE);
+                favouriteIcon.setVisibility(View.GONE);
+                TextView outOfStock = new TextView(context);
+                outOfStock.setText("Out of Stock!");
+                view.addView(outOfStock);
+            }
+            else {
+                view.setOnClickListener(v -> {
+                    Fragment productView = new ProductInfoFragment();
+                    Bundle args =  new Bundle();
+                    args.putSerializable("product", (Serializable) product);
+                    productView.setArguments(args);
+                    main.loadFragment(productView);
+                });
+            }
             return view;
         }
         return convertView;
 
     }
-
-    public User getUser(){
-        return user;
-    }
-
-
 
 
 }
