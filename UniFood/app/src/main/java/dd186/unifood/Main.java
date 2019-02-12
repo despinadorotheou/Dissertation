@@ -85,18 +85,10 @@ public class Main extends AppCompatActivity
         basketNumTextView = (TextView) view.findViewById(R.id.basket_num);
         setBasketBadgeNum(basketItemsNum);
         ImageView basket = view.findViewById(R.id.basket_img);
-        basket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = new BasketFragment();
-                loadFragment(fragment);
-            }
+        basket.setOnClickListener(v -> {
+            Fragment fragment = new BasketFragment();
+            loadFragment(fragment);
         });
-//        new MyMenuItemStuffListener(view, "Show Message") {
-//            @Override
-//            public void onClick(View v) {
-//            }
-//        };
         return true;
     }
 
@@ -114,16 +106,16 @@ public class Main extends AppCompatActivity
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Fragment fragment = null;
-        switch (item.getItemId()) {
-            case R.id.basket_actionbar:
-                fragment = new BasketFragment();
-                break;
-        }
-        return loadFragment(fragment);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        Fragment fragment = null;
+//        switch (item.getItemId()) {
+//            case R.id.basket_actionbar:
+//                fragment = new BasketFragment();
+//                break;
+//        }
+//        return loadFragment(fragment);
+//    }
 
     private boolean loadFragment(Fragment fragment) {
         if (fragment != null) {
