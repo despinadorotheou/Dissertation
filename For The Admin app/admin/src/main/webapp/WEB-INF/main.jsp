@@ -34,7 +34,8 @@
     </div>
 <section>
     <a class="btn btn-primary" href="/main/edit">Add new product</a>
-    <a class="btn btn-primary" href="/main/deals">See the deals</a>
+    <a class="btn btn-primary" href="/main/deals">Go to the deals</a>
+    <a class="btn btn-primary" href="/main/offers">Go to the offers</a>
 </section>
     <br>
 <section>

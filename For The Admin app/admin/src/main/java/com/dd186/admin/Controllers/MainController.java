@@ -1,8 +1,10 @@
 package com.dd186.admin.Controllers;
 
 import com.dd186.admin.Domain.Deal;
+import com.dd186.admin.Domain.Offer;
 import com.dd186.admin.Domain.Product;
 import com.dd186.admin.Services.DealService;
+import com.dd186.admin.Services.OfferService;
 import com.dd186.admin.Services.ProductService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,10 @@ public class MainController {
 
     @Autowired
     private DealService dealService;
+
+    @Autowired
+    private OfferService offerService;
+
 
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
@@ -107,6 +113,14 @@ public class MainController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("deals",(List<Deal>)dealService.findAll());
         modelAndView.setViewName("dealsPage");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/offers", method = RequestMethod.GET)
+    public ModelAndView offerPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("offers",(List<Offer>)offerService.findAll());
+        modelAndView.setViewName("offersPage");
         return modelAndView;
     }
 

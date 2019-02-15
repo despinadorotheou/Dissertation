@@ -3,6 +3,9 @@ package com.dd186.admin.Domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -31,12 +34,15 @@ public class Offer {
         this.id = id;
     }
 
-    public Set<Product> getOfferProducts() {
-        return offerProducts;
+    public List<Product> getOfferProducts() {
+        return new ArrayList<>(offerProducts);
     }
 
-    public void setOfferProducts(Set<Product> offerProducts) {
-        this.offerProducts = offerProducts;
+    public void setOfferProducts(List<Product> offerProducts) {
+        if (offerProducts == null)
+            this.offerProducts = null;
+        else
+            this.offerProducts = new HashSet<>(offerProducts);
     }
 
     public double getValue() {
