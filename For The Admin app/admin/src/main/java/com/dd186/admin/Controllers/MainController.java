@@ -1,6 +1,8 @@
 package com.dd186.admin.Controllers;
 
+import com.dd186.admin.Domain.Deal;
 import com.dd186.admin.Domain.Product;
+import com.dd186.admin.Services.DealService;
 import com.dd186.admin.Services.ProductService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class MainController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private DealService dealService;
 
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
@@ -96,5 +101,14 @@ public class MainController {
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
     }
+
+    @RequestMapping(value = "/deals", method = RequestMethod.GET)
+    public ModelAndView dealPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("deals",(List<Deal>)dealService.findAll());
+        modelAndView.setViewName("dealsPage");
+        return modelAndView;
+    }
+
 
 }
