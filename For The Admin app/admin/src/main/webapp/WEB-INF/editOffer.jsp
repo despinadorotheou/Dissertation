@@ -34,14 +34,14 @@
                 <td><label for="product<%=i+1%>">Product <%=i+1%></label></td>
                 <td>
                     <select id="product<%=i+1%>" name="product<%=i+1%>">
-                        <c:set var="previous" value="<%=offer.getOfferProducts().get(i)%>"/>
-                        <c:forEach var="product" items="${offer.getOfferProducts()}">
+                        <c:set var="previous" value="<%=offer.getOfferProducts().get(i).getProduct()%>"/>
+                        <c:forEach var="offerProduct" items="${offer.getOfferProducts()}">
                             <c:choose>
-                                <c:when test="${ previous == product}">
-                                    <option selected value="${product.getId()}">${product.getName()}</option>
+                                <c:when test="${ previous == offerProduct.getProduct()}">
+                                    <option selected value="${offerProduct.getProduct().getId()}">${offerProduct.getProduct().getName()}</option>
                                 </c:when>
                                 <c:otherwise>
-                                    <option value="${product.getId()}">${product.getName()}</option>
+                                    <option value="${offerProduct.getProduct().getId()}">${offerProduct.getProduct().getName()}</option>
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
@@ -65,6 +65,14 @@
             </tr>
             <%}%>
             <%}%>
+            <tr>
+                <td><label for="description">Description</label></td>
+                <% if (editOffer){%>
+                <td><input id="description" name="description" value="<%=offer.getDescription()%>" required/></td>
+                <%}else{%>
+                <td><input id="description" name="description" required/></td>
+                <%}%>
+            </tr>
             <tr>
                 <td><label for="value">Value</label></td>
                 <% if (editOffer){%>

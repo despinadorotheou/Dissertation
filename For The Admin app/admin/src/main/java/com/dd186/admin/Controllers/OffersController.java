@@ -2,6 +2,7 @@ package com.dd186.admin.Controllers;
 
 import com.dd186.admin.Domain.Category;
 import com.dd186.admin.Domain.Offer;
+import com.dd186.admin.Domain.OfferProduct;
 import com.dd186.admin.Domain.Product;
 import com.dd186.admin.Services.OfferService;
 import com.dd186.admin.Services.ProductService;
@@ -45,19 +46,38 @@ public class OffersController {
                                   @RequestParam(name = "product1") int prod1,
                                   @RequestParam(name = "product2") int prod2,
                                   @RequestParam(name = "product3", required = false, defaultValue = "-1") int prod3,
+                                  @RequestParam(name = "description") String desc,
                                   @RequestParam(name = "value") double value) {
         ModelAndView modelAndView = new ModelAndView();
-        Offer offer = new Offer();
+        Product product1 = productService.findById(prod1);
+        Product product2 = productService.findById(prod2);
+        Offer offer;
+        if (prod3 != -1) {
+            Product product3 = productService.findById(prod3);
+            if ((prod1 == prod2) && prod1 == prod3){
+                 offer = new Offer(new OfferProduct(product1,3));
+            } else if (prod1 == prod2){
+                 offer = new Offer(new OfferProduct(product1,2), new OfferProduct(product3,1) );
+            } else if (prod2 == prod3){
+                 offer = new Offer(new OfferProduct(product2,2), new OfferProduct(product1,1) );
+            } else if (prod1 == prod3){
+                 offer = new Offer(new OfferProduct(product1,2), new OfferProduct(product2,1) );
+            } else {
+                 offer = new Offer(new OfferProduct(product1,1), new OfferProduct(product2,1),  new OfferProduct(product3,1) );
+            }
+        }else{
+
+            if (prod1 == prod2){
+                offer = new Offer(new OfferProduct(product1,2) );
+            } else {
+                offer = new Offer(new OfferProduct(product1,1), new OfferProduct(product2,1) );
+            }
+
+        }
         if (id != -1) {
             offer.setId(id);
         }
-        List<Product> products = new ArrayList<>();
-        products.add(productService.findById(prod1));
-        products.add(productService.findById(prod2));
-        if (prod3 != -1) {
-            products.add(productService.findById(prod3));
-        }
-        offer.setOfferProducts(products);
+        offer.setDescription(desc);
         offer.setValue(value);
         offerService.save(offer);
         modelAndView.addObject("offers", (List<Offer>) offerService.findAll());

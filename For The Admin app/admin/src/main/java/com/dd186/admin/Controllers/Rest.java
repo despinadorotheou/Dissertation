@@ -1,7 +1,8 @@
 package com.dd186.admin.Controllers;
 
-import com.dd186.admin.Domain.Product;
-import com.dd186.admin.Domain.User;
+import com.dd186.admin.Domain.*;
+import com.dd186.admin.Services.DealService;
+import com.dd186.admin.Services.OfferService;
 import com.dd186.admin.Services.ProductService;
 import com.dd186.admin.Services.UserService;
 import com.google.gson.JsonArray;
@@ -24,16 +25,67 @@ public class Rest {
     ProductService productService;
     @Autowired
     UserService userService;
+    @Autowired
+    DealService dealService;
+    @Autowired
+    OfferService offerService;
 
     //http://10.0.2.2:8080/rest/products
     @RequestMapping(value = "/products")
     public String sendProducts() throws SQLException, IOException {
         List<Product> products = productService.findAll();
-        JsonArray toRet = createList(products);
+        JsonArray toRet = createProductList(products);
         if (toRet.isJsonNull())
             return "";
         else
-            return createList(products).toString();
+            return createProductList(products).toString();
+    }
+
+    //http://10.0.2.2:8080/rest/deals
+    @RequestMapping(value = "/deals")
+    public String sendDeals() {
+        List<Deal> deals = dealService.findAll();
+        JsonArray toRet = new JsonArray();
+        if (!deals.isEmpty()){
+            for (Deal d:deals) {
+                JsonObject deal = new JsonObject();
+                deal.addProperty("id", d.getId());
+                deal.addProperty("description", d.getDescription());
+                deal.addProperty("value", d.getValue());
+                JsonArray categoriesInDeal = new JsonArray();
+                for (Category c: d.getDealCategories()) {
+                    JsonObject category = new JsonObject();
+                    category.addProperty("id", c.getId());
+                    category.addProperty("category", c.getCategory());
+                    categoriesInDeal.add(category);
+                }
+                deal.addProperty("dealCategories",categoriesInDeal.toString());
+                toRet.add(deal);
+            }
+            return toRet.toString();
+        } else {
+            return "";
+        }
+    }
+
+    //http://10.0.2.2:8080/rest/offers
+    @RequestMapping(value = "/offers")
+    public String sendOffers() throws SQLException {
+        List<Offer> offers = offerService.findAll();
+        JsonArray toRet = new JsonArray();
+        if (!offers.isEmpty()){
+            for (Offer o:offers) {
+                JsonObject offer = new JsonObject();
+                offer.addProperty("id", o.getId());
+                offer.addProperty("description", o.getDescription());
+                offer.addProperty("value", o.getValue());
+//                offer.addProperty("offerProducts",createProductList(o.getOfferProducts()).toString());
+                toRet.add(offer);
+            }
+            return toRet.toString();
+        } else {
+            return "";
+        }
     }
 
     //http://10.0.2.2:8080/rest/login/"+email.getText().toString()+"/" +pass.getText().toString()
@@ -50,7 +102,7 @@ public class Rest {
                 userProperties.addProperty("password",user.getPassword());
                 List<Product> favourites = new ArrayList<>();
                 favourites.addAll(user.getFavProduct());
-                userProperties.add("favouriteProducts", createList(favourites));
+                userProperties.add("favouriteProducts", createProductList(favourites));
                 return userProperties.toString();
             } else return "invalid";
         } else return "invalid";
@@ -96,7 +148,7 @@ public class Rest {
 
 
     //method for creating Json Array for the android app
-    private JsonArray createList(List<Product> products) throws SQLException {
+    private JsonArray createProductList(List<Product> products) throws SQLException {
         JsonArray result = new JsonArray();
         if (!products.isEmpty()) {
             for (Product p : products) {
@@ -116,6 +168,7 @@ public class Rest {
         }
         return result;
     }
+
 
 
 

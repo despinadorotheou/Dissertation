@@ -32,6 +32,8 @@
                 <tr>
                     <td><h3>Id</h3></td>
                     <td><h3>Products in the Offer</h3></td>
+                    <td><h3>Quantity</h3></td>
+                    <td><h3>Description</h3></td>
                     <td><h3>Value</h3></td>
                     <td><h3></h3></td>
                     <td><h3></h3></td>
@@ -42,11 +44,19 @@
                         <td><c:out value="${offer.getId()}"/></td>
                         <td>
                             <p>
-                                <c:forEach items="${offer.getOfferProducts()}" var="product">
-                                    <c:out value="${product.getName()}"/> <br>
+                                <c:forEach items="${offer.getOfferProducts()}" var="offerProduct">
+                                    <c:out value="${offerProduct.getProduct().getName()}"/> <br>
                                 </c:forEach>
                             </p>
                         </td>
+                        <td>
+                            <p>
+                                <c:forEach items="${offer.getOfferProducts()}" var="offerProduct">
+                                    <c:out value="${offerProduct.getQuantity()}"/> <br>
+                                </c:forEach>
+                            </p>
+                        </td>
+                        <td><c:out value="${offer.getDescription()}"/></td>
                         <td><c:out value="${offer.getValue()}"/></td>
                         <td><a class="btn btn-success" href="/main/offers/edit?offerId=${offer.getId()}">Edit</a></td>
                         <td><a class="btn btn-danger" href="/main/offers/delete?offerId=${offer.getId()}">Delete</a></td>

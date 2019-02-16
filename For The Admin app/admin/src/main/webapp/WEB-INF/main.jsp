@@ -54,22 +54,22 @@
             <td><h3></h3></td>
         </tr>
         </thead>
-        <c:forEach items="${products}" var="product">
+        <c:forEach items="${products}" var="offerProduct">
             <tr>
-                <td><c:out value="${product.getId()}"/></td>
-                <td><c:out value="${product.getName()}"/></td>
-                <td><c:out value="${product.getDescription()}"/></td>
-                <td><c:out value="${product.getPrice()}"/></td>
-                <td><c:out value="${product.getQuantity()}"/></td>
-                <td><c:out value="${product.getCategory().getCategory()}"/></td>
-                <c:if test="${product.getImage() != null}">
-                    <td><a class="btn btn-primary" href="/main/image?productId=${product.getId()}">See Image</a></td>
+                <td><c:out value="${offerProduct.getId()}"/></td>
+                <td><c:out value="${offerProduct.getName()}"/></td>
+                <td><c:out value="${offerProduct.getDescription()}"/></td>
+                <td><c:out value="${offerProduct.getPrice()}"/></td>
+                <td><c:out value="${offerProduct.getQuantity()}"/></td>
+                <td><c:out value="${offerProduct.getCategory().getCategory()}"/></td>
+                <c:if test="${offerProduct.getImage() != null}">
+                    <td><a class="btn btn-primary" href="/main/image?productId=${offerProduct.getId()}">See Image</a></td>
                 </c:if>
-                <c:if test="${product.getImage() == null}">
+                <c:if test="${offerProduct.getImage() == null}">
                     <td><c:out value="No Image"/></td>
                 </c:if>
-                <td><a class="btn btn-success" href="/main/edit?productId=${product.getId()}">Edit</a></td>
-                <td><a class="btn btn-danger" href="/main/delete?productId=${product.getId()}">Delete</a></td>
+                <td><a class="btn btn-success" href="/main/edit?productId=${offerProduct.getId()}">Edit</a></td>
+                <td><a class="btn btn-danger" href="/main/delete?productId=${offerProduct.getId()}">Delete</a></td>
             </tr>
         </c:forEach>
     </table>

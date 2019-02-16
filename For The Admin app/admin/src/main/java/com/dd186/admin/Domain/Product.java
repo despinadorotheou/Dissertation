@@ -29,8 +29,14 @@ public class Product {
     @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "productID"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Category category;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<OfferProduct> offerProducts;
 
     public Product() {
+    }
+
+    public Product(int id) {
+        this.id = id;
     }
 
     public String getName() {
