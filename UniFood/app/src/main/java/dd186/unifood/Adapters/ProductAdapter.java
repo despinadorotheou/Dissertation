@@ -83,6 +83,8 @@ public class ProductAdapter extends BaseAdapter {
                     httpRequest.execute();
                     favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
                     main.setUser(user);
+                    notifyDataSetChanged();
+
 
                 });
             }else{
@@ -95,6 +97,7 @@ public class ProductAdapter extends BaseAdapter {
                     httpRequest.execute();
                     favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
                     main.setUser(user);
+                    notifyDataSetChanged();
 
                 });
             }
