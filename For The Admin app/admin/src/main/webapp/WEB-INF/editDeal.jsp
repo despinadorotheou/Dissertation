@@ -28,26 +28,29 @@
                     <td><input id="id" name="id" value="<%=deal.getId()%>" readonly="true"/></td>
                 </tr>
             <%}%>
-            <% if (editDeal){
-                for (int i=0; i<deal.getDealCategories().size(); i++){%>
-                    <tr>
-                        <td><label for="category<%=i+1%>">Category <%=i+1%></label></td>
-                        <td>
-                            <select id="category<%=i+1%>" name="category<%=i+1%>">
-                                <c:set var="previous" value="<%=deal.getDealCategories().get(i)%>"/>
-                                <c:forEach var="category" items="${deal.getDealCategories()}">
-                                    <c:choose>
-                                        <c:when test="${ previous == category}">
-                                            <option selected value="${category.getCategory()}">${category.getCategory()}</option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="${category.getCategory()}">${category.getCategory()}</option>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-                            </select>
-                        </td>
-                    </tr>
+            <% if (editDeal){%>
+                <%for (int i=0; i<deal.getDealCategories().size(); i++){%>
+                    <c:set var="q" value="<%=deal.getDealCategories().get(i).getQuantity()%>"/>
+                    <c:forEach var = "i" begin = "1" end = "${q}">
+                        <tr>
+                            <td><label for="category<%=i+1%>">Category <%=i+1%></label></td>
+                            <td>
+                                <select id="category<%=i+1%>" name="category<%=i+1%>">
+                                    <c:set var="previous" value="<%=deal.getDealCategories().get(i).getCategory()%>"/>
+                                    <c:forEach var="category" items="${categories}">
+                                        <c:choose>
+                                            <c:when test="${ previous == category}">
+                                                <option selected value="${category.getCategory()}">${category.getCategory()}</option>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <option value="${category.getCategory()}">${category.getCategory()}</option>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                        </tr>
+                    </c:forEach>
                 <%}%>
             <%}else{
                 for (int i=0; i<3; i++){%>

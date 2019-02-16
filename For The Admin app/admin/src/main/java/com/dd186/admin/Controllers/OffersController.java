@@ -90,7 +90,6 @@ public class OffersController {
         ModelAndView modelAndView = new ModelAndView();
         Offer o = offerService.findById(offerId);
         if (o != null) {
-            o.setOfferProducts(null);
             offerService.delete(o);
         }
         modelAndView.addObject("offers", (List<Offer>) offerService.findAll());

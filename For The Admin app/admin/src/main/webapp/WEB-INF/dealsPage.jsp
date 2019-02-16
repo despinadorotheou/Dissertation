@@ -32,6 +32,7 @@
                 <tr>
                     <td><h3>Id</h3></td>
                     <td><h3>Categories in the Deal</h3></td>
+                    <td><h3>Quantity</h3></td>
                     <td><h3>Description</h3></td>
                     <td><h3>Value</h3></td>
                     <td><h3></h3></td>
@@ -44,7 +45,14 @@
                         <td>
                             <p>
                                 <c:forEach items="${deal.getDealCategories()}" var="category">
-                                    <c:out value="${category.getCategory()}"/> <br>
+                                    <c:out value="${category.getCategory().getCategory()}"/> <br>
+                                </c:forEach>
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                                <c:forEach items="${deal.getDealCategories()}" var="category">
+                                    <c:out value="${category.getQuantity()}"/> <br>
                                 </c:forEach>
                             </p>
                         </td>

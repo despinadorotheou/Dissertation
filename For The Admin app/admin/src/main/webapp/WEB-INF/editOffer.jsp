@@ -30,40 +30,43 @@
             <%}%>
             <% if (editOffer){
                 for (int i=0; i<offer.getOfferProducts().size(); i++){%>
-            <tr>
-                <td><label for="product<%=i+1%>">Product <%=i+1%></label></td>
-                <td>
-                    <select id="product<%=i+1%>" name="product<%=i+1%>">
-                        <c:set var="previous" value="<%=offer.getOfferProducts().get(i).getProduct()%>"/>
-                        <c:forEach var="offerProduct" items="${offer.getOfferProducts()}">
-                            <c:choose>
-                                <c:when test="${ previous == offerProduct.getProduct()}">
-                                    <option selected value="${offerProduct.getProduct().getId()}">${offerProduct.getProduct().getName()}</option>
-                                </c:when>
-                                <c:otherwise>
-                                    <option value="${offerProduct.getProduct().getId()}">${offerProduct.getProduct().getName()}</option>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                    </select>
-                </td>
-            </tr>
-            <%}%>
+                    <c:set var="q" value="<%=offer.getOfferProducts().get(i).getQuantity()%>"/>
+                    <c:forEach var = "i" begin = "1" end = "${q}">
+                        <tr>
+                            <td><label for="product<%=i+1%>">Product <%=i+1%></label></td>
+                            <td>
+                                <select id="product<%=i+1%>" name="product<%=i+1%>">
+                                    <c:set var="previous" value="<%=offer.getOfferProducts().get(i).getProduct()%>"/>
+                                    <c:forEach var="product" items="${products}">
+                                        <c:choose>
+                                            <c:when test="${ previous == product}">
+                                                <option selected value="${product.getId()}">${product.getName()}</option>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <option value="${product.getId()}">${product.getName()}</option>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                <%}%>
             <%}else{
                 for (int i=0; i<3; i++){%>
-            <tr>
-                <td><label for="product<%=i+1%>">Product <%=i+1%></label></td>
-                <td>
-                    <select id="product<%=i+1%>" name="product<%=i+1%>">
-                        <option hidden disabled selected value> -- select an option -- </option>
-                        <c:forEach var="product" items="${products}">
-                            <option value="${product.getId()}">${product.getName()}</option>
-                        </c:forEach>
+                    <tr>
+                        <td><label for="product<%=i+1%>">Product <%=i+1%></label></td>
+                        <td>
+                            <select id="product<%=i+1%>" name="product<%=i+1%>">
+                                <option hidden disabled selected value> -- select an option -- </option>
+                                <c:forEach var="product" items="${products}">
+                                    <option value="${product.getId()}">${product.getName()}</option>
+                                </c:forEach>
 
-                    </select>
-                </td>
-            </tr>
-            <%}%>
+                            </select>
+                        </td>
+                    </tr>
+                <%}%>
             <%}%>
             <tr>
                 <td><label for="description">Description</label></td>

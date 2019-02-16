@@ -3,6 +3,7 @@ package com.dd186.admin.Domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Entity
@@ -14,6 +15,8 @@ public class Category {
     private int id;
     @Column(name = "category", nullable = false)
     private String category;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private Set<DealCategory> dealCategories;
 
     public Category(String category) {
         this.category = category;

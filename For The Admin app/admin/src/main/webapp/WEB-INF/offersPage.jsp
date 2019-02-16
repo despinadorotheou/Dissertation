@@ -44,15 +44,15 @@
                         <td><c:out value="${offer.getId()}"/></td>
                         <td>
                             <p>
-                                <c:forEach items="${offer.getOfferProducts()}" var="offerProduct">
-                                    <c:out value="${offerProduct.getProduct().getName()}"/> <br>
+                                <c:forEach items="${offer.getOfferProducts()}" var="product">
+                                    <c:out value="${product.getProduct().getName()}"/> <br>
                                 </c:forEach>
                             </p>
                         </td>
                         <td>
                             <p>
-                                <c:forEach items="${offer.getOfferProducts()}" var="offerProduct">
-                                    <c:out value="${offerProduct.getQuantity()}"/> <br>
+                                <c:forEach items="${offer.getOfferProducts()}" var="product">
+                                    <c:out value="${product.getQuantity()}"/> <br>
                                 </c:forEach>
                             </p>
                         </td>

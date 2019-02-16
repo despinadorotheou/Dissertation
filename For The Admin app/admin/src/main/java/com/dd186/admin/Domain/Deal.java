@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @Entity
@@ -19,13 +21,17 @@ public class Deal {
     private int id;
     @Column(name = "deal_description", nullable = false)
     private String description;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "deal_category", joinColumns = @JoinColumn(name = "deal_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> dealCategories;
+    @OneToMany(mappedBy = "deal", cascade = CascadeType.ALL)
+    private Set<DealCategory> dealCategories;
     @Column(name = "deal_value")
     private double value;
 
     public Deal() {
+    }
+
+    public Deal(DealCategory... dealCategories) {
+        for(DealCategory dealCategory : dealCategories) dealCategory.setDeal(this);
+        this.dealCategories = Stream.of(dealCategories).collect(Collectors.toSet());
     }
 
     public int getId() {
@@ -36,11 +42,11 @@ public class Deal {
         this.id = id;
     }
 
-    public List<Category> getDealCategories() {
+    public List<DealCategory> getDealCategories() {
         return new ArrayList<>(dealCategories);
     }
 
-    public void setDealCategories(List<Category> dealCategories) {
+    public void setDealCategories(List<DealCategory> dealCategories) {
         if (dealCategories == null)
             this.dealCategories = null;
         else

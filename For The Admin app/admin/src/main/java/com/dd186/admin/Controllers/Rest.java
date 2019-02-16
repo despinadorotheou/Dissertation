@@ -53,12 +53,12 @@ public class Rest {
                 deal.addProperty("description", d.getDescription());
                 deal.addProperty("value", d.getValue());
                 JsonArray categoriesInDeal = new JsonArray();
-                for (Category c: d.getDealCategories()) {
-                    JsonObject category = new JsonObject();
-                    category.addProperty("id", c.getId());
-                    category.addProperty("category", c.getCategory());
-                    categoriesInDeal.add(category);
-                }
+//                for (Category c: d.getDealCategories()) {
+//                    JsonObject category = new JsonObject();
+//                    category.addProperty("id", c.getId());
+//                    category.addProperty("category", c.getCategory());
+//                    categoriesInDeal.add(category);
+//                }
                 deal.addProperty("dealCategories",categoriesInDeal.toString());
                 toRet.add(deal);
             }

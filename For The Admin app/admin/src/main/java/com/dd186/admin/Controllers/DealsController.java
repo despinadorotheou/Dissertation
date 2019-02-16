@@ -2,6 +2,7 @@ package com.dd186.admin.Controllers;
 
 import com.dd186.admin.Domain.Category;
 import com.dd186.admin.Domain.Deal;
+import com.dd186.admin.Domain.DealCategory;
 import com.dd186.admin.Domain.Product;
 import com.dd186.admin.Services.DealService;
 import com.dd186.admin.Services.ProductService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/main/deals")
@@ -48,18 +50,34 @@ public class DealsController {
                                   @RequestParam(name = "description") String desc,
                                   @RequestParam(name = "value") double value) {
         ModelAndView modelAndView = new ModelAndView();
-        Deal deal = new Deal();
+        Deal deal;
+        Category category1 = productService.findByCategory(cat1);
+        Category category2 = productService.findByCategory(cat2);
+        if (!cat3.equals("-1")) {
+            Category category3 = productService.findByCategory(cat3);
+            if ((Objects.equals(cat1, cat2)) && Objects.equals(cat1, cat3)){
+                deal = new Deal(new DealCategory(category1,3));
+            } else if (Objects.equals(cat1, cat2)){
+                deal = new Deal(new DealCategory(category1,2), new DealCategory(category3,1) );
+            } else if (Objects.equals(cat2, cat3)){
+                deal = new Deal(new DealCategory(category2,2), new DealCategory(category1,1) );
+            } else if (Objects.equals(cat1, cat3)){
+                deal = new Deal(new DealCategory(category1,2), new DealCategory(category2,1) );
+            } else {
+                deal = new Deal(new DealCategory(category1,1), new DealCategory(category2,1),  new DealCategory(category3,1) );
+            }
+        }else {
+            if (Objects.equals(cat1, cat2)){
+                deal = new Deal(new DealCategory(category1,2) );
+            } else {
+                deal = new Deal(new DealCategory(category1,1), new DealCategory(category2,1) );
+            }
+        }
+
         if (id != -1) {
             deal.setId(id);
         }
         deal.setDescription(desc);
-        List<Category> categories = new ArrayList<>();
-        categories.add(productService.findByCategory(cat1));
-        categories.add(productService.findByCategory(cat2));
-        if (!cat3.equals("-1")) {
-            categories.add(productService.findByCategory(cat3));
-        }
-        deal.setDealCategories(categories);
         deal.setValue(value);
         dealService.save(deal);
         modelAndView.addObject("deals", (List<Deal>) dealService.findAll());
@@ -72,7 +90,6 @@ public class DealsController {
         ModelAndView modelAndView = new ModelAndView();
         Deal d = dealService.findById(dealId);
         if (d != null) {
-            d.setDealCategories(null);
             dealService.delete(d);
         }
         modelAndView.addObject("deals",(List<Deal>)dealService.findAll());
