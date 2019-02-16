@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import dd186.unifood.Entities.Deal;
+import dd186.unifood.Entities.Offer;
 import dd186.unifood.Entities.Product;
 import dd186.unifood.Entities.User;
 import dd186.unifood.Fragments.AccountFragment;
@@ -43,6 +45,8 @@ public class Main extends AppCompatActivity
     private User user;
     private List<Product> basket = new ArrayList<>();
     private List<Product> favourites = new ArrayList<>();
+    private List<Offer> offers = new ArrayList<>();
+    private List<Deal> deals = new ArrayList<>();
     public int basketItemsNum = 0;
     public TextView basketNumTextView;
     int minteger=1;
@@ -55,18 +59,12 @@ public class Main extends AppCompatActivity
         String extra = getIntent().getStringExtra("user");
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            user = objectMapper.readValue(extra, new TypeReference<User>() {
-            });
-
-        } catch (Exception e) {
-            System.out.println("Something wrong with the deserialisation of products ");
-            e.printStackTrace();
-        }
-        try {
+            user = objectMapper.readValue(extra, new TypeReference<User>() {});
             products = extractProductsFromJson(makeHttpRequest("http://10.0.2.2:8080/rest/products"));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+            offers = objectMapper.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/offers"), new TypeReference<List<Offer>>() {});
+            deals = objectMapper.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/deals"), new TypeReference<List<Deal>>() {});
+        } catch (Exception e) {
+            System.out.println("Something wrong with the deserialisation");
             e.printStackTrace();
         }
         favourites = user.getFavouriteProducts();

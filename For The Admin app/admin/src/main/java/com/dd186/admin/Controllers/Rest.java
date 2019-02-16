@@ -61,7 +61,7 @@ public class Rest {
                         categoriesInDeal.add(category);
                     }
                 }
-                deal.addProperty("dealCategories",categoriesInDeal.toString());
+                deal.add("dealCategories",categoriesInDeal);
                 toRet.add(deal);
             }
             return toRet.toString();
@@ -81,7 +81,7 @@ public class Rest {
                 offer.addProperty("id", o.getId());
                 offer.addProperty("description", o.getDescription());
                 offer.addProperty("value", o.getValue());
-                offer.addProperty("offerProducts",createProductList(listFromOfferProductList(o.getOfferProducts())).toString());
+                offer.add("offerProducts",createProductList(listFromOfferProductList(o.getOfferProducts())));
                 toRet.add(offer);
             }
             return toRet.toString();
