@@ -6,7 +6,7 @@ public class Deal {
 
     private int id;
     private String description;
-    private List<Category> categoriesInDeal;
+    private List<Category> dealCategories;
     private double value;
 
     public Deal() {
@@ -15,7 +15,7 @@ public class Deal {
     public Deal(int id, String description, List<Category> categoriesInDeal, double value) {
         this.id = id;
         this.description = description;
-        this.categoriesInDeal = categoriesInDeal;
+        this.dealCategories = categoriesInDeal;
         this.value = value;
     }
 
@@ -36,11 +36,11 @@ public class Deal {
     }
 
     public List<Category> getCategoriesInDeal() {
-        return categoriesInDeal;
+        return dealCategories;
     }
 
     public void setCategoriesInDeal(List<Category> categoriesInDeal) {
-        this.categoriesInDeal = categoriesInDeal;
+        this.dealCategories = categoriesInDeal;
     }
 
     public double getValue() {

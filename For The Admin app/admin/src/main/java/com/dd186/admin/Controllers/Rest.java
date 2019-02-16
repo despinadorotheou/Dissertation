@@ -54,11 +54,12 @@ public class Rest {
                 deal.addProperty("value", d.getValue());
                 JsonArray categoriesInDeal = new JsonArray();
                 for (DealCategory dealCategory : d.getDealCategories()) {
-                    JsonObject category = new JsonObject();
-                    category.addProperty("id", dealCategory.getCategory().getId());
-                    category.addProperty("category", dealCategory.getCategory().getCategory());
-                    category.addProperty("quantity", dealCategory.getQuantity());
-                    categoriesInDeal.add(category);
+                    for (int i =0; i<dealCategory.getQuantity(); i++) {
+                        JsonObject category = new JsonObject();
+                        category.addProperty("id", dealCategory.getCategory().getId());
+                        category.addProperty("category", dealCategory.getCategory().getCategory());
+                        categoriesInDeal.add(category);
+                    }
                 }
                 deal.addProperty("dealCategories",categoriesInDeal.toString());
                 toRet.add(deal);
@@ -80,7 +81,7 @@ public class Rest {
                 offer.addProperty("id", o.getId());
                 offer.addProperty("description", o.getDescription());
                 offer.addProperty("value", o.getValue());
-//                offer.addProperty("offerProducts",createProductList(o.getOfferProducts()).toString());
+                offer.addProperty("offerProducts",createProductList(listFromOfferProductList(o.getOfferProducts())).toString());
                 toRet.add(offer);
             }
             return toRet.toString();
@@ -168,6 +169,17 @@ public class Rest {
             }
         }
         return result;
+    }
+
+    //method used to create a list of products based on the offerProduct list
+    private List<Product> listFromOfferProductList(List<OfferProduct> offerProducts){
+        List<Product> products = new ArrayList<>();
+        for (OfferProduct op:offerProducts) {
+            for (int i = 0; i < op.getQuantity(); i++) {
+                products.add(op.getProduct());
+            }
+        }
+        return products;
     }
 
 
