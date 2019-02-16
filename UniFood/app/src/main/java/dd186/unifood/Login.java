@@ -23,7 +23,6 @@ public class Login extends AppCompatActivity {
 
     EditText email,pass;
     TextView error;
-    List<Product> products = new ArrayList<>();
 
 
     @Override

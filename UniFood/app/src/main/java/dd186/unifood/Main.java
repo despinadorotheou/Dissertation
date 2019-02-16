@@ -1,25 +1,20 @@
 package dd186.unifood;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,7 +44,7 @@ public class Main extends AppCompatActivity
     private List<Deal> deals = new ArrayList<>();
     public int basketItemsNum = 0;
     public TextView basketNumTextView;
-    int minteger=1;
+    int qInt =1;
 
 
     @Override
@@ -293,12 +288,12 @@ public class Main extends AppCompatActivity
         for (Product p : products) {
             if (p.getName().contentEquals(productName.getText())) {
                 product = p;
+                int quantityInBasket = Integer.parseInt(quantity.getText().toString());
+                product.setQuantityInBasket(quantityInBasket);
+                p.setQuantity(p.getQuantity()-quantityInBasket);
                 break;
             }
         }
-        int quantityInBasket = Integer.parseInt(quantity.getText().toString());
-        product.setQuantityInBasket(quantityInBasket);
-        product.setQuantity(product.getQuantity()-quantityInBasket);
         basket.add(product);
         int num=0;
         for (Product p:basket) {
@@ -332,22 +327,26 @@ public class Main extends AppCompatActivity
                 break;
             }
         }
-        minteger ++;
-        if(product.getQuantity()< minteger)
-            minteger--;
-        display(minteger);
+        if(product.getQuantity()>= qInt +1) {
+            qInt++;}
+        display(qInt);
     }
 
     public void decreaseInteger(View view) {
-        if (minteger > 1)
-            minteger = minteger - 1;
-        display(minteger);
+        if (qInt > 1)
+            qInt = qInt - 1;
+        display(qInt);
     }
 
     private void display(int number) {
         TextView displayInteger = (TextView) findViewById(
                 R.id.amount_quantity);
         displayInteger.setText("" + number);
+    }
+
+    //method used to reset the quantity of the items in product info page
+    public void resetQuantityInt(){
+        qInt = 1;
     }
 
 }

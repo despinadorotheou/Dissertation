@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import dd186.unifood.Entities.Product;
+import dd186.unifood.Main;
 import dd186.unifood.R;
 
 public class ProductInfoFragment extends Fragment {
@@ -27,6 +28,9 @@ public class ProductInfoFragment extends Fragment {
         Bundle args = getArguments();
         Product product = (Product) args.getSerializable("product");
         if (product!= null){
+            Main main = (Main) getActivity();
+            assert main != null;
+            main.resetQuantityInt();
             ImageView image = view.findViewById(R.id.product_img);
             byte[] img = Base64.decode(product.getImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
