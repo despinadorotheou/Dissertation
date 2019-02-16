@@ -288,13 +288,24 @@ public class Main extends AppCompatActivity
         for (Product p : products) {
             if (p.getName().contentEquals(productName.getText())) {
                 product = p;
-                int quantityInBasket = Integer.parseInt(quantity.getText().toString());
-                product.setQuantityInBasket(quantityInBasket);
-                p.setQuantity(p.getQuantity()-quantityInBasket);
+
                 break;
             }
         }
-        basket.add(product);
+        int quantityInBasket = Integer.parseInt(quantity.getText().toString());
+        product.setQuantity(product.getQuantity()-quantityInBasket);
+        boolean existsInBasket = false;
+        for (Product p: basket) {
+            if (p == product) {
+                int previousQuantity = p.getQuantityInBasket();
+                p.setQuantityInBasket( previousQuantity + quantityInBasket);
+                existsInBasket = true;
+            }
+        }
+        if (!existsInBasket){
+            product.setQuantityInBasket(quantityInBasket);
+            basket.add(product);
+        }
         int num=0;
         for (Product p:basket) {
             num += p.getQuantityInBasket();
