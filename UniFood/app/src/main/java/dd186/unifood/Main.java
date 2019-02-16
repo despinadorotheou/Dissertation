@@ -58,13 +58,15 @@ public class Main extends AppCompatActivity
         setContentView(R.layout.activity_main);
         String extra = getIntent().getStringExtra("user");
         ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper1 = new ObjectMapper();
+        ObjectMapper objectMapper2 = new ObjectMapper();
         try {
             user = objectMapper.readValue(extra, new TypeReference<User>() {});
             products = extractProductsFromJson(makeHttpRequest("http://10.0.2.2:8080/rest/products"));
-            offers = objectMapper.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/offers"), new TypeReference<List<Offer>>() {});
-            deals = objectMapper.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/deals"), new TypeReference<List<Deal>>() {});
+            offers = objectMapper1.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/offers"), new TypeReference<List<Offer>>() {});
+            deals = objectMapper2.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/deals"), new TypeReference<List<Deal>>() {});
         } catch (Exception e) {
-            System.out.println("Something wrong with the deserialisation");
+            System.out.println("Something wrong with the deserialisationdd");
             e.printStackTrace();
         }
         favourites = user.getFavouriteProducts();

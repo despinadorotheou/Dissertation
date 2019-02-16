@@ -12,10 +12,10 @@ public class Offer {
     public Offer() {
     }
 
-    public Offer(int id, String description, List<Product> productsInOffer, double value) {
+    public Offer(int id, String description, double value, List<Product> offerProducts) {
         this.id = id;
         this.description = description;
-        this.productsInOffer = productsInOffer;
+        this.productsInOffer = offerProducts;
         this.value = value;
     }
 
@@ -39,8 +39,8 @@ public class Offer {
         return productsInOffer;
     }
 
-    public void setProductsInOffer(List<Product> productsInOffer) {
-        this.productsInOffer = productsInOffer;
+    public void setProductsInOffer(List<Product> offerProducts) {
+        this.productsInOffer = offerProducts;
     }
 
     public double getValue() {

@@ -6,16 +6,16 @@ public class Deal {
 
     private int id;
     private String description;
-    private List<Category> dealCategories;
     private double value;
+    private List<Category> categoriesInDeal;
 
     public Deal() {
     }
 
-    public Deal(int id, String description, List<Category> categoriesInDeal, double value) {
+    public Deal(int id, String description, double value,  List<Category> dealCategories) {
         this.id = id;
         this.description = description;
-        this.dealCategories = categoriesInDeal;
+        this.categoriesInDeal = dealCategories;
         this.value = value;
     }
 
@@ -36,11 +36,11 @@ public class Deal {
     }
 
     public List<Category> getCategoriesInDeal() {
-        return dealCategories;
+        return categoriesInDeal;
     }
 
     public void setCategoriesInDeal(List<Category> categoriesInDeal) {
-        this.dealCategories = categoriesInDeal;
+        this.categoriesInDeal = categoriesInDeal;
     }
 
     public double getValue() {
