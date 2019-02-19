@@ -21,7 +21,7 @@ public class Offer {
     private int id;
     @Column(name = "offer_description", nullable = false)
     private String description;
-    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<OfferProduct> offerProducts;
     @Column(name = "offer_value")
     private double value;

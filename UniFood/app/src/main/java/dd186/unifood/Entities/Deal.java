@@ -7,6 +7,7 @@ public class Deal {
     private int id;
     private String description;
     private double value;
+    private String image;
     private List<Category> categoriesInDeal;
 
     public Deal() {
@@ -49,5 +50,13 @@ public class Deal {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

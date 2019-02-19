@@ -20,7 +20,7 @@
 <body>
 <div class="container-fluid">
     <h2>New/edit Deal Information</h2>
-    <form method="POST" action="/main/deals/add">
+    <form method="POST" enctype="multipart/form-data" action="/main/deals/add">
         <table>
             <% if (editDeal){%>
                 <tr>
@@ -29,13 +29,14 @@
                 </tr>
             <%}%>
             <% if (editDeal){%>
+            <c:set var="c" value="${1}"/>
                 <%for (int i=0; i<deal.getDealCategories().size(); i++){%>
                     <c:set var="q" value="<%=deal.getDealCategories().get(i).getQuantity()%>"/>
-                    <c:forEach var = "i" begin = "1" end = "${q}">
+                     <c:forEach var = "i" begin = "1" end = "${q}">
                         <tr>
-                            <td><label for="category<%=i+1%>">Category <%=i+1%></label></td>
+                            <td><label for="category${c}">Category ${c}</label></td>
                             <td>
-                                <select id="category<%=i+1%>" name="category<%=i+1%>">
+                                <select id="category${c}" name="category${c}">
                                     <c:set var="previous" value="<%=deal.getDealCategories().get(i).getCategory()%>"/>
                                     <c:forEach var="category" items="${categories}">
                                         <c:choose>
@@ -50,6 +51,7 @@
                                 </select>
                             </td>
                         </tr>
+                         <c:set var="c" value="${c+1}"/>
                     </c:forEach>
                 <%}%>
             <%}else{
@@ -83,6 +85,12 @@
                 <%}else{%>
                     <td><input id="value" type="number" step="0.01" min="0.00" name="value" required/></td>
                 <%}%>
+            </tr>
+            <tr>
+                <td><label for="image">Photo</label></td>
+                <td>
+                    <p><input type="file" name="image" id="image"/></p>
+                </td>
             </tr>
             <tr>
                 <td colspan="2">

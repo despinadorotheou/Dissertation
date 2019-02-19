@@ -3,6 +3,7 @@ package com.dd186.admin.Domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,10 +22,12 @@ public class Deal {
     private int id;
     @Column(name = "deal_description", nullable = false)
     private String description;
-    @OneToMany(mappedBy = "deal", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "deal", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<DealCategory> dealCategories;
     @Column(name = "deal_value")
     private double value;
+    @Column(name = "deal_image")
+    private Blob image;
 
     public Deal() {
     }
@@ -67,6 +70,14 @@ public class Deal {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Blob getImage() {
+        return image;
+    }
+
+    public void setImage(Blob image) {
+        this.image = image;
     }
 
     @Override

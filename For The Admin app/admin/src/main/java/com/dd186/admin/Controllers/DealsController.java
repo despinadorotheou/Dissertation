@@ -6,12 +6,21 @@ import com.dd186.admin.Domain.DealCategory;
 import com.dd186.admin.Domain.Product;
 import com.dd186.admin.Services.DealService;
 import com.dd186.admin.Services.ProductService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,7 +57,9 @@ public class DealsController {
                                   @RequestParam(name = "category2") String cat2,
                                   @RequestParam(name = "category3", required = false, defaultValue = "-1") String cat3,
                                   @RequestParam(name = "description") String desc,
-                                  @RequestParam(name = "value") double value) {
+                                  @RequestParam(name = "value") double value,
+                                  @RequestParam(name = "image", required = false)MultipartFile image
+    ) throws IOException, SQLException {
         ModelAndView modelAndView = new ModelAndView();
         Deal deal;
         Category category1 = productService.findByCategory(cat1);
@@ -77,6 +88,13 @@ public class DealsController {
         if (id != -1) {
             deal.setId(id);
         }
+        if (!image.isEmpty()){
+            Blob blob = new javax.sql.rowset.serial.SerialBlob(image.getBytes());
+            deal.setImage(blob);
+        } else if(id!=-1){
+            Deal lastDeal= dealService.findById(id);
+            deal.setImage(lastDeal.getImage());
+        }
         deal.setDescription(desc);
         deal.setValue(value);
         dealService.save(deal);
@@ -95,5 +113,13 @@ public class DealsController {
         modelAndView.addObject("deals",(List<Deal>)dealService.findAll());
         modelAndView.setViewName("dealsPage");
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/image", method = RequestMethod.GET)
+    public void getImageAsByteArray(@RequestParam( name = "dealId") int id, HttpServletResponse response) throws IOException, SQLException {
+        Deal deal = dealService.findById(id);
+        InputStream in = deal.getImage().getBinaryStream();
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        IOUtils.copy(in, response.getOutputStream());
     }
 }

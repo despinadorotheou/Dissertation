@@ -360,4 +360,12 @@ public class Main extends AppCompatActivity
         qInt = 1;
     }
 
+    //getters for the deals and the offers
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public List<Deal> getDeals() {
+        return deals;
+    }
 }

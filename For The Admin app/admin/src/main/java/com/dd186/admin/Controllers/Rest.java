@@ -43,7 +43,7 @@ public class Rest {
 
     //http://10.0.2.2:8080/rest/deals
     @RequestMapping(value = "/deals")
-    public String sendDeals() {
+    public String sendDeals() throws SQLException {
         List<Deal> deals = dealService.findAll();
         JsonArray toRet = new JsonArray();
         if (!deals.isEmpty()){
@@ -61,6 +61,7 @@ public class Rest {
                         categoriesInDeal.add(category);
                     }
                 }
+                deal.addProperty("image",Base64.encodeBase64String(d.getImage().getBytes(1, (int) d.getImage().length())) );
                 deal.add("categoriesInDeal",categoriesInDeal);
                 toRet.add(deal);
             }
