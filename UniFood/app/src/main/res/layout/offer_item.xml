@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/offer_img"
+        android:layout_width="90dp"
+        android:layout_height="90dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/offer_description"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:text="1234567890521635641365132135213521532131" />
+
+        <Button
+            android:id="@+id/add_basket_btn_offer"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/colorBackground"
+            android:text="Add to Basket" />
+    </LinearLayout>
+
+</LinearLayout>

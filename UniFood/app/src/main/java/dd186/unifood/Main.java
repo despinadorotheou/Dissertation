@@ -30,6 +30,7 @@ import dd186.unifood.Fragments.AccountFragment;
 import dd186.unifood.Fragments.BasketFragment;
 import dd186.unifood.Fragments.CategoryFragment;
 import dd186.unifood.Fragments.FavouritesFragment;
+import dd186.unifood.Fragments.OffersFragment;
 import dd186.unifood.Fragments.SearchFragment;
 import dd186.unifood.Fragments.OrderHistoryFragment;
 import dd186.unifood.Fragments.OrderStatusFragment;
@@ -278,9 +279,8 @@ public class Main extends AppCompatActivity
 
     //method used to display all the set offers
     public void setOfOffers(View view){
-        Fragment fragment = new CategoryFragment();
-        Bundle args = new Bundle();
-        args.putInt("offerOrCategory", 1);
+        Fragment fragment = new OffersFragment();
+        loadFragment(fragment);
     }
 
     //method used to make http requests

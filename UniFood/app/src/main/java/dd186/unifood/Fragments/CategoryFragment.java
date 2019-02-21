@@ -34,13 +34,8 @@ public class CategoryFragment extends Fragment {
         GridView gridView;
         gridView = (GridView) rootView.findViewById(R.id.product_list);
         assert args != null;
-        if (args.getInt("offerOrCategory") == 1) {
-            List<Product> products = (List<Product>) args.getSerializable("products");
-            gridView.setAdapter(new ProductAdapter(main, products, user));
-        } else if (args.getInt("offerOrCategory") == 0) {
-            List<Offer> offers = main.getOffers();
-            gridView.setAdapter( new OfferAdapter(main, offers));
-        }
+        List<Product> products = (List<Product>) args.getSerializable("products");
+        gridView.setAdapter(new ProductAdapter(main, products, user));
         return rootView;
     }
 }
