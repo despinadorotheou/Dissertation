@@ -3,6 +3,7 @@ package com.dd186.admin.Domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +26,8 @@ public class Offer {
     private Set<OfferProduct> offerProducts;
     @Column(name = "offer_value")
     private double value;
+    @Column(name = "offer_image")
+    private Blob image;
 
     public Offer() {
     }
@@ -67,5 +70,13 @@ public class Offer {
             this.offerProducts = null;
         else
             this.offerProducts = new HashSet<>(offerProducts);
+    }
+
+    public Blob getImage() {
+        return image;
+    }
+
+    public void setImage(Blob image) {
+        this.image = image;
     }
 }

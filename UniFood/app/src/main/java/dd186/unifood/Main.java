@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -221,6 +222,7 @@ public class Main extends AppCompatActivity
 
         Fragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
+        args.putInt("offerOrCategory", 0);
         args.putSerializable("products", (Serializable) sandwiches);
         fragment.setArguments(args);
         loadFragment(fragment);
@@ -237,6 +239,7 @@ public class Main extends AppCompatActivity
         Fragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
         args.putSerializable("products", (Serializable) snacks);
+        args.putInt("offerOrCategory", 0);
         fragment.setArguments(args);
         loadFragment(fragment);
     }
@@ -251,6 +254,7 @@ public class Main extends AppCompatActivity
         }
         Fragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
+        args.putInt("offerOrCategory", 0);
         args.putSerializable("products", (Serializable) drinks);
         fragment.setArguments(args);
         loadFragment(fragment);
@@ -266,12 +270,20 @@ public class Main extends AppCompatActivity
         }
         Fragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
+        args.putInt("offerOrCategory", 0);
         args.putSerializable("products", (Serializable) coffee);
         fragment.setArguments(args);
         loadFragment(fragment);
     }
 
-    //method used to do http requests
+    //method used to display all the set offers
+    public void setOfOffers(View view){
+        Fragment fragment = new CategoryFragment();
+        Bundle args = new Bundle();
+        args.putInt("offerOrCategory", 1);
+    }
+
+    //method used to make http requests
     public String makeHttpRequest(String link) throws ExecutionException, InterruptedException {
         HttpRequest httpRequest = new HttpRequest();
         httpRequest.setLink(link);
@@ -279,7 +291,7 @@ public class Main extends AppCompatActivity
         return httpRequest.get();
     }
 
-    //method for the button add to the basket
+    //method for the button add to the basket products
     public void addToBasket(View view) {
         TextView productName = findViewById(R.id.product_name);
         TextView quantity = (TextView) findViewById(
@@ -311,6 +323,32 @@ public class Main extends AppCompatActivity
             num += p.getQuantityInBasket();
         }
         setBasketBadgeNum(num);
+        Toast.makeText(getApplicationContext(),  "Added to the basket!", Toast.LENGTH_SHORT).show();
+    }
+
+    //method for the button add to the basket products
+    public void addOfferToBasket(Offer offer) {
+
+//        int quantityInBasket = Integer.parseInt(quantity.getText().toString());
+//        product.setQuantity(product.getQuantity()-quantityInBasket);
+//        boolean existsInBasket = false;
+//        for (Product p: basket) {
+//            if (p == product) {
+//                int previousQuantity = p.getQuantityInBasket();
+//                p.setQuantityInBasket( previousQuantity + quantityInBasket);
+//                existsInBasket = true;
+//            }
+//        }
+//        if (!existsInBasket){
+//            product.setQuantityInBasket(quantityInBasket);
+//            basket.add(product);
+//        }
+//        int num=0;
+//        for (Product p:basket) {
+//            num += p.getQuantityInBasket();
+//        }
+//        setBasketBadgeNum(num);
+        Toast.makeText(getApplicationContext(),  "Added to the basket!", Toast.LENGTH_SHORT).show();
     }
 
     //method used to update the products in the basket

@@ -15,7 +15,7 @@ public class Category {
     private int id;
     @Column(name = "category", nullable = false)
     private String category;
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<DealCategory> dealCategories;
 
     public Category(String category) {

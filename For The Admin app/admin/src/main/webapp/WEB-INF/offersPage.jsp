@@ -35,6 +35,7 @@
                     <td><h3>Quantity</h3></td>
                     <td><h3>Description</h3></td>
                     <td><h3>Value</h3></td>
+                    <td><h3>Image</h3></td>
                     <td><h3></h3></td>
                     <td><h3></h3></td>
                 </tr>
@@ -58,6 +59,12 @@
                         </td>
                         <td><c:out value="${offer.getDescription()}"/></td>
                         <td><c:out value="${offer.getValue()}"/></td>
+                        <c:if test="${offer.getImage() != null}">
+                            <td><a class="btn btn-primary" href="/main/offers/image?dealId=${offer.getId()}">See Image</a></td>
+                        </c:if>
+                        <c:if test="${offer.getImage() == null}">
+                            <td><c:out value="No Image"/></td>
+                        </c:if>
                         <td><a class="btn btn-success" href="/main/offers/edit?offerId=${offer.getId()}">Edit</a></td>
                         <td><a class="btn btn-danger" href="/main/offers/delete?offerId=${offer.getId()}">Delete</a></td>
                     </tr>

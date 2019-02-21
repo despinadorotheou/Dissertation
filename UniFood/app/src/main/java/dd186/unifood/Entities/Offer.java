@@ -8,6 +8,8 @@ public class Offer {
     private String description;
     private List<Product> productsInOffer;
     private double value;
+    private String image;
+
 
     public Offer() {
     }
@@ -49,5 +51,13 @@ public class Offer {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

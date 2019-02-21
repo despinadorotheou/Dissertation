@@ -6,13 +6,21 @@ import com.dd186.admin.Domain.OfferProduct;
 import com.dd186.admin.Domain.Product;
 import com.dd186.admin.Services.OfferService;
 import com.dd186.admin.Services.ProductService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +41,7 @@ public class OffersController {
             Offer offer1 = ((List<Offer>) offerService.findAll()).stream().filter(p -> (((Offer) p).getId() == offerId)).findAny().get();
             offer.setId(offerId);
             offer.setOfferProducts(offer1.getOfferProducts());
+            offer.setDescription(offer1.getDescription());
             offer.setValue(offer1.getValue());
             modelAndView.addObject("offer", offer);
         }
@@ -47,7 +56,8 @@ public class OffersController {
                                   @RequestParam(name = "product2") int prod2,
                                   @RequestParam(name = "product3", required = false, defaultValue = "-1") int prod3,
                                   @RequestParam(name = "description") String desc,
-                                  @RequestParam(name = "value") double value) {
+                                  @RequestParam(name = "value") double value,
+                                  @RequestParam(name = "image", required = false)MultipartFile image) throws IOException, SQLException {
         ModelAndView modelAndView = new ModelAndView();
         Product product1 = productService.findById(prod1);
         Product product2 = productService.findById(prod2);
@@ -77,6 +87,13 @@ public class OffersController {
         if (id != -1) {
             offer.setId(id);
         }
+        if (!image.isEmpty()){
+            Blob blob = new javax.sql.rowset.serial.SerialBlob(image.getBytes());
+            offer.setImage(blob);
+        } else if(id!=-1){
+            Offer lastDeal= offerService.findById(id);
+            offer.setImage(lastDeal.getImage());
+        }
         offer.setDescription(desc);
         offer.setValue(value);
         offerService.save(offer);
@@ -95,5 +112,13 @@ public class OffersController {
         modelAndView.addObject("offers", (List<Offer>) offerService.findAll());
         modelAndView.setViewName("offersPage");
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/image", method = RequestMethod.GET)
+    public void getImageAsByteArray(@RequestParam( name = "dealId") int id, HttpServletResponse response) throws IOException, SQLException {
+        Offer offer = offerService.findById(id);
+        InputStream in = offer.getImage().getBinaryStream();
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        IOUtils.copy(in, response.getOutputStream());
     }
 }

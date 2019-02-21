@@ -19,8 +19,8 @@
 </head>
 <body>
 <div class="container-fluid">
-    <h2>New/edit Deal Information</h2>
-    <form method="POST" action="/main/offers/add">
+    <h2>New/edit Offer Information</h2>
+    <form method="POST" enctype="multipart/form-data" action="/main/offers/add">
         <table>
             <% if (editOffer){%>
             <tr>
@@ -28,14 +28,15 @@
                 <td><input id="id" name="id" value="<%=offer.getId()%>" readonly="true"/></td>
             </tr>
             <%}%>
-            <% if (editOffer){
-                for (int i=0; i<offer.getOfferProducts().size(); i++){%>
+            <% if (editOffer){ %>
+            <c:set var="c" value="${1}"/>
+            <% for (int i=0; i<offer.getOfferProducts().size(); i++){%>
                     <c:set var="q" value="<%=offer.getOfferProducts().get(i).getQuantity()%>"/>
                     <c:forEach var = "i" begin = "1" end = "${q}">
                         <tr>
-                            <td><label for="product<%=i+1%>">Product <%=i+1%></label></td>
+                            <td><label for="product${c}">Product ${c}</label></td>
                             <td>
-                                <select id="product<%=i+1%>" name="product<%=i+1%>">
+                                <select id="product${c}" name="product${c}">
                                     <c:set var="previous" value="<%=offer.getOfferProducts().get(i).getProduct()%>"/>
                                     <c:forEach var="product" items="${products}">
                                         <c:choose>
@@ -50,6 +51,7 @@
                                 </select>
                             </td>
                         </tr>
+                        <c:set var="c" value="${c+1}"/>
                     </c:forEach>
                 <%}%>
             <%}else{
@@ -83,6 +85,12 @@
                 <%}else{%>
                 <td><input id="value" type="number" step="0.01" min="0.00" name="value" required/></td>
                 <%}%>
+            </tr>
+            <tr>
+                <td><label for="image">Photo</label></td>
+                <td>
+                    <p><input type="file" name="image" id="image"/></p>
+                </td>
             </tr>
             <tr>
                 <td colspan="2">

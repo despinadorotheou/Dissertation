@@ -14,7 +14,9 @@ import android.widget.Toast;
 import java.io.Serializable;
 import java.util.List;
 
+import dd186.unifood.Adapters.OfferAdapter;
 import dd186.unifood.Adapters.ProductAdapter;
+import dd186.unifood.Entities.Offer;
 import dd186.unifood.Entities.Product;
 import dd186.unifood.Entities.User;
 import dd186.unifood.Main;
@@ -29,10 +31,16 @@ public class CategoryFragment extends Fragment {
         Main main = (Main) getActivity();
         assert main != null;
         User user =  main.getUser();
-        List<Product> products = (List<Product>) args.getSerializable("products");
         GridView gridView;
         gridView = (GridView) rootView.findViewById(R.id.product_list);
-        gridView.setAdapter(new ProductAdapter(main,products, user));
+        assert args != null;
+        if (args.getInt("offerOrCategory") == 1) {
+            List<Product> products = (List<Product>) args.getSerializable("products");
+            gridView.setAdapter(new ProductAdapter(main, products, user));
+        } else if (args.getInt("offerOrCategory") == 0) {
+            List<Offer> offers = main.getOffers();
+            gridView.setAdapter( new OfferAdapter(main, offers));
+        }
         return rootView;
     }
 }

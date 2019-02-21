@@ -82,6 +82,7 @@ public class Rest {
                 offer.addProperty("id", o.getId());
                 offer.addProperty("description", o.getDescription());
                 offer.addProperty("value", o.getValue());
+                offer.addProperty("image",Base64.encodeBase64String(o.getImage().getBytes(1, (int) o.getImage().length())) );
                 offer.add("productsInOffer",createProductList(listFromOfferProductList(o.getOfferProducts())));
                 toRet.add(offer);
             }
