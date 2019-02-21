@@ -18,5 +18,6 @@
     <string name="search">Search</string>
     <string name="search_hint">Search...</string>
     <string name="basket">basket</string>
+    <string name="out_of_stock_msg">Out of Stock!</string>
 
 </resources>

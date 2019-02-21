@@ -14,6 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 import dd186.unifood.Adapters.CheckoutProductAdapter;
@@ -57,7 +59,8 @@ public class BasketFragment extends Fragment {
             for (Product p : products) {
                 totalPrice += (p.getPrice()* p.getQuantityInBasket()) ;
             }
-            total.setText(Double.toString(totalPrice));
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            total.setText(formatter.format(totalPrice));
             empty.setVisibility(View.INVISIBLE);
         } else {
             listView.setVisibility(View.INVISIBLE);

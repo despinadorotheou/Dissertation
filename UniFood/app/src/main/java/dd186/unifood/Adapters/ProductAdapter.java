@@ -14,6 +14,8 @@ import android.widget.*;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 //import org.apache.commons.codec.binary.Base64;
 import dd186.unifood.Entities.Product;
@@ -107,7 +109,8 @@ public class ProductAdapter extends BaseAdapter {
             nameTextView.setPadding(0, 0, 0, 0);
             view.addView(nameTextView);
             TextView priceTextView = new TextView(context);
-            priceTextView.setText("£" + Double.toString(product.getPrice()));
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            priceTextView.setText("£" + formatter.format(product.getPrice()));
             priceTextView.setPadding(0,0,0,30);
             view.addView(priceTextView);
             if (product.getQuantity()<=0){
@@ -115,7 +118,7 @@ public class ProductAdapter extends BaseAdapter {
                 priceTextView.setVisibility(View.GONE);
                 favouriteIcon.setVisibility(View.GONE);
                 TextView outOfStock = new TextView(context);
-                outOfStock.setText("Out of Stock!");
+                outOfStock.setText(context.getString(R.string.out_of_stock_msg));
                 view.addView(outOfStock);
             }
             else {

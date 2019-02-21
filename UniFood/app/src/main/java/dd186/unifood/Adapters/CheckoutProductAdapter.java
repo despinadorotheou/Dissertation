@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 import dd186.unifood.Entities.Product;
@@ -82,7 +84,8 @@ public class CheckoutProductAdapter  extends BaseAdapter {
             quantityTextView.setPadding(0, 0, 0, 0);
             view2.addView(quantityTextView);
             TextView priceTextView = new TextView(context);
-            priceTextView.setText("£" + Double.toString(product.getPrice()));
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            priceTextView.setText("£" + formatter.format(product.getPrice()));
             priceTextView.setPadding(0,0,0,30);
             view2.addView(priceTextView);
             view.addView(view2);
@@ -107,7 +110,7 @@ public class CheckoutProductAdapter  extends BaseAdapter {
                     for (Product p : products) {
                         updateTotal += (p.getPrice() * p.getQuantityInBasket());
                     }
-                    total.setText(Double.toString(updateTotal));
+                    total.setText(formatter.format(updateTotal));
                 }
                 notifyDataSetChanged();
 
