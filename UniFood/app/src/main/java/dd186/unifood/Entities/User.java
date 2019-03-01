@@ -10,6 +10,7 @@ public class User {
     private String email;
     private String password;
     private List<Product> favouriteProducts;
+    private List<Order> orders;
 
     public User(int id, String name, String lastName, String email, String password, List<Product> favouriteProducts) {
         this.id = id;
@@ -69,5 +70,13 @@ public class User {
 
     public void setFavouriteProducts(List<Product> favouriteProducts) {
         this.favouriteProducts = favouriteProducts;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

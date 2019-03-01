@@ -16,14 +16,18 @@ import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import dd186.unifood.Entities.Deal;
 import dd186.unifood.Entities.Offer;
+import dd186.unifood.Entities.Order;
 import dd186.unifood.Entities.Product;
 import dd186.unifood.Entities.User;
 import dd186.unifood.Fragments.AccountFragment;
@@ -44,6 +48,7 @@ public class Main extends AppCompatActivity
     private List<Product> favourites = new ArrayList<>();
     private List<Offer> offers = new ArrayList<>();
     private List<Deal> deals = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
     public int basketItemsNum = 0;
     public TextView basketNumTextView;
     int qInt =1;
@@ -65,6 +70,7 @@ public class Main extends AppCompatActivity
             e.printStackTrace();
         }
         favourites = user.getFavouriteProducts();
+        orders = user.getOrders();
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
         loadFragment(new HomeFragment());
@@ -86,19 +92,6 @@ public class Main extends AppCompatActivity
             loadFragment(fragment);
         });
         return true;
-    }
-
-    public void setBasketBadgeNum(int num) {
-        basketItemsNum = num;
-        if (basketNumTextView == null) return;
-        runOnUiThread(() -> {
-            if (basketItemsNum == 0) {
-                basketNumTextView.setVisibility(View.INVISIBLE);
-            } else {
-                basketNumTextView.setVisibility(View.VISIBLE);
-                basketNumTextView.setText(Integer.toString(basketItemsNum));
-            }
-        });
     }
 
 
@@ -142,6 +135,51 @@ public class Main extends AppCompatActivity
         return loadFragment(fragment);
     }
 
+    public void setBasketBadgeNum(int num) {
+        basketItemsNum = num;
+        if (basketNumTextView == null) return;
+        runOnUiThread(() -> {
+            if (basketItemsNum == 0) {
+                basketNumTextView.setVisibility(View.INVISIBLE);
+            } else {
+                basketNumTextView.setVisibility(View.VISIBLE);
+                basketNumTextView.setText(Integer.toString(basketItemsNum));
+            }
+        });
+    }
+
+    //METHODS USED FOR THE HTTP REQUESTS
+
+    //method used to extract the products for the given json string
+    public List<Product> extractProductsFromJson(String productString) {
+        //if the json string is empty or null, the return early.
+        ObjectMapper mapper = new ObjectMapper();
+        if (TextUtils.isEmpty(productString)) {
+            return null;
+        }
+        try {
+            List<Product> products = new ArrayList<>();
+            products = mapper.readValue(productString, new TypeReference<List<Product>>() {
+            });
+
+            return products;
+        } catch (Exception e) {
+            System.out.println("Something wrong with the deserialisation of products ");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //method used to make http requests
+    public String makeHttpRequest(String link) throws ExecutionException, InterruptedException {
+        HttpGetRequest httpGetRequest = new HttpGetRequest();
+        httpGetRequest.setLink(link);
+        httpGetRequest.execute();
+        return httpGetRequest.get();
+    }
+
+    //ON CLICK METHODS//
+
     //method for the order status button in the account fragment_search
     public void orderStatus(View view) {
         Fragment fragment = new OrderStatusFragment();
@@ -164,52 +202,6 @@ public class Main extends AppCompatActivity
     public void exit(View view) {
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
-    }
-
-    //method used to send the list of products to the fragments
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    //method used to send the list of products that are in the basket to the fragments
-    public List<Product> getBasketProducts() {
-        return basket;
-    }
-
-
-    //method used to send the user to the fragments
-    public User getUser() {
-        return user;
-    }
-
-    //method used to receive the updated user from the fragments
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    //method used to send the user's favourite products
-    public List<Product> getFavourites() {
-        return favourites;
-    }
-
-    //method used to extract the products for the given json string
-    public List<Product> extractProductsFromJson(String productString) {
-        //if the json string is empty or null, the return early.
-        ObjectMapper mapper = new ObjectMapper();
-        if (TextUtils.isEmpty(productString)) {
-            return null;
-        }
-        try {
-            List<Product> products = new ArrayList<>();
-            products = mapper.readValue(productString, new TypeReference<List<Product>>() {
-            });
-
-            return products;
-        } catch (Exception e) {
-            System.out.println("Something wrong with the deserialisation of products ");
-            e.printStackTrace();
-            return null;
-        }
     }
 
     //method to display all the sandwiches
@@ -283,13 +275,8 @@ public class Main extends AppCompatActivity
         loadFragment(fragment);
     }
 
-    //method used to make http requests
-    public String makeHttpRequest(String link) throws ExecutionException, InterruptedException {
-        HttpRequest httpRequest = new HttpRequest();
-        httpRequest.setLink(link);
-        httpRequest.execute();
-        return httpRequest.get();
-    }
+
+    //ALL METHODS RELATED TO THE BASKET'S FUNCTIONALITIES //
 
     //method for the button add to the basket products
     public void addToBasket(View view) {
@@ -308,7 +295,7 @@ public class Main extends AppCompatActivity
         product.setQuantity(product.getQuantity()-quantityInBasket);
         boolean existsInBasket = false;
         for (Product p: basket) {
-            if (p == product) {
+            if (p.getId() == product.getId()) {
                 int previousQuantity = p.getQuantityInBasket();
                 p.setQuantityInBasket( previousQuantity + quantityInBasket);
                 existsInBasket = true;
@@ -326,35 +313,43 @@ public class Main extends AppCompatActivity
         Toast.makeText(getApplicationContext(),  "Added to the basket!", Toast.LENGTH_SHORT).show();
     }
 
-    //method for the button add to the basket products
+    //method for the button add to the basket products of an offer
     public void addOfferToBasket(Offer offer) {
-
-//        int quantityInBasket = Integer.parseInt(quantity.getText().toString());
-//        product.setQuantity(product.getQuantity()-quantityInBasket);
-//        boolean existsInBasket = false;
-//        for (Product p: basket) {
-//            if (p == product) {
-//                int previousQuantity = p.getQuantityInBasket();
-//                p.setQuantityInBasket( previousQuantity + quantityInBasket);
-//                existsInBasket = true;
-//            }
-//        }
-//        if (!existsInBasket){
-//            product.setQuantityInBasket(quantityInBasket);
-//            basket.add(product);
-//        }
-//        int num=0;
-//        for (Product p:basket) {
-//            num += p.getQuantityInBasket();
-//        }
-//        setBasketBadgeNum(num);
+        offer.setQuantityInBasket(offer.getQuantityInBasket()+1);
+        for (Product product: offer.getProductsInOffer()) {
+            product.setQuantity(product.getQuantity()-1);
+            boolean existsInBasket = false;
+            for (Product p: basket) {
+                if (p.getId() == product.getId()) {
+                    int previousQuantity = p.getQuantityInBasket();
+                    p.setQuantityInBasket( previousQuantity + 1);
+                    existsInBasket = true;
+                }
+            }
+            if (!existsInBasket){
+                product.setQuantityInBasket(1);
+                basket.add(product);
+            }
+        }
+        int num=0;
+        for (Product p:basket) {
+            num += p.getQuantityInBasket();
+        }
+        setBasketBadgeNum(num);
         Toast.makeText(getApplicationContext(),  "Added to the basket!", Toast.LENGTH_SHORT).show();
     }
 
-    //method used to update the products in the basket
-    public void removeFromBasket(List<Product> basketProducts, TextView basketNumTextView) {
+    //method used to remove the product from the basket
+    public void removeFromBasket(Product product, TextView basketNumTextView) {
         this.basketNumTextView = basketNumTextView;
-        basket = basketProducts;
+        basket.remove(product);
+        product.setQuantity(product.getQuantity()+product.getQuantityInBasket());
+        product.setQuantityInBasket(0);
+        for (Offer o:offers) {
+            if(o.getProductsInOffer().contains(product) && o.getQuantityInBasket()>0){
+                o.setQuantityInBasket(0);
+            }
+        }
         int num=0;
         for (Product p:basket) {
             num += p.getQuantityInBasket();
@@ -365,6 +360,27 @@ public class Main extends AppCompatActivity
     public TextView getBasketNumTextView(){
         return basketNumTextView;
     }
+
+    //on click method for pay in cash
+    public void payInCash(View view){
+        TextView finalTotal = findViewById(R.id.finalTotal_basket);
+        HashMap<String,String> id_quanity = new HashMap<>();
+        for (Product p:basket) {
+            id_quanity.put(String.valueOf(p.getId()), String.valueOf(p.getQuantityInBasket()));
+        }
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson =  gsonBuilder.create();
+        String json = gson.toJson(id_quanity);
+        HttpPostRequest httpPostRequest =  new HttpPostRequest();
+        httpPostRequest.execute("http://10.0.2.2:8080/rest/addOrder/"+user.getId() + "/"+String.valueOf(finalTotal.getText()), json);
+        basket = new ArrayList<>();
+        Fragment fragment =  new BasketFragment();
+        loadFragment(fragment);
+        setBasketBadgeNum(0);
+        Toast.makeText(getApplicationContext(), "Order sent!", Toast.LENGTH_SHORT).show();
+    }
+
+    //METHODS RELATED TO THE QUANTITY OF THE PRODUCTS//
 
     //methods used to increase and decrease the quantity of the items in the basket
     public void increaseInteger(View view) {
@@ -398,6 +414,36 @@ public class Main extends AppCompatActivity
         qInt = 1;
     }
 
+
+
+    //SETTERS AND GETTERS//
+
+    //method used to send the list of products to the fragments
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    //method used to send the list of products that are in the basket to the fragments
+    public List<Product> getBasketProducts() {
+        return basket;
+    }
+
+
+    //method used to send the user to the fragments
+    public User getUser() {
+        return user;
+    }
+
+    //method used to receive the updated user from the fragments
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    //method used to send the user's favourite products
+    public List<Product> getFavourites() {
+        return favourites;
+    }
+
     //getters for the deals and the offers
     public List<Offer> getOffers() {
         return offers;
@@ -406,4 +452,16 @@ public class Main extends AppCompatActivity
     public List<Deal> getDeals() {
         return deals;
     }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    //  USEFUL METHODS //
+
+
 }

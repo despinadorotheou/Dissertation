@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import dd186.unifood.Entities.Product;
 import dd186.unifood.Main;
 import dd186.unifood.R;
@@ -37,8 +40,9 @@ public class ProductInfoFragment extends Fragment {
             image.setImageBitmap(bitmap);
             TextView name = view.findViewById(R.id.product_name);
             name.setText(product.getName());
+            NumberFormat formatter = new DecimalFormat("#0.00");
             TextView price = view.findViewById(R.id.product_price);
-            price.setText("£"+ Double.toString(product.getPrice()));
+            price.setText("£"+ formatter.format(product.getPrice()));
             TextView description = view.findViewById(R.id.product_descriptiom);
             description.setText(product.getDescription());
         }

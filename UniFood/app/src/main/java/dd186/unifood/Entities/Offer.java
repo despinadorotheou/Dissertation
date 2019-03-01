@@ -9,6 +9,7 @@ public class Offer {
     private List<Product> productsInOffer;
     private double value;
     private String image;
+    private int quantityInBasket ;
 
 
     public Offer() {
@@ -59,5 +60,13 @@ public class Offer {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getQuantityInBasket() {
+        return quantityInBasket;
+    }
+
+    public void setQuantityInBasket(int quantityInBasket) {
+        this.quantityInBasket = quantityInBasket;
     }
 }

@@ -6,6 +6,7 @@ public class Category implements Serializable {
 
     private int id;
     private String category;
+    private int quantityInDeal;
 
     public Category(String category) {
         this.category = category;
@@ -30,5 +31,11 @@ public class Category implements Serializable {
         this.id = id;
     }
 
+    public int getQuantityInDeal() {
+        return quantityInDeal;
+    }
 
+    public void setQuantityInDeal(int quantityInDeal) {
+        this.quantityInDeal = quantityInDeal;
+    }
 }

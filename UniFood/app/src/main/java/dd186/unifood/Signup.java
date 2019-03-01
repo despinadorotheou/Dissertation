@@ -28,7 +28,7 @@ public class Signup extends AppCompatActivity {
     }
 
     public void Creation(View view) {
-        HttpRequest httpRequest = new HttpRequest();
+        HttpGetRequest httpGetRequest = new HttpGetRequest();
         String userName = name.getText().toString();
         String last = lastName.getText().toString();
         String useremail = email.getText().toString();
@@ -37,10 +37,10 @@ public class Signup extends AppCompatActivity {
         if (useremail.trim().equals("") || userName.trim().equals("")|| last.trim().equals("")|| password1.trim().equals("")|| password2.trim().equals("")){
             //todo
         } else if(password1.contentEquals(password2)){
-            httpRequest.setLink("http://10.0.2.2:8080/rest/signup/"+useremail+"/" +userName+"/" +last+"/" +password1);
-            httpRequest.execute();
+            httpGetRequest.setLink("http://10.0.2.2:8080/rest/signup/"+useremail+"/" +userName+"/" +last+"/" +password1);
+            httpGetRequest.execute();
             try {
-                if (httpRequest.get().contains("ok")){
+                if (httpGetRequest.get().contains("ok")){
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
                 } else {

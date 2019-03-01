@@ -37,8 +37,8 @@ public class OffersFragment extends Fragment {
         recyclerView =  rootView.findViewById(R.id.offer_list);
         assert args != null;
         List<Offer> offers = main.getOffers();
-        recyclerView.addItemDecoration(new DividerItemDecoration(main, LinearLayoutManager.HORIZONTAL));
-        recyclerView.setLayoutManager(new LinearLayoutManager(main, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.addItemDecoration(new DividerItemDecoration(main, LinearLayoutManager.VERTICAL));
+        recyclerView.setLayoutManager(new LinearLayoutManager(main, LinearLayoutManager.VERTICAL, false));
         // remove the offer if any of its items is out of stock
         List<Offer> availableOffers = new ArrayList<>();
         for (Offer o:offers) {

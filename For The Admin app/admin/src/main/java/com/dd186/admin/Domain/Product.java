@@ -3,13 +3,14 @@ package com.dd186.admin.Domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Blob;
 import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product implements Serializable{
 
     @Id
     @GeneratedValue(strategy= GenerationType.TABLE)
@@ -108,5 +109,6 @@ public class Product {
     public void setImage(Blob image) {
         this.image = image;
     }
+
 
 }

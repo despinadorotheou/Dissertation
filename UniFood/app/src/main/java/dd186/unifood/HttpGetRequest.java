@@ -11,7 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-public class HttpRequest extends AsyncTask<URL,Void, String> {
+public class HttpGetRequest extends AsyncTask<URL,Void, String> {
     private String link;
 
 

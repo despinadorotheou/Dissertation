@@ -39,7 +39,6 @@ public class LoginController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         List<Product> products = productService.findAll();
-        modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
         modelAndView.addObject("products",products);
         modelAndView.setViewName("main");
         return modelAndView;

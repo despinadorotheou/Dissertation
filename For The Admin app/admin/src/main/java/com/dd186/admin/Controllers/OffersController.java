@@ -1,6 +1,5 @@
 package com.dd186.admin.Controllers;
 
-import com.dd186.admin.Domain.Category;
 import com.dd186.admin.Domain.Offer;
 import com.dd186.admin.Domain.OfferProduct;
 import com.dd186.admin.Domain.Product;
@@ -21,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller

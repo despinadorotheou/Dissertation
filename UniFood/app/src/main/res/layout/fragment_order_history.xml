@@ -7,9 +7,25 @@
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="290dp"
-        android:text="order history"
+        android:text="Order History"
+        android:textColor="@color/colorPrimary"
         android:textSize="24sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/order_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="569dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="34dp"
+        android:columnWidth="90dp"
+        android:horizontalSpacing="10dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp" />
 </RelativeLayout>

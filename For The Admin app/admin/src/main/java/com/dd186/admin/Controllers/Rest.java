@@ -1,10 +1,9 @@
 package com.dd186.admin.Controllers;
 
 import com.dd186.admin.Domain.*;
-import com.dd186.admin.Services.DealService;
-import com.dd186.admin.Services.OfferService;
-import com.dd186.admin.Services.ProductService;
-import com.dd186.admin.Services.UserService;
+import com.dd186.admin.Services.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/rest")
@@ -29,6 +26,8 @@ public class Rest {
     DealService dealService;
     @Autowired
     OfferService offerService;
+    @Autowired
+    OrderService orderService;
 
     //http://10.0.2.2:8080/rest/products
     @RequestMapping(value = "/products")
@@ -38,7 +37,7 @@ public class Rest {
         if (toRet.isJsonNull())
             return "";
         else
-            return createProductList(products).toString();
+            return toRet.toString();
     }
 
     //http://10.0.2.2:8080/rest/deals
@@ -54,13 +53,13 @@ public class Rest {
                 deal.addProperty("value", d.getValue());
                 JsonArray categoriesInDeal = new JsonArray();
                 for (DealCategory dealCategory : d.getDealCategories()) {
-                    for (int i =0; i<dealCategory.getQuantity(); i++) {
-                        JsonObject category = new JsonObject();
-                        category.addProperty("id", dealCategory.getCategory().getId());
-                        category.addProperty("category", dealCategory.getCategory().getCategory());
-                        categoriesInDeal.add(category);
-                    }
+                    JsonObject category = new JsonObject();
+                    category.addProperty("id", dealCategory.getCategory().getId());
+                    category.addProperty("category", dealCategory.getCategory().getCategory());
+                    category.addProperty("quantityInDeal", dealCategory.getQuantity());
+                    categoriesInDeal.add(category);
                 }
+
                 deal.addProperty("image",Base64.encodeBase64String(d.getImage().getBytes(1, (int) d.getImage().length())) );
                 deal.add("categoriesInDeal",categoriesInDeal);
                 toRet.add(deal);
@@ -107,6 +106,7 @@ public class Rest {
                 List<Product> favourites = new ArrayList<>();
                 favourites.addAll(user.getFavProduct());
                 userProperties.add("favouriteProducts", createProductList(favourites));
+                userProperties.add("orders", createOfferList(new ArrayList<>(user.getOrders())));
                 return userProperties.toString();
             } else return "invalid";
         } else return "invalid";
@@ -150,8 +150,30 @@ public class Rest {
         userService.saveUser(user);
     }
 
+    //http://10.0.2.2:8080/rest/sendOrder/"+userID
+    @RequestMapping(value = "/addOrder/{userID}/{price}")
+    public String addOrder(@PathVariable("userID") int user_id,@PathVariable("price") double price, @RequestBody HashMap<String,String> map) throws IOException {
+        User user = userService.findById(user_id);
+        List<OrderProduct> inOrder = new ArrayList<>();
+        for (String i :map.keySet()) {
+            Product product = productService.findById(Integer.parseInt(i));
+            int quantity = Integer.parseInt(map.get(i));
+            product.setQuantity(product.getQuantity()-quantity);
+            productService.save(product);
+            OrderProduct orderProduct = new OrderProduct(product, quantity);
+            inOrder.add(orderProduct);
+        }
+        Order order = new Order(inOrder,price);
+        orderService.save(order);
+        user.getOrders().add(order);
+        userService.saveUser(user);
+        return "ok";
+    }
 
-    //method for creating Json Array for the android app
+
+
+
+    //method for creating Json Array of the products for the android app
     private JsonArray createProductList(List<Product> products) throws SQLException {
         JsonArray result = new JsonArray();
         if (!products.isEmpty()) {
@@ -183,6 +205,39 @@ public class Rest {
         }
         return products;
     }
+
+    //method used to create an objectarray from a list of orders
+    private JsonArray createOfferList(List<Order> orders) throws SQLException {
+        JsonArray result = new JsonArray();
+        if (!orders.isEmpty()) {
+            for (Order o : orders) {
+                JsonObject order = new JsonObject();
+                order.addProperty("id", o.getId());
+                Date date=new Date(o.getDate().getTime());
+                order.addProperty("date", String.valueOf(date));
+                order.addProperty("value", o.getValue());
+                order.add("products", listFromOrderProductList(o.getOrderProducts()));
+                result.add(order);
+            }
+        }
+        return result;
+    }
+
+    //method used to create a hashmap of products based on the orderproduct list
+    private JsonObject listFromOrderProductList(List<OrderProduct> orderProducts){
+        HashMap<Integer, Integer> products = new HashMap<>();
+        for (OrderProduct op:orderProducts) {
+            products.put(op.getProduct().getId(), op.getQuantity());
+        }
+
+        JsonObject map = new JsonObject();
+        for (Integer i:products.keySet()) {
+            map.addProperty(String.valueOf(i), products.get(i));
+        }
+
+        return map;
+    }
+
 
 
 

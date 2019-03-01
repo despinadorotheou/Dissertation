@@ -1,19 +1,16 @@
 package dd186.unifood.Adapters;
 
 import android.content.*;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
@@ -21,7 +18,7 @@ import java.util.*;
 import dd186.unifood.Entities.Product;
 import dd186.unifood.Entities.User;
 import dd186.unifood.Fragments.ProductInfoFragment;
-import dd186.unifood.HttpRequest;
+import dd186.unifood.HttpGetRequest;
 import dd186.unifood.Main;
 import dd186.unifood.R;
 
@@ -80,9 +77,9 @@ public class ProductAdapter extends BaseAdapter {
                 favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
                 favouriteIcon.setOnClickListener(v -> {
                     user.getFavouriteProducts().remove(product);
-                    HttpRequest httpRequest = new HttpRequest();
-                    httpRequest.setLink("http://10.0.2.2:8080/rest/removeFavourite/" + user.getId() +"/" + product.getId());
-                    httpRequest.execute();
+                    HttpGetRequest httpGetRequest = new HttpGetRequest();
+                    httpGetRequest.setLink("http://10.0.2.2:8080/rest/removeFavourite/" + user.getId() +"/" + product.getId());
+                    httpGetRequest.execute();
                     favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
                     main.setUser(user);
                     notifyDataSetChanged();
@@ -94,9 +91,9 @@ public class ProductAdapter extends BaseAdapter {
                 favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
                 favouriteIcon.setOnClickListener(v -> {
                     user.getFavouriteProducts().add(product);
-                    HttpRequest httpRequest = new HttpRequest();
-                    httpRequest.setLink("http://10.0.2.2:8080/rest/addFavourite/" + user.getId() +"/" +product.getId());
-                    httpRequest.execute();
+                    HttpGetRequest httpGetRequest = new HttpGetRequest();
+                    httpGetRequest.setLink("http://10.0.2.2:8080/rest/addFavourite/" + user.getId() +"/" +product.getId());
+                    httpGetRequest.execute();
                     favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
                     main.setUser(user);
                     notifyDataSetChanged();
