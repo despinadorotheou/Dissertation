@@ -1,12 +1,16 @@
 package dd186.unifood.Entities;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import dd186.unifood.Main;
 
 public class Offer {
 
     private int id;
     private String description;
-    private List<Product> productsInOffer;
+    private HashMap<String, Integer> productsInOffer;
     private double value;
     private String image;
     private int quantityInBasket ;
@@ -15,7 +19,7 @@ public class Offer {
     public Offer() {
     }
 
-    public Offer(int id, String description, double value, List<Product> offerProducts) {
+    public Offer(int id, String description, double value, HashMap<String, Integer> offerProducts) {
         this.id = id;
         this.description = description;
         this.productsInOffer = offerProducts;
@@ -39,11 +43,23 @@ public class Offer {
     }
 
     public List<Product> getProductsInOffer() {
-        return productsInOffer;
+        List<Product> products = Main.getProducts();
+        List<Product> favProducts = new ArrayList<>();
+        for (String s:productsInOffer.keySet()) {
+            for (int i = 0; i< productsInOffer.get(s); i++) {
+                for (Product p : products) {
+                    if (Integer.parseInt(s) == p.getId()) {
+                        favProducts.add(p);
+                        break;
+                    }
+                }
+            }
+        }
+        return favProducts;
     }
 
-    public void setProductsInOffer(List<Product> offerProducts) {
-        this.productsInOffer = offerProducts;
+    public void setProductsInOffer(HashMap<String, Integer> productsInOffer) {
+        this.productsInOffer = productsInOffer;
     }
 
     public double getValue() {

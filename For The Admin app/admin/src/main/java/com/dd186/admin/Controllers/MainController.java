@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -49,9 +50,11 @@ public class MainController {
             product.setQuantity(product2.getQuantity());
             product.setCategory(product2.getCategory());
             product.setImage(product2.getImage());
+            product.setPreference(product2.getPreference());
             modelAndView.addObject("product", product);
         }
         modelAndView.addObject("categories", productService.findAllCategories());
+        modelAndView.addObject("preferences", listOfPreferences());
         modelAndView.setViewName("editProduct");
         return modelAndView;
     }
@@ -63,6 +66,7 @@ public class MainController {
                                   @RequestParam(name ="price") double price,
                                   @RequestParam(name = "quantity") int quantity,
                                   @RequestParam(name = "category") String cat,
+                                  @RequestParam(name = "preference") String pref,
                                   @RequestParam(name = "image", required = false)MultipartFile image) throws IOException, SQLException {
         ModelAndView modelAndView = new ModelAndView();
         Product product = new Product();
@@ -73,6 +77,7 @@ public class MainController {
         product.setDescription(description);
         product.setPrice(price);
         product.setQuantity(quantity);
+        product.setPreference(pref);
         product.setCategory(productService.findByCategory(cat));
         if (!image.isEmpty()){
             Blob blob = new javax.sql.rowset.serial.SerialBlob(image.getBytes());
@@ -122,6 +127,15 @@ public class MainController {
         modelAndView.addObject("offers",(List<Offer>)offerService.findAll());
         modelAndView.setViewName("offersPage");
         return modelAndView;
+    }
+
+    private List<String> listOfPreferences(){
+        List<String> toRet = new ArrayList<>();
+        toRet.add("Vegan");
+        toRet.add("Vegetarian");
+        toRet.add("Non-Vegetarian");
+        return toRet;
+
     }
 
 

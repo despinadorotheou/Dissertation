@@ -148,7 +148,7 @@ public class BasketFragment extends Fragment {
                 double diff = originalPrice - d.getValue();
                 discountValue += diff;
             } else {
-                //reset tester
+                //reset tester because the deal does not applies
                 tester.addAll(temp);
             }
         }

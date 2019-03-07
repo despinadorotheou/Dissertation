@@ -49,6 +49,7 @@
             <td><h3>Price</h3></td>
             <td><h3>Quantity</h3></td>
             <td><h3>Category</h3></td>
+            <td><h3>Preference</h3></td>
             <td><h3>Image</h3></td>
             <td><h3></h3></td>
             <td><h3></h3></td>
@@ -62,6 +63,7 @@
                 <td><c:out value="${product.getPrice()}"/></td>
                 <td><c:out value="${product.getQuantity()}"/></td>
                 <td><c:out value="${product.getCategory().getCategory()}"/></td>
+                <td><c:out value="${product.getPreference()}"/></td>
                 <c:if test="${product.getImage() != null}">
                     <td><a class="btn btn-primary" href="/main/image?productId=${product.getId()}">See Image</a></td>
                 </c:if>

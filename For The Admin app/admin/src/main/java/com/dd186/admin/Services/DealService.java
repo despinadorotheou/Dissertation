@@ -11,8 +11,12 @@ import java.util.List;
 @Service("dealService")
 public class DealService {
 
-    @Autowired
     DealRepository dealRepository;
+
+    @Autowired
+    public DealService(DealRepository dealRepository){
+        this.dealRepository = dealRepository;
+    }
 
     public List<Deal> findAll(){
         return dealRepository.findAll();

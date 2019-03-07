@@ -10,6 +10,7 @@ public class Product implements Serializable {
     private double price;
     private int quantity;
     private String image;
+    private String preference;
     private Category category;
     private int quantityInBasket;
     private int quantityInOrder;
@@ -86,6 +87,14 @@ public class Product implements Serializable {
 
     public void setQuantityInOrder(int quantityInOrder) {
         this.quantityInOrder = quantityInOrder;
+    }
+
+    public String getPreference() {
+        return preference;
+    }
+
+    public void setPreference(String preference) {
+        this.preference = preference;
     }
 
     public Product() {

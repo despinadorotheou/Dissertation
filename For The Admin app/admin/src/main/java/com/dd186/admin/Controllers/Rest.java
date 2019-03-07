@@ -2,8 +2,6 @@ package com.dd186.admin.Controllers;
 
 import com.dd186.admin.Domain.*;
 import com.dd186.admin.Services.*;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +80,7 @@ public class Rest {
                 offer.addProperty("description", o.getDescription());
                 offer.addProperty("value", o.getValue());
                 offer.addProperty("image",Base64.encodeBase64String(o.getImage().getBytes(1, (int) o.getImage().length())) );
-                offer.add("productsInOffer",createProductList(listFromOfferProductList(o.getOfferProducts())));
+                offer.add("productsInOffer", mapFromOfferProductList(o.getOfferProducts()));
                 toRet.add(offer);
             }
             return toRet.toString();
@@ -105,7 +103,7 @@ public class Rest {
                 userProperties.addProperty("password",user.getPassword());
                 List<Product> favourites = new ArrayList<>();
                 favourites.addAll(user.getFavProduct());
-                userProperties.add("favouriteProducts", createProductList(favourites));
+                userProperties.add("favouriteProducts", toIntegerList(favourites));
                 userProperties.add("orders", createOfferList(new ArrayList<>(user.getOrders())));
                 return userProperties.toString();
             } else return "invalid";
@@ -185,6 +183,7 @@ public class Rest {
                 product.addProperty("price", p.getPrice());
                 product.addProperty("quantity", p.getQuantity());
                 product.addProperty("image", Base64.encodeBase64String(p.getImage().getBytes(1, (int) p.getImage().length())));
+                product.addProperty("preference", p.getPreference()+-);
                 JsonObject category = new JsonObject();
                 category.addProperty("id", p.getCategory().getId());
                 category.addProperty("category", p.getCategory().getCategory());
@@ -195,15 +194,18 @@ public class Rest {
         return result;
     }
 
-    //method used to create a list of products based on the offerProduct list
-    private List<Product> listFromOfferProductList(List<OfferProduct> offerProducts){
-        List<Product> products = new ArrayList<>();
+    //method used to create a map of products based on the offerProduct list
+    private JsonObject mapFromOfferProductList(List<OfferProduct> offerProducts){
+        HashMap<Integer, Integer> products = new HashMap<>();
         for (OfferProduct op:offerProducts) {
-            for (int i = 0; i < op.getQuantity(); i++) {
-                products.add(op.getProduct());
-            }
+            products.put(op.getProduct().getId(), op.getQuantity());
         }
-        return products;
+        JsonObject map = new JsonObject();
+        for (Integer i:products.keySet()) {
+            map.addProperty(String.valueOf(i), products.get(i));
+        }
+
+        return map;
     }
 
     //method used to create an objectarray from a list of orders
@@ -216,7 +218,7 @@ public class Rest {
                 Date date=new Date(o.getDate().getTime());
                 order.addProperty("date", String.valueOf(date));
                 order.addProperty("value", o.getValue());
-                order.add("products", listFromOrderProductList(o.getOrderProducts()));
+                order.add("products", mapFromOrderProductList(o.getOrderProducts()));
                 result.add(order);
             }
         }
@@ -224,7 +226,7 @@ public class Rest {
     }
 
     //method used to create a hashmap of products based on the orderproduct list
-    private JsonObject listFromOrderProductList(List<OrderProduct> orderProducts){
+    private JsonObject mapFromOrderProductList(List<OrderProduct> orderProducts){
         HashMap<Integer, Integer> products = new HashMap<>();
         for (OrderProduct op:orderProducts) {
             products.put(op.getProduct().getId(), op.getQuantity());
@@ -236,6 +238,20 @@ public class Rest {
         }
 
         return map;
+    }
+
+    //method used to create an integer list json array with ids from a list of products
+    private JsonArray toIntegerList(List<Product> products){
+        List<Integer> list = new ArrayList<>();
+        for (Product p:products) {
+            list.add(p.getId());
+        }
+        JsonArray arr = new JsonArray();
+        for(int i : list) {
+            arr.add(i);
+        }
+        return arr;
+
     }
 
 

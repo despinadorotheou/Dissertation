@@ -67,7 +67,7 @@ public class ProductAdapter extends BaseAdapter {
             view.addView(image);
             ImageView favouriteIcon = new ImageView(context);
             boolean productInFavourites = false;
-            for (Product p: user.getFavouriteProducts()) {
+            for (Product p: main.getFavourites()) {
                 if (p.getId()==product.getId()){
                     productInFavourites = true;
                 }
@@ -76,7 +76,7 @@ public class ProductAdapter extends BaseAdapter {
                 favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
                 favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
                 favouriteIcon.setOnClickListener(v -> {
-                    user.getFavouriteProducts().remove(product);
+                    main.getFavourites().remove(product);
                     HttpGetRequest httpGetRequest = new HttpGetRequest();
                     httpGetRequest.setLink("http://10.0.2.2:8080/rest/removeFavourite/" + user.getId() +"/" + product.getId());
                     httpGetRequest.execute();
@@ -90,7 +90,7 @@ public class ProductAdapter extends BaseAdapter {
                 favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
                 favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
                 favouriteIcon.setOnClickListener(v -> {
-                    user.getFavouriteProducts().add(product);
+                    main.getFavourites().add(product);
                     HttpGetRequest httpGetRequest = new HttpGetRequest();
                     httpGetRequest.setLink("http://10.0.2.2:8080/rest/addFavourite/" + user.getId() +"/" +product.getId());
                     httpGetRequest.execute();

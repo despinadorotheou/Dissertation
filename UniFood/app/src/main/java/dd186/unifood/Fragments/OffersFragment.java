@@ -26,6 +26,8 @@ import dd186.unifood.Main;
 import dd186.unifood.R;
 
 public class OffersFragment extends Fragment {
+    List<Product> products;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class OffersFragment extends Fragment {
         Bundle args = getArguments();
         Main main = (Main) getActivity();
         assert main != null;
+        products = main.getProducts();
         RecyclerView recyclerView ;
         recyclerView =  rootView.findViewById(R.id.offer_list);
         assert args != null;
@@ -43,8 +46,15 @@ public class OffersFragment extends Fragment {
         List<Offer> availableOffers = new ArrayList<>();
         for (Offer o:offers) {
             boolean outOfStock = false;
-            for (Product p:o.getProductsInOffer()){
-                if (p.getQuantity() <= 0){
+            for (Product productOffer:o.getProductsInOffer()){
+                Product product = new Product();
+                for (Product pr : products) {
+                    if (productOffer.getId() == pr.getId()) {
+                        product = pr;
+                        break;
+                    }
+                }
+                if (product.getQuantity() <= 1){
                     outOfStock=true;
                     break;
                 }

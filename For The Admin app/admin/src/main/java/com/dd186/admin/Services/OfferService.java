@@ -10,8 +10,12 @@ import java.util.List;
 @Service("offerService")
 public class OfferService {
 
-    @Autowired
     OfferRepository offerRepository;
+
+    @Autowired
+    public OfferService(OfferRepository offerRepository){
+        this.offerRepository = offerRepository;
+    }
 
     public List<Offer> findAll(){
         return offerRepository.findAll();

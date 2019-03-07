@@ -26,10 +26,62 @@
         android:id="@+id/search_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="1dp"
         android:ems="10"
         android:hint="@string/search_hint"
         android:inputType="text" />
+
+    <Switch
+        android:id="@+id/vegan_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="23dp"
+        android:layout_toEndOf="@+id/search_input"
+        android:layout_toRightOf="@+id/search_input" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@+id/search_input"
+        android:layout_toRightOf="@+id/search_input"
+        android:text="Vegan"
+        android:textColor="@android:color/holo_green_dark" />
+
+    <Switch
+        android:id="@+id/vegetaterian_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="23dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="23dp"
+        android:layout_toEndOf="@+id/vegan_switch"
+        android:layout_toRightOf="@+id/vegan_switch" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="13dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@+id/textView16"
+        android:layout_toRightOf="@+id/textView16"
+        android:text="Vegetarian"
+        android:textColor="@android:color/holo_green_light" />
 
 </RelativeLayout>

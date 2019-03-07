@@ -1,7 +1,10 @@
 package dd186.unifood.Entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import dd186.unifood.Main;
 
 public class User {
     private int id;
@@ -9,10 +12,10 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private List<Product> favouriteProducts;
+    private List<Integer> favouriteProducts;
     private List<Order> orders;
 
-    public User(int id, String name, String lastName, String email, String password, List<Product> favouriteProducts) {
+    public User(int id, String name, String lastName, String email, String password, List<Integer> favouriteProducts) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -65,10 +68,20 @@ public class User {
     }
 
     public List<Product> getFavouriteProducts() {
-        return favouriteProducts;
+        List<Product> products = Main.getProducts();
+        List<Product> toRet =  new ArrayList<>();
+        for (Integer i:favouriteProducts) {
+            for (Product p : products) {
+                if (p.getId() == i){
+                    toRet.add(p);
+                    break;
+                }
+            }
+        }
+        return  toRet;
     }
 
-    public void setFavouriteProducts(List<Product> favouriteProducts) {
+    public void setFavouriteProducts(List<Integer> favouriteProducts) {
         this.favouriteProducts = favouriteProducts;
     }
 

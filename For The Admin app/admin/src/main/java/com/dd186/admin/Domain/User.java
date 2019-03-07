@@ -25,13 +25,13 @@ public class User {
     private String password;
     @Column(name = "active")
     private int active;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_favourite", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "productID"))
     private Set<Product> favProduct;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_order", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
     private Set<Order> orders;
 
@@ -40,6 +40,15 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+    }
+
+    public User(int id, String name, String lastName, String email, String password, int active) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.active = active;
     }
 
     public User(){

@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -45,6 +46,21 @@ public class ProductInfoFragment extends Fragment {
             price.setText("£"+ formatter.format(product.getPrice()));
             TextView description = view.findViewById(R.id.product_descriptiom);
             description.setText(product.getDescription());
+            ConstraintLayout vegan = view.findViewById(R.id.vegan_layout);
+            ConstraintLayout vegetarian = view.findViewById(R.id.vegetarian_layout);
+            switch (product.getPreference()) {
+                case "Vegan":
+                    vegetarian.setVisibility(View.GONE);
+                    break;
+                case "Vegetarian":
+                    vegan.setVisibility(View.GONE);
+                    break;
+                default:
+                    vegetarian.setVisibility(View.GONE);
+                    vegan.setVisibility(View.GONE);
+                    break;
+            }
+
         }
         return view;
     }

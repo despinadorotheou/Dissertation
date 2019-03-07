@@ -32,7 +32,6 @@ import dd186.unifood.Entities.Product;
 import dd186.unifood.Entities.User;
 import dd186.unifood.Fragments.AccountFragment;
 import dd186.unifood.Fragments.BasketFragment;
-import dd186.unifood.Fragments.CategoryFragment;
 import dd186.unifood.Fragments.FavouritesFragment;
 import dd186.unifood.Fragments.OffersFragment;
 import dd186.unifood.Fragments.SearchFragment;
@@ -42,7 +41,7 @@ import dd186.unifood.Fragments.HomeFragment;
 
 public class Main extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private List<Product> products = new ArrayList<>();
+    private static List<Product> products = new ArrayList<>();
     private User user;
     private List<Product> basket = new ArrayList<>();
     private List<Product> favourites = new ArrayList<>();
@@ -126,7 +125,10 @@ public class Main extends AppCompatActivity
                 fragment = new HomeFragment();
                 break;
             case R.id.navigation_search:
+                Bundle args = new Bundle();
+                args.putSerializable("products", (Serializable) products);
                 fragment = new SearchFragment();
+                fragment.setArguments(args);
                 break;
             case R.id.navigation_account:
                 fragment = new AccountFragment();
@@ -213,9 +215,8 @@ public class Main extends AppCompatActivity
             }
         }
 
-        Fragment fragment = new CategoryFragment();
+        Fragment fragment = new SearchFragment();
         Bundle args = new Bundle();
-        args.putInt("offerOrCategory", 0);
         args.putSerializable("products", (Serializable) sandwiches);
         fragment.setArguments(args);
         loadFragment(fragment);
@@ -229,10 +230,9 @@ public class Main extends AppCompatActivity
                 snacks.add(p);
             }
         }
-        Fragment fragment = new CategoryFragment();
+        Fragment fragment = new SearchFragment();
         Bundle args = new Bundle();
         args.putSerializable("products", (Serializable) snacks);
-        args.putInt("offerOrCategory", 0);
         fragment.setArguments(args);
         loadFragment(fragment);
     }
@@ -245,9 +245,8 @@ public class Main extends AppCompatActivity
                 drinks.add(p);
             }
         }
-        Fragment fragment = new CategoryFragment();
+        Fragment fragment = new SearchFragment();
         Bundle args = new Bundle();
-        args.putInt("offerOrCategory", 0);
         args.putSerializable("products", (Serializable) drinks);
         fragment.setArguments(args);
         loadFragment(fragment);
@@ -261,9 +260,8 @@ public class Main extends AppCompatActivity
                 coffee.add(p);
             }
         }
-        Fragment fragment = new CategoryFragment();
+        Fragment fragment = new SearchFragment();
         Bundle args = new Bundle();
-        args.putInt("offerOrCategory", 0);
         args.putSerializable("products", (Serializable) coffee);
         fragment.setArguments(args);
         loadFragment(fragment);
@@ -287,7 +285,6 @@ public class Main extends AppCompatActivity
         for (Product p : products) {
             if (p.getName().contentEquals(productName.getText())) {
                 product = p;
-
                 break;
             }
         }
@@ -309,6 +306,8 @@ public class Main extends AppCompatActivity
         for (Product p:basket) {
             num += p.getQuantityInBasket();
         }
+        Fragment reload = new HomeFragment();
+        loadFragment(reload);
         setBasketBadgeNum(num);
         Toast.makeText(getApplicationContext(),  "Added to the basket!", Toast.LENGTH_SHORT).show();
     }
@@ -316,15 +315,24 @@ public class Main extends AppCompatActivity
     //method for the button add to the basket products of an offer
     public void addOfferToBasket(Offer offer) {
         offer.setQuantityInBasket(offer.getQuantityInBasket()+1);
-        for (Product product: offer.getProductsInOffer()) {
-            product.setQuantity(product.getQuantity()-1);
+        for (Product productOffer: offer.getProductsInOffer()) {
+            Product product = new Product();
+            for (Product p : products) {
+                if (productOffer.getId() == p.getId()) {
+                    product = p;
+                    break;
+                }
+            }
+            int previousQ = product.getQuantity();
+            product.setQuantity(previousQ-1);
             boolean existsInBasket = false;
             for (Product p: basket) {
                 if (p.getId() == product.getId()) {
-                    int previousQuantity = p.getQuantityInBasket();
-                    p.setQuantityInBasket( previousQuantity + 1);
+                    int previousQuantityInBasket = p.getQuantityInBasket();
+                    p.setQuantityInBasket(previousQuantityInBasket + 1);
                     existsInBasket = true;
                 }
+
             }
             if (!existsInBasket){
                 product.setQuantityInBasket(1);
@@ -335,6 +343,8 @@ public class Main extends AppCompatActivity
         for (Product p:basket) {
             num += p.getQuantityInBasket();
         }
+        Fragment reload = new OffersFragment();
+        loadFragment(reload);
         setBasketBadgeNum(num);
         Toast.makeText(getApplicationContext(),  "Added to the basket!", Toast.LENGTH_SHORT).show();
     }
@@ -419,7 +429,7 @@ public class Main extends AppCompatActivity
     //SETTERS AND GETTERS//
 
     //method used to send the list of products to the fragments
-    public List<Product> getProducts() {
+    public static List<Product> getProducts() {
         return products;
     }
 
@@ -457,11 +467,8 @@ public class Main extends AppCompatActivity
         return orders;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
+
 
     //  USEFUL METHODS //
-
 
 }

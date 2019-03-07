@@ -26,18 +26,29 @@ public class Product implements Serializable{
     private int quantity;
     @Column(name = "image")
     private Blob image;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "productID"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Category category;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<OfferProduct> offerProducts;
+    @Column(name = "preference")
+    private String preference;
 
     public Product() {
     }
 
     public Product(int id) {
         this.id = id;
+    }
+
+    public Product(int id,String name, String description, Double price, int quantity, Category category) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+        this.category = category;
     }
 
     public String getName() {
@@ -110,5 +121,11 @@ public class Product implements Serializable{
         this.image = image;
     }
 
+    public String getPreference() {
+        return preference;
+    }
 
+    public void setPreference(String preference) {
+        this.preference = preference;
+    }
 }

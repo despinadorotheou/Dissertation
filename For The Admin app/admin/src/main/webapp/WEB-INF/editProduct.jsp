@@ -1,7 +1,4 @@
 <%@ page import="com.dd186.admin.Domain.Product" %>
-<%@ page import="org.springframework.web.multipart.MultipartFile" %>
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="org.springframework.mock.web.MockMultipartFile" %>
 <!DOCTYPE HTML>
 <% Product product = null;
     boolean editProduct = false;
@@ -82,6 +79,30 @@
                             <c:forEach var="category" items="${categories}">
                                 <option value="${category.getCategory()}">${category.getCategory()}</option>
                             </c:forEach>
+                        <%}%>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="preference">Preference</label></td>
+                <td>
+                    <select id="preference" name="preference">
+                        <% if (editProduct){%>
+                        <c:set var="previous" value="<%=product.getPreference()%>"/>
+                        <c:forEach var="preference" items="${preferences}">
+                            <c:choose>
+                                <c:when test="${ previous.equals(preference)}">
+                                    <option selected value="${preference}">${preference}</option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${preference}">${preference}</option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                        <%}else{%>
+                        <c:forEach var="preference" items="${preferences}">
+                            <option value="${preference}">${preference}</option>
+                        </c:forEach>
                         <%}%>
                     </select>
                 </td>
