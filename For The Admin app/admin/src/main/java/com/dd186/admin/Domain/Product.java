@@ -34,6 +34,8 @@ public class Product implements Serializable{
     private Set<OfferProduct> offerProducts;
     @Column(name = "preference")
     private String preference;
+    @Column(name = "ingredients")
+    private String ingredients;
 
     public Product() {
     }
@@ -127,5 +129,13 @@ public class Product implements Serializable{
 
     public void setPreference(String preference) {
         this.preference = preference;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
     }
 }

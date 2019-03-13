@@ -1,9 +1,13 @@
 package dd186.unifood;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -13,15 +17,41 @@ public class Login extends AppCompatActivity {
 
     EditText email,pass;
     TextView error;
+    CheckBox rememberMe;
+    SharedPreferences userDetails;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userDetails = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
         setContentView(R.layout.activity_login);
         email = (EditText) findViewById(R.id.email_login);
         pass = (EditText) findViewById(R.id.pass_login);
         error = findViewById(R.id.error_login);
+        rememberMe = findViewById(R.id.remember_me_btn);
+        String savedEmail = userDetails.getString("email", "");
+        assert savedEmail != null;
+        if (!savedEmail.equals("")){
+            rememberMe.setChecked(true);
+            email.setText(savedEmail);
+        }
+        rememberMe.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor edit = userDetails.edit();
+            if (isChecked){
+                if (savedEmail.equals("")) {
+                    if (!email.getText().toString().isEmpty()) {
+                        edit.putString("email", email.getText().toString().trim());
+                        edit.apply();
+                    }
+                }
+            }else{
+                if (!savedEmail.equals("")) {
+                    edit.remove("email");
+                    edit.apply();
+                }
+            }
+        });
 
     }
 

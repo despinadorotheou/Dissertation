@@ -32,6 +32,7 @@ import dd186.unifood.Entities.Product;
 import dd186.unifood.Entities.User;
 import dd186.unifood.Fragments.AccountFragment;
 import dd186.unifood.Fragments.BasketFragment;
+import dd186.unifood.Fragments.CardInfoFragment;
 import dd186.unifood.Fragments.FavouritesFragment;
 import dd186.unifood.Fragments.OffersFragment;
 import dd186.unifood.Fragments.SearchFragment;
@@ -273,6 +274,11 @@ public class Main extends AppCompatActivity
         loadFragment(fragment);
     }
 
+    //method used to display all the set offers
+    public void payByCardPage(View view){
+        Fragment fragment = new CardInfoFragment();
+        loadFragment(fragment);
+    }
 
     //ALL METHODS RELATED TO THE BASKET'S FUNCTIONALITIES //
 

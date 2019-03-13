@@ -51,6 +51,7 @@ public class MainController {
             product.setCategory(product2.getCategory());
             product.setImage(product2.getImage());
             product.setPreference(product2.getPreference());
+            product.setIngredients(product2.getIngredients());
             modelAndView.addObject("product", product);
         }
         modelAndView.addObject("categories", productService.findAllCategories());
@@ -63,6 +64,7 @@ public class MainController {
     public ModelAndView addChange(@RequestParam(name ="id", required = false,  defaultValue="-1") int id,
                                   @RequestParam(name ="name") String name,
                                   @RequestParam(name ="description", required = false) String description,
+                                  @RequestParam(name ="ingredients") String ingredients,
                                   @RequestParam(name ="price") double price,
                                   @RequestParam(name = "quantity") int quantity,
                                   @RequestParam(name = "category") String cat,
@@ -75,6 +77,7 @@ public class MainController {
         }
         product.setName(name);
         product.setDescription(description);
+        product.setIngredients(ingredients);
         product.setPrice(price);
         product.setQuantity(quantity);
         product.setPreference(pref);

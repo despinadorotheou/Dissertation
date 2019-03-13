@@ -11,6 +11,7 @@ public class Product implements Serializable {
     private int quantity;
     private String image;
     private String preference;
+    private String ingredients;
     private Category category;
     private int quantityInBasket;
     private int quantityInOrder;
@@ -95,6 +96,14 @@ public class Product implements Serializable {
 
     public void setPreference(String preference) {
         this.preference = preference;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
     }
 
     public Product() {

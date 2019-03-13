@@ -183,7 +183,8 @@ public class Rest {
                 product.addProperty("price", p.getPrice());
                 product.addProperty("quantity", p.getQuantity());
                 product.addProperty("image", Base64.encodeBase64String(p.getImage().getBytes(1, (int) p.getImage().length())));
-                product.addProperty("preference", p.getPreference()+-);
+                product.addProperty("preference", p.getPreference());
+                product.addProperty("ingredients", p.getIngredients());
                 JsonObject category = new JsonObject();
                 category.addProperty("id", p.getCategory().getId());
                 category.addProperty("category", p.getCategory().getCategory());

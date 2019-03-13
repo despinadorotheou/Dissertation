@@ -44,6 +44,14 @@
                 <%}%>
             </tr>
             <tr>
+                <td><label for="ingredients">Ingredients</label></td>
+                <% if (editProduct){%>
+                <td><input id="ingredients" name="ingredients" value="<%=product.getIngredients()%>" required/></td>
+                <%}else{%>
+                <td><input id="ingredients" name="ingredients" required/></td>
+                <%}%>
+            </tr>
+            <tr>
                 <td><label for="price">Price</label></td>
                 <% if (editProduct){%>
                     <td><input id="price"  type="number" step="0.01" min="0.00" name="price"  value="<%=product.getPrice()%>" required/></td>
