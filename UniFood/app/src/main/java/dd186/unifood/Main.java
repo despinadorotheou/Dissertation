@@ -1,6 +1,8 @@
 package dd186.unifood;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -52,12 +54,15 @@ public class Main extends AppCompatActivity
     public int basketItemsNum = 0;
     public TextView basketNumTextView;
     int qInt =1;
+    SharedPreferences userDetails;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userDetails = getSharedPreferences("UserDetails", Context.MODE_PRIVATE);
         String extra = getIntent().getStringExtra("user");
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -65,6 +70,21 @@ public class Main extends AppCompatActivity
             products = extractProductsFromJson(makeHttpRequest("http://10.0.2.2:8080/rest/products"));
             offers = objectMapper.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/offers"), new TypeReference<List<Offer>>() {});
             deals = objectMapper.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/deals"), new TypeReference<List<Deal>>() {});
+            String basketStr = userDetails.getString("basket", "");
+            assert basketStr != null;
+            if (!basketStr.equals("")){
+                basket = objectMapper.readValue(basketStr, new TypeReference<List<Product>>(){});
+                int counter = 0;
+                for (Product p:basket) {
+                    if (p.getQuantity()>1){
+                        p.setQuantity(p.getQuantity()-p.getQuantityInBasket());
+                        counter++;
+                    }else{
+                        basket.remove(p);
+                    }
+                }
+                setBasketBadgeNum(counter);
+            }
         } catch (Exception e) {
             System.out.println("Something wrong with the deserialisationdd");
             e.printStackTrace();
@@ -203,6 +223,16 @@ public class Main extends AppCompatActivity
 
     //Method for the sign out button so the user can return back to login page
     public void exit(View view) {
+        if (!basket.isEmpty()){
+            Gson googleJson = new Gson();
+            String basketInString = googleJson.toJson(basket);
+            SharedPreferences.Editor edit = userDetails.edit();
+            edit.putString("basket", basketInString);
+            edit.apply();
+            for (Product p:basket) {
+                p.setQuantity(p.getQuantity()+p.getQuantityInBasket());
+            }
+        }
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }
