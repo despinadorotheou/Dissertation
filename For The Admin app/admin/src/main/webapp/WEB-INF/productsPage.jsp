@@ -35,9 +35,8 @@
         <input type="text" id="searchValue" class="form-control" onkeyup="searchFunction()" placeholder="Search...">
     </div>
 <section>
-    <a class="btn btn-primary" href="/main/edit">Add new product</a>
-    <a class="btn btn-primary" href="/main/deals">Go to the deals</a>
-    <a class="btn btn-primary" href="/main/offers">Go to the offers</a>
+    <a class="btn btn-primary" href="/main">Back to Main</a>
+    <a class="btn btn-primary" href="/main/products/edit">Add new product</a>
 </section>
     <br>
 <section>
@@ -69,13 +68,13 @@
                 <td><c:out value="${product.getCategory().getCategory()}"/></td>
                 <td><c:out value="${product.getPreference()}"/></td>
                 <c:if test="${product.getImage() != null}">
-                    <td><a class="btn btn-primary" href="/main/image?productId=${product.getId()}">See Image</a></td>
+                    <td><a class="btn btn-primary" href="/main/products/image?productId=${product.getId()}">See Image</a></td>
                 </c:if>
                 <c:if test="${product.getImage() == null}">
                     <td><c:out value="No Image"/></td>
                 </c:if>
-                <td><a class="btn btn-success" href="/main/edit?productId=${product.getId()}">Edit</a></td>
-                <td><a class="btn btn-danger" href="/main/delete?productId=${product.getId()}">Delete</a></td>
+                <td><a class="btn btn-success" href="/main/products/edit?productId=${product.getId()}">Edit</a></td>
+                <td><a class="btn btn-danger" href="/main/products/delete?productId=${product.getId()}">Delete</a></td>
             </tr>
         </c:forEach>
     </table>

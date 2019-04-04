@@ -26,22 +26,29 @@ public class Order {
     private Timestamp date;
     @Column(name = "order_value")
     private double value;
+    @Column(name = "order_status")
+    private OrderStatus status;
+    @Column(name = "order_paid")
+    private boolean paid;
+    @Column(name = "order_userID")
+    private int userid;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<OrderProduct> orderProducts;
 
     public Order() {
     }
 
-    public Order(@NonNull List<OrderProduct> orderProducts, double value) {
+    public Order(@NonNull List<OrderProduct> orderProducts, double value, Timestamp date) {
         for(OrderProduct orderProduct : orderProducts) orderProduct.setOrder(this);
         this.orderProducts = new HashSet<>(orderProducts);
-        date = new Timestamp(System.currentTimeMillis());
+        this.date = date;
+//        date = new Timestamp(System.currentTimeMillis());
         this.value = value;
     }
 
     public Order(double value) {
         this.value = value;
-        date = new Timestamp(System.currentTimeMillis());
+//        date = new Timestamp(System.currentTimeMillis());
     }
 
     public int getId() {
@@ -81,5 +88,27 @@ public class Order {
         this.date = date;
     }
 
+    public OrderStatus getStatus() {
+        return status;
+    }
 
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
 }

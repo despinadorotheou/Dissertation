@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +57,7 @@ public class Main extends AppCompatActivity
     public TextView basketNumTextView;
     int qInt =1;
     SharedPreferences userDetails;
+    private final static Order currentOrder = new Order();
 
 
 
@@ -408,7 +411,7 @@ public class Main extends AppCompatActivity
     }
 
     //on click method for pay in cash
-    public void payInCash(View view){
+    public void payInCash(View view) throws IOException {
         TextView finalTotal = findViewById(R.id.finalTotal_basket);
         HashMap<String,String> id_quanity = new HashMap<>();
         for (Product p:basket) {
@@ -417,13 +420,18 @@ public class Main extends AppCompatActivity
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson =  gsonBuilder.create();
         String json = gson.toJson(id_quanity);
-        HttpPostRequest httpPostRequest =  new HttpPostRequest();
-        httpPostRequest.execute("http://10.0.2.2:8080/rest/addOrder/"+user.getId() + "/"+String.valueOf(finalTotal.getText()), json);
+        HttpPostRequest httpPostRequest =  new HttpPostRequest(currentOrder);
+        httpPostRequest.execute("http://10.0.2.2:8080/rest/addOrder/cash/"+user.getId() + "/"+String.valueOf(finalTotal.getText()), json);
         basket = new ArrayList<>();
-        Fragment fragment =  new BasketFragment();
-        loadFragment(fragment);
         setBasketBadgeNum(0);
+        Fragment fragment =  new OrderStatusFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("order", currentOrder);
+        fragment.setArguments(args);
+        loadFragment(fragment);
         Toast.makeText(getApplicationContext(), "Order sent!", Toast.LENGTH_SHORT).show();
+        FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf(user.getId()));
+
     }
 
     //METHODS RELATED TO THE QUANTITY OF THE PRODUCTS//

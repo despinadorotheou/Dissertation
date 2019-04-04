@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,17 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/main")
-public class MainController {
+@RequestMapping("/main/products")
+public class ProductController {
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private DealService dealService;
-
-    @Autowired
-    private OfferService offerService;
 
 
 
@@ -70,7 +65,6 @@ public class MainController {
                                   @RequestParam(name = "category") String cat,
                                   @RequestParam(name = "preference") String pref,
                                   @RequestParam(name = "image", required = false)MultipartFile image) throws IOException, SQLException {
-        ModelAndView modelAndView = new ModelAndView();
         Product product = new Product();
         if (id != -1){
             product.setId(id);
@@ -90,9 +84,8 @@ public class MainController {
             product.setImage(lastProduct.getImage());
         }
         productService.save(product);
-        modelAndView.addObject("products",(List<Product>)productService.findAll());
-        modelAndView.setViewName("main");
-        return modelAndView;
+        return new ModelAndView(new RedirectView("/main/products"));
+
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
@@ -116,21 +109,6 @@ public class MainController {
         IOUtils.copy(in, response.getOutputStream());
     }
 
-    @RequestMapping(value = "/deals", method = RequestMethod.GET)
-    public ModelAndView dealPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("deals",(List<Deal>)dealService.findAll());
-        modelAndView.setViewName("dealsPage");
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/offers", method = RequestMethod.GET)
-    public ModelAndView offerPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("offers",(List<Offer>)offerService.findAll());
-        modelAndView.setViewName("offersPage");
-        return modelAndView;
-    }
 
     private List<String> listOfPreferences(){
         List<String> toRet = new ArrayList<>();

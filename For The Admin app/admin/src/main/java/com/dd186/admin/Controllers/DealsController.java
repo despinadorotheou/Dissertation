@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -60,7 +61,6 @@ public class DealsController {
                                   @RequestParam(name = "value") double value,
                                   @RequestParam(name = "image", required = false)MultipartFile image
     ) throws IOException, SQLException {
-        ModelAndView modelAndView = new ModelAndView();
         Deal deal;
         Category category1 = productService.findByCategory(cat1);
         Category category2 = productService.findByCategory(cat2);
@@ -98,9 +98,7 @@ public class DealsController {
         deal.setDescription(desc);
         deal.setValue(value);
         dealService.save(deal);
-        modelAndView.addObject("deals", (List<Deal>) dealService.findAll());
-        modelAndView.setViewName("dealsPage");
-        return modelAndView;
+        return new ModelAndView(new RedirectView("/main/deals"));
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)

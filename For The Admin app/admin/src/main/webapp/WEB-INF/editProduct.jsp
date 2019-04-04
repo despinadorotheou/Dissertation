@@ -19,7 +19,7 @@
 <body>
     <div class="container-fluid">
         <h2>New/edit Product Information</h2>
-        <form method="POST" enctype="multipart/form-data" action="/main/add">
+        <form method="POST" enctype="multipart/form-data" action="/main/products/add">
         <table>
             <% if (editProduct){%>
             <tr>

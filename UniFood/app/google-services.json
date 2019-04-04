@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "1062677133790",
+    "firebase_url": "https://canteen-ordering-system.firebaseio.com",
+    "project_id": "canteen-ordering-system",
+    "storage_bucket": "canteen-ordering-system.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062677133790:android:5bd5c0fb41a70ac6",
+        "android_client_info": {
+          "package_name": "example.unifood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1062677133790-cl2ceauvsfovop35phiqv3lp4rbdppig.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "example.unifood",
+            "certificate_hash": "55cfa5d344bc8c23e9a712a64202701e478ae688"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA68J2wG-MB3ahePALPKfq1ZakNcXZkx4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062677133790-4cn34b8p0i2og1uqh9kthajjii3fs919.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

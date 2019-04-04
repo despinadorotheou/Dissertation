@@ -1,15 +1,17 @@
 package dd186.unifood.Entities;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 
-public class Order {
+public class Order implements Serializable {
 
     private int id;
     private String date;
     private double value;
     private HashMap<String, Integer> products;
+    private boolean paid;
 
 
     public Order() {
@@ -45,5 +47,13 @@ public class Order {
 
     public HashMap<String, Integer> getProducts() {
         return products;
+    }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 }

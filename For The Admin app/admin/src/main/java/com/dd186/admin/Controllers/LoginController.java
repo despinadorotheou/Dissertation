@@ -1,9 +1,12 @@
 package com.dd186.admin.Controllers;
 
+import com.dd186.admin.Domain.Order;
+import com.dd186.admin.Domain.OrderStatus;
 import com.dd186.admin.Domain.Product;
 import com.dd186.admin.Domain.User;
 import com.dd186.admin.Repositories.ProductRepository;
 import com.dd186.admin.Repositories.UserRepository;
+import com.dd186.admin.Services.OrderService;
 import com.dd186.admin.Services.ProductService;
 import com.dd186.admin.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,8 +27,9 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
-    private ProductService productService;
+    OrderService orderService;
 
     @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
@@ -38,9 +43,14 @@ public class LoginController {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
-        List<Product> products = productService.findAll();
-        modelAndView.addObject("products",products);
-        modelAndView.setViewName("main");
+        List<Order> pendingOrders = new ArrayList<>();
+        for (Order o:orderService.getAll()) {
+            if (o.getStatus() != OrderStatus.COLLECTED){
+                pendingOrders.add(o);
+            }
+        }
+        modelAndView.addObject("orders",(List<Order>)pendingOrders);
+        modelAndView.setViewName("ordersPage");
         return modelAndView;
     }
 

@@ -10,12 +10,12 @@ import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.*;
 
 @RestController
 @RequestMapping("/rest")
 public class Rest {
-
     @Autowired
     ProductService productService;
     @Autowired
@@ -104,7 +104,7 @@ public class Rest {
                 List<Product> favourites = new ArrayList<>();
                 favourites.addAll(user.getFavProduct());
                 userProperties.add("favouriteProducts", toIntegerList(favourites));
-                userProperties.add("orders", createOfferList(new ArrayList<>(user.getOrders())));
+                userProperties.add("orders", createOrderList(new ArrayList<>(user.getOrders())));
                 return userProperties.toString();
             } else return "invalid";
         } else return "invalid";
@@ -148,10 +148,58 @@ public class Rest {
         userService.saveUser(user);
     }
 
-    //http://10.0.2.2:8080/rest/sendOrder/"+userID
-    @RequestMapping(value = "/addOrder/{userID}/{price}")
+    //http://10.0.2.2:8080/rest/addOrder/cash/"+userID
+    @RequestMapping(value = "/addOrder/cash/{userID}/{price}")
     public String addOrder(@PathVariable("userID") int user_id,@PathVariable("price") double price, @RequestBody HashMap<String,String> map) throws IOException {
         User user = userService.findById(user_id);
+
+        Timestamp date = new Timestamp(System.currentTimeMillis());
+        Order order = new Order(productsInMap(map),price, date);
+        order.setStatus(OrderStatus.PENDING);
+        order.setPaid(false);
+        order.setUserid(user_id);
+        orderService.save(order);
+
+        user.getOrders().add(order);
+        userService.saveUser(user);
+
+        Order order1 = orderService.findlastorder(user_id);
+        JsonObject orderProperties = new JsonObject();
+        orderProperties.addProperty("id", order1.getId());
+        Date orderDate=new Date(order1.getDate().getTime());
+        orderProperties.addProperty("date", String.valueOf(orderDate));
+        orderProperties.addProperty("value", order1.getValue());
+        orderProperties.add("products", mapFromOrderProductList(order1.getOrderProducts()));
+        return orderProperties.toString();
+    }
+
+    //http://10.0.2.2:8080/rest/addOrder/cash/"+userID
+    @RequestMapping(value = "/addOrder/card/{userID}/{price}")
+    public String addOrderCard(@PathVariable("userID") int user_id,@PathVariable("price") double price, @RequestBody HashMap<String,String> map) throws IOException {
+        User user = userService.findById(user_id);
+
+        Timestamp date = new Timestamp(System.currentTimeMillis());
+        Order order = new Order(productsInMap(map),price, date);
+        order.setStatus(OrderStatus.PENDING);
+        order.setPaid(true);
+        order.setUserid(user_id);
+        orderService.save(order);
+
+        user.getOrders().add(order);
+        userService.saveUser(user);
+
+        Order order1 = orderService.findlastorder(user_id);
+        JsonObject orderProperties = new JsonObject();
+        orderProperties.addProperty("id", order1.getId());
+        Date orderDate=new Date(order1.getDate().getTime());
+        orderProperties.addProperty("date", String.valueOf(orderDate));
+        orderProperties.addProperty("value", order1.getValue());
+        orderProperties.add("products", mapFromOrderProductList(order1.getOrderProducts()));
+        return orderProperties.toString();
+    }
+
+    //method used to extract the products in the order from a map
+    private List<OrderProduct> productsInMap(HashMap<String,String> map){
         List<OrderProduct> inOrder = new ArrayList<>();
         for (String i :map.keySet()) {
             Product product = productService.findById(Integer.parseInt(i));
@@ -161,11 +209,7 @@ public class Rest {
             OrderProduct orderProduct = new OrderProduct(product, quantity);
             inOrder.add(orderProduct);
         }
-        Order order = new Order(inOrder,price);
-        orderService.save(order);
-        user.getOrders().add(order);
-        userService.saveUser(user);
-        return "ok";
+        return inOrder;
     }
 
 
@@ -210,7 +254,7 @@ public class Rest {
     }
 
     //method used to create an objectarray from a list of orders
-    private JsonArray createOfferList(List<Order> orders) throws SQLException {
+    private JsonArray createOrderList(List<Order> orders) throws SQLException {
         JsonArray result = new JsonArray();
         if (!orders.isEmpty()) {
             for (Order o : orders) {

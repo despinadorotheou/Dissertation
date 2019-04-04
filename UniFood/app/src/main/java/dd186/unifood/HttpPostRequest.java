@@ -2,6 +2,9 @@ package dd186.unifood;
 
 import android.os.AsyncTask;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,13 +17,26 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 
+import dd186.unifood.Entities.Order;
+
 public class HttpPostRequest extends AsyncTask<String, String, String> {
     private String link;
+    private Order order;
+
+    public HttpPostRequest(Order order) {
+        this.order = order;
+    }
 
     @Override
     protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            Order order = objectMapper.readValue(s, new TypeReference<Order>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @Override
     protected String doInBackground(String... params) {
@@ -67,7 +83,7 @@ public class HttpPostRequest extends AsyncTask<String, String, String> {
         return jsonResponse;
     }
 
-    public  String readFromStream(InputStream inputStream) throws IOException {
+    private String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         if (inputStream != null){
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
@@ -81,4 +97,5 @@ public class HttpPostRequest extends AsyncTask<String, String, String> {
 
         return output.toString();
     }
+
 }

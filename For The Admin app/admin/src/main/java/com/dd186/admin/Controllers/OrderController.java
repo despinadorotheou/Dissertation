@@ -1,0 +1,131 @@
+package com.dd186.admin.Controllers;
+import com.dd186.admin.Domain.*;
+import com.dd186.admin.Services.*;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+@Controller
+@RequestMapping("/main")
+public class OrderController {
+
+
+    @Autowired
+    AndroidPushNotificationsService androidPushNotificationsService;
+
+    @Autowired
+    OrderService orderService;
+
+    @Autowired
+    private DealService dealService;
+
+    @Autowired
+    private OfferService offerService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private UserService userService;
+
+    @RequestMapping(value = "/order/ready", method = RequestMethod.GET, produces = "application/json")
+    public ModelAndView orderReady(@RequestParam(value="orderId") int orderId) throws JSONException {
+        Order order = orderService.findById(orderId);
+        order.setStatus(OrderStatus.READY);
+        orderService.save(order);
+        User user = userService.findById(order.getUserid());
+        JSONObject body = new JSONObject();
+        body.put("to", "/topics/" + user.getId());
+        body.put("priority", "high");
+
+        JSONObject notification = new JSONObject();
+        notification.put("title", "UniFood");
+        notification.put("body", "Your order is ready for collection! Your order number is" + orderId);
+
+        JSONObject data = new JSONObject();
+        data.put("Key-1", "JSA Data 1");
+        data.put("Key-2", "JSA Data 2");
+
+        body.put("notification", notification);
+        body.put("data", data);
+
+        /**
+         {
+         "notification": {
+         "title": "UniFood",
+         "body": "Happy Message!"
+         },
+         "data": {
+         "Key-1": "JSA Data 1",
+         "Key-2": "JSA Data 2"
+         },
+         "to": "/topics/userID",
+         "priority": "high"
+         }
+        */
+
+        HttpEntity<String> request = new HttpEntity<>(body.toString());
+
+        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
+        CompletableFuture.allOf(pushNotification).join();
+
+        try {
+            String firebaseResponse = pushNotification.get();
+
+            System.out.println(new ResponseEntity<>(firebaseResponse, HttpStatus.OK));
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println(new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST));
+            e.printStackTrace();
+        }
+
+        return new ModelAndView(new RedirectView("/main"));
+
+    }
+
+    @RequestMapping(value = "/order/collected", method = RequestMethod.GET)
+    public ModelAndView orderCollected(@RequestParam(value="orderId") int orderId) {
+        Order order = orderService.findById(orderId);
+        order.setStatus(OrderStatus.COLLECTED);
+        orderService.save(order);
+        return new ModelAndView(new RedirectView("/main"));
+    }
+
+    @RequestMapping(value = "/deals", method = RequestMethod.GET)
+    public ModelAndView dealPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("deals",(List<Deal>)dealService.findAll());
+        modelAndView.setViewName("dealsPage");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/offers", method = RequestMethod.GET)
+    public ModelAndView offerPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("offers",(List<Offer>)offerService.findAll());
+        modelAndView.setViewName("offersPage");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/products", method = RequestMethod.GET)
+    public ModelAndView productPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("products",(List<Product>)productService.findAll());
+        modelAndView.setViewName("productsPage");
+        return modelAndView;
+    }
+
+}
