@@ -26,13 +26,11 @@ import dd186.unifood.R;
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
 
     private List<Order> orders;
-    private List<Product> products;
     private Main main;
 
-    public OrderAdapter(Main main, List<Order> orders, List<Product> products){
+    public OrderAdapter(Main main, List<Order> orders){
         this.main =main;
         this.orders = orders;
-        this.products = products;
     }
 
 
@@ -50,7 +48,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.date.setText(orders.get(position).getDate());
         holder.id.setText(String.valueOf(orders.get(position).getId()));
         holder.value.setText("£"+formatter.format(orders.get(position).getValue()));
-        holder.products.setAdapter(new ProductAdapterVertical(main, fromMapToList(orders.get(position).getProducts())) );
+        holder.products.setAdapter(new ProductAdapterVertical(main, main.fromMapToList(orders.get(position).getProducts())) );
 
     }
 
@@ -59,23 +57,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         return orders.size();
     }
 
-    private List<Product> fromMapToList(HashMap<String, Integer> map){
-        List<Product> list = new ArrayList<>();
-        for (String i:map.keySet()) {
-            Product product = null;
-            for (Product p:products) {
-                if (p.getId() == Integer.parseInt(i)){
-                    product = p;
-                    break;
-                }
-            }
-            if (product != null) {
-                product.setQuantityInBasket(map.get(i));
-                list.add(product);
-            }
-        }
-        return list;
-    }
 
     class OrderViewHolder extends RecyclerView.ViewHolder {
         TextView id;

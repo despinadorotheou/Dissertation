@@ -7,6 +7,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -42,6 +44,10 @@ public class MyFirebaseInstanceService extends FirebaseMessagingService {
             notificationChannel.setLightColor(Color.YELLOW);
             notificationChannel.setVibrationPattern(new long[]{0,1000,500,1000});
             notificationChannel.enableVibration(true);
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE).build();
+            notificationChannel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), audioAttributes);
             notificationManager.createNotificationChannel(notificationChannel);
         }
 
@@ -68,10 +74,6 @@ public class MyFirebaseInstanceService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
-//        sendRegistrationToServer(token);
     }
 
 }

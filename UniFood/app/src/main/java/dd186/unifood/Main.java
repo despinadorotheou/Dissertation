@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,18 +48,18 @@ import dd186.unifood.Fragments.HomeFragment;
 
 public class Main extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private static List<Product> products = new ArrayList<>();
-    private User user;
-    private List<Product> basket = new ArrayList<>();
-    private List<Product> favourites = new ArrayList<>();
-    private List<Offer> offers = new ArrayList<>();
-    private List<Deal> deals = new ArrayList<>();
-    private List<Order> orders = new ArrayList<>();
+    public static List<Product> products = new ArrayList<>();
+    public static User user;
+    public static List<Product> basket = new ArrayList<>();
+    public static List<Offer> offers = new ArrayList<>();
+    public static List<Deal> deals = new ArrayList<>();
+    public static List<Order> orders = new ArrayList<>();
+    public static List<Product> favourites = new ArrayList<>();
     public int basketItemsNum = 0;
     public TextView basketNumTextView;
     int qInt =1;
     SharedPreferences userDetails;
-    private final static Order currentOrder = new Order();
+    public static Order pendingOrder = null;
 
 
 
@@ -73,6 +75,7 @@ public class Main extends AppCompatActivity
             products = extractProductsFromJson(makeHttpRequest("http://10.0.2.2:8080/rest/products"));
             offers = objectMapper.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/offers"), new TypeReference<List<Offer>>() {});
             deals = objectMapper.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/deals"), new TypeReference<List<Deal>>() {});
+            favourites = user.getFavouriteProducts();
             String basketStr = userDetails.getString("basket", "");
             assert basketStr != null;
             if (!basketStr.equals("")){
@@ -92,11 +95,10 @@ public class Main extends AppCompatActivity
             System.out.println("Something wrong with the deserialisationdd");
             e.printStackTrace();
         }
-        favourites = user.getFavouriteProducts();
         orders = user.getOrders();
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
-        loadFragment(new HomeFragment());
+        loadFragment(new HomeFragment(), "home");
 
 
     }
@@ -112,7 +114,7 @@ public class Main extends AppCompatActivity
         ImageView basket = view.findViewById(R.id.basket_img);
         basket.setOnClickListener(v -> {
             Fragment fragment = new BasketFragment();
-            loadFragment(fragment);
+            loadFragment(fragment, "basket");
         });
         return true;
     }
@@ -129,11 +131,11 @@ public class Main extends AppCompatActivity
 //        return loadFragment(fragment);
 //    }
 
-    public boolean loadFragment(Fragment fragment) {
+    public boolean loadFragment(Fragment fragment, String tag) {
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
+                    .replace(R.id.fragment_container, fragment, tag)
                     .commit();
             return true;
         }
@@ -144,21 +146,25 @@ public class Main extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Fragment fragment = null;
+        String tag = null;
         switch (menuItem.getItemId()) {
             case R.id.navigation_home:
                 fragment = new HomeFragment();
+                tag = "home";
                 break;
             case R.id.navigation_search:
                 Bundle args = new Bundle();
                 args.putSerializable("products", (Serializable) products);
                 fragment = new SearchFragment();
                 fragment.setArguments(args);
+                tag = "search";
                 break;
             case R.id.navigation_account:
                 fragment = new AccountFragment();
+                tag = "account";
                 break;
         }
-        return loadFragment(fragment);
+        return loadFragment(fragment, tag);
     }
 
     public void setBasketBadgeNum(int num) {
@@ -209,19 +215,23 @@ public class Main extends AppCompatActivity
     //method for the order status button in the account fragment_search
     public void orderStatus(View view) {
         Fragment fragment = new OrderStatusFragment();
-        loadFragment(fragment);
+        Bundle args = new Bundle();
+        //it's not the first time the orderStatusFragment is called so the 0 stands for false
+        args.putInt("firstTime", 0);
+        fragment.setArguments(args);
+        loadFragment(fragment, "orderStatus");
     }
 
     //method for the order history button in the account fragment_search
     public void orderHistory(View view) {
         Fragment fragment = new OrderHistoryFragment();
-        loadFragment(fragment);
+        loadFragment(fragment, "orderHistory");
     }
 
     //method for the favourites button in the account fragment_search
     public void favourites(View view) {
         Fragment fragment = new FavouritesFragment();
-        loadFragment(fragment);
+        loadFragment(fragment, "favourites");
     }
 
     //Method for the sign out button so the user can return back to login page
@@ -253,7 +263,7 @@ public class Main extends AppCompatActivity
         Bundle args = new Bundle();
         args.putSerializable("products", (Serializable) sandwiches);
         fragment.setArguments(args);
-        loadFragment(fragment);
+        loadFragment(fragment, "search");
     }
 
     //method to display all the snacks
@@ -268,7 +278,7 @@ public class Main extends AppCompatActivity
         Bundle args = new Bundle();
         args.putSerializable("products", (Serializable) snacks);
         fragment.setArguments(args);
-        loadFragment(fragment);
+        loadFragment(fragment, "search");
     }
 
     //method to display all the drinks
@@ -283,7 +293,7 @@ public class Main extends AppCompatActivity
         Bundle args = new Bundle();
         args.putSerializable("products", (Serializable) drinks);
         fragment.setArguments(args);
-        loadFragment(fragment);
+        loadFragment(fragment, "search");
     }
 
     //method to display all the sandwiches
@@ -298,19 +308,19 @@ public class Main extends AppCompatActivity
         Bundle args = new Bundle();
         args.putSerializable("products", (Serializable) coffee);
         fragment.setArguments(args);
-        loadFragment(fragment);
+        loadFragment(fragment, "search");
     }
 
     //method used to display all the set offers
     public void setOfOffers(View view){
         Fragment fragment = new OffersFragment();
-        loadFragment(fragment);
+        loadFragment(fragment, "offers");
     }
 
     //method used to display all the set offers
     public void payByCardPage(View view){
         Fragment fragment = new CardInfoFragment();
-        loadFragment(fragment);
+        loadFragment(fragment, "cardInfo");
     }
 
     //ALL METHODS RELATED TO THE BASKET'S FUNCTIONALITIES //
@@ -346,7 +356,7 @@ public class Main extends AppCompatActivity
             num += p.getQuantityInBasket();
         }
         Fragment reload = new HomeFragment();
-        loadFragment(reload);
+        loadFragment(reload, "home");
         setBasketBadgeNum(num);
         Toast.makeText(getApplicationContext(),  "Added to the basket!", Toast.LENGTH_SHORT).show();
     }
@@ -383,7 +393,7 @@ public class Main extends AppCompatActivity
             num += p.getQuantityInBasket();
         }
         Fragment reload = new OffersFragment();
-        loadFragment(reload);
+        loadFragment(reload, "offers");
         setBasketBadgeNum(num);
         Toast.makeText(getApplicationContext(),  "Added to the basket!", Toast.LENGTH_SHORT).show();
     }
@@ -411,7 +421,7 @@ public class Main extends AppCompatActivity
     }
 
     //on click method for pay in cash
-    public void payInCash(View view) throws IOException {
+    public void payInCash(View view) throws IOException, ExecutionException, InterruptedException {
         TextView finalTotal = findViewById(R.id.finalTotal_basket);
         HashMap<String,String> id_quanity = new HashMap<>();
         for (Product p:basket) {
@@ -420,18 +430,11 @@ public class Main extends AppCompatActivity
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson =  gsonBuilder.create();
         String json = gson.toJson(id_quanity);
-        HttpPostRequest httpPostRequest =  new HttpPostRequest(currentOrder);
+        ObjectMapper objectMapper = new ObjectMapper();
+        HttpPostRequest httpPostRequest =  new HttpPostRequest();
         httpPostRequest.execute("http://10.0.2.2:8080/rest/addOrder/cash/"+user.getId() + "/"+String.valueOf(finalTotal.getText()), json);
-        basket = new ArrayList<>();
-        setBasketBadgeNum(0);
-        Fragment fragment =  new OrderStatusFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("order", currentOrder);
-        fragment.setArguments(args);
-        loadFragment(fragment);
-        Toast.makeText(getApplicationContext(), "Order sent!", Toast.LENGTH_SHORT).show();
-        FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf(user.getId()));
-
+        pendingOrder = objectMapper.readValue(httpPostRequest.get(), new TypeReference<Order>() {});
+        afterPlaceOrder();
     }
 
     //METHODS RELATED TO THE QUANTITY OF THE PRODUCTS//
@@ -468,51 +471,37 @@ public class Main extends AppCompatActivity
         qInt = 1;
     }
 
-
-
-    //SETTERS AND GETTERS//
-
-    //method used to send the list of products to the fragments
-    public static List<Product> getProducts() {
-        return products;
-    }
-
-    //method used to send the list of products that are in the basket to the fragments
-    public List<Product> getBasketProducts() {
-        return basket;
-    }
-
-
-    //method used to send the user to the fragments
-    public User getUser() {
-        return user;
-    }
-
-    //method used to receive the updated user from the fragments
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    //method used to send the user's favourite products
-    public List<Product> getFavourites() {
-        return favourites;
-    }
-
-    //getters for the deals and the offers
-    public List<Offer> getOffers() {
-        return offers;
-    }
-
-    public List<Deal> getDeals() {
-        return deals;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-
-
     //  USEFUL METHODS //
 
+    public void afterPlaceOrder(){
+        basket = new ArrayList<>();
+        setBasketBadgeNum(0);
+        Fragment fragment =  new OrderStatusFragment();
+        Bundle args = new Bundle();
+        //it's the first time the orderStatusFragment is called so the 1 stands for true
+        args.putInt("firstTime", 1);
+        fragment.setArguments(args);
+        loadFragment(fragment, "orderStatus");
+        Toast.makeText(getApplicationContext(), "Order sent!", Toast.LENGTH_SHORT).show();
+        FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf(user.getId()));
+    }
+
+    //takes a map with the products ids and converts it to a list o products
+    public List<Product> fromMapToList(HashMap<String, Integer> map){
+        List<Product> list = new ArrayList<>();
+        for (String i:map.keySet()) {
+            Product product = null;
+            for (Product p:products) {
+                if (p.getId() == Integer.parseInt(i)){
+                    product = p;
+                    break;
+                }
+            }
+            if (product != null) {
+                product.setQuantityInBasket(map.get(i));
+                list.add(product);
+            }
+        }
+        return list;
+    }
 }

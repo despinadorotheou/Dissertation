@@ -68,7 +68,7 @@ public class User {
     }
 
     public List<Product> getFavouriteProducts() {
-        List<Product> products = Main.getProducts();
+        List<Product> products = Main.products;
         List<Product> toRet =  new ArrayList<>();
         for (Integer i:favouriteProducts) {
             for (Product p : products) {

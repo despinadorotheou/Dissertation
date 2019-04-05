@@ -54,7 +54,7 @@ public class OrderController {
 
         JSONObject notification = new JSONObject();
         notification.put("title", "UniFood");
-        notification.put("body", "Your order is ready for collection! Your order number is" + orderId);
+        notification.put("body", "Your order is ready for collection! \n Your order number is " + orderId + "." );
 
         JSONObject data = new JSONObject();
         data.put("Key-1", "JSA Data 1");

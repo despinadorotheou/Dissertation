@@ -21,18 +21,16 @@ import dd186.unifood.Main;
 import dd186.unifood.R;
 
 public class OrderHistoryFragment extends Fragment {
-    List<Order> orders = new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_order_history, null );
         Main main = (Main) getActivity();
         assert main != null;
-        orders = main.getOrders();
         RecyclerView recyclerView = rootView.findViewById(R.id.order_list_view);
         recyclerView.addItemDecoration(new DividerItemDecoration(main, LinearLayoutManager.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(main, LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(new OrderAdapter(main,orders,main.getProducts()));
+        recyclerView.setAdapter(new OrderAdapter(main,Main.user.getOrders()));
         return rootView;
     }
 }

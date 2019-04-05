@@ -20,7 +20,6 @@ import dd186.unifood.Main;
 import dd186.unifood.R;
 
 public class FavouritesFragment extends Fragment {
-    List<Product> favourites = new ArrayList<>();
 
     @Nullable
     @Override
@@ -30,9 +29,7 @@ public class FavouritesFragment extends Fragment {
         gridView = (GridView) rootView.findViewById(R.id.product_list);
         Main main = (Main) getActivity();
         assert main != null;
-        favourites = main.getFavourites();
-        User user =  main.getUser();
-        gridView.setAdapter(new ProductAdapter(main,favourites, user));
+        gridView.setAdapter(new ProductAdapter(main,Main.favourites));
         return rootView;
 
     }

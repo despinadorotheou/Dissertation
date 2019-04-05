@@ -43,11 +43,10 @@ public class Offer {
     }
 
     public List<Product> getProductsInOffer() {
-        List<Product> products = Main.getProducts();
         List<Product> favProducts = new ArrayList<>();
         for (String s:productsInOffer.keySet()) {
             for (int i = 0; i< productsInOffer.get(s); i++) {
-                for (Product p : products) {
+                for (Product p : Main.products) {
                     if (Integer.parseInt(s) == p.getId()) {
                         favProducts.add(p);
                         break;

@@ -52,10 +52,9 @@ public class SearchFragment extends Fragment {
         Bundle args = getArguments();
         assert args != null;
         products = (List<Product>) args.getSerializable("products");
-        user = main.getUser();
         currentDisplayedProducts = products;
         searchInput = rootView.findViewById(R.id.search_input);
-        gridView.setAdapter(new ProductAdapter(main,products, user));
+        gridView.setAdapter(new ProductAdapter(main,products));
         Spinner searchFilter = rootView.findViewById(R.id.spinner_filter);
         String[] items = new String[]{"Name", "Ingredients"};
         ArrayAdapter<String> adapter =  new ArrayAdapter<>(Objects.requireNonNull(this.getContext()),R.layout.spinner_item, items);
@@ -98,7 +97,7 @@ public class SearchFragment extends Fragment {
                 vegetarian.setClickable(true);
             }
             currentDisplayedProducts = result;
-            gridView.setAdapter(new ProductAdapter(main, result, user));
+            gridView.setAdapter(new ProductAdapter(main, result));
         });
         vegetarian.setOnCheckedChangeListener((buttonView, isChecked) -> {
             //list used to store the products that was displayed on the screen before sleekbar changes
@@ -121,7 +120,7 @@ public class SearchFragment extends Fragment {
                 }
             }
             currentDisplayedProducts = result;
-            gridView.setAdapter(new ProductAdapter(main, result, user));
+            gridView.setAdapter(new ProductAdapter(main, result));
         });
         SeekBar costFilter = rootView.findViewById(R.id.cost_constain);
         TextView maxCost = rootView.findViewById(R.id.max_txt_search);
@@ -160,7 +159,7 @@ public class SearchFragment extends Fragment {
 
                 }
                 currentDisplayedProducts = result;
-                gridView.setAdapter(new ProductAdapter(main, result, user));
+                gridView.setAdapter(new ProductAdapter(main, result));
                 maxFilter= progressNum;
             }
         });
@@ -182,7 +181,7 @@ public class SearchFragment extends Fragment {
                         result.add(p);
                     }
                 }
-                gridView.setAdapter(new ProductAdapter(main, result, user));
+                gridView.setAdapter(new ProductAdapter(main, result));
             }
 
             @Override
@@ -207,7 +206,7 @@ public class SearchFragment extends Fragment {
                         result.add(p);
                     }
                 }
-                gridView.setAdapter(new ProductAdapter(main, result, user));
+                gridView.setAdapter(new ProductAdapter(main, result));
 
             }
 

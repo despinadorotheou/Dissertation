@@ -198,6 +198,22 @@ public class Rest {
         return orderProperties.toString();
     }
 
+    //http://10.0.2.2:8080/rest/checkStatus/" +pendingOrder.getId()
+    @RequestMapping(value = "/checkStatus/{orderID}")
+    public String checkStatus(@PathVariable("orderID") int order_id) throws IOException {
+        Order order = orderService.findById(order_id);
+        if (order.getStatus() == OrderStatus.READY){
+            return "Ready for collection!";
+        } else if (order.getStatus() == OrderStatus.PENDING){
+            return "Pending...";
+        } else if (order.getStatus() == OrderStatus.COLLECTED){
+            return "Collected!";
+        } else if (order.getStatus() == OrderStatus.EDITING){
+            return "Editing...";
+        }
+        return "Something went wrong!";
+    }
+
     //method used to extract the products in the order from a map
     private List<OrderProduct> productsInMap(HashMap<String,String> map){
         List<OrderProduct> inOrder = new ArrayList<>();

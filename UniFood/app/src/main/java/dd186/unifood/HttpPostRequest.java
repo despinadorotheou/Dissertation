@@ -23,9 +23,9 @@ public class HttpPostRequest extends AsyncTask<String, String, String> {
     private String link;
     private Order order;
 
-    public HttpPostRequest(Order order) {
-        this.order = order;
-    }
+//    public HttpPostRequest(Order order) {
+//        this.order = order;
+//    }
 
     @Override
     protected void onPostExecute(String s) {

@@ -8,8 +8,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import dd186.unifood.Entities.Order;
 import dd186.unifood.Entities.User;
 import dd186.unifood.Main;
 import dd186.unifood.R;
@@ -23,9 +25,12 @@ public class AccountFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_account, null );
         Main main = (Main) getActivity();
         assert main != null;
-        User user = main.getUser();
+        if (Main.pendingOrder!= null){
+            Button orderStatus = view.findViewById(R.id.orderStatus_btn);
+            orderStatus.setVisibility(View.VISIBLE);
+        }
         TextView name = view.findViewById(R.id.name_account);
-        name.setText(user.getName() + " " + user.getLastName());
+        name.setText(Main.user.getName() + " " + Main.user.getLastName());
         return view;
     }
 

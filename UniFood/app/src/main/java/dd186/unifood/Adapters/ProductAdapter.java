@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 //import org.apache.commons.codec.binary.Base64;
 import dd186.unifood.Entities.Product;
 import dd186.unifood.Entities.User;
@@ -22,16 +23,16 @@ import dd186.unifood.HttpGetRequest;
 import dd186.unifood.Main;
 import dd186.unifood.R;
 
+import static dd186.unifood.Main.user;
+
 public class ProductAdapter extends BaseAdapter {
 
     private List<Product> products;
-    private User user;
     private Main main;
 
-    public ProductAdapter(Main main, List<Product> products, User user){
+    public ProductAdapter(Main main, List<Product> products){
         this.main =main;
         this.products = products;
-        this.user = user;
     }
 
     @Override
@@ -67,7 +68,7 @@ public class ProductAdapter extends BaseAdapter {
             view.addView(image);
             ImageView favouriteIcon = new ImageView(context);
             boolean productInFavourites = false;
-            for (Product p: main.getFavourites()) {
+            for (Product p: Main.favourites) {
                 if (p.getId()==product.getId()){
                     productInFavourites = true;
                 }
@@ -76,12 +77,15 @@ public class ProductAdapter extends BaseAdapter {
                 favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
                 favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
                 favouriteIcon.setOnClickListener(v -> {
-                    main.getFavourites().remove(product);
-                    HttpGetRequest httpGetRequest = new HttpGetRequest();
-                    httpGetRequest.setLink("http://10.0.2.2:8080/rest/removeFavourite/" + user.getId() +"/" + product.getId());
-                    httpGetRequest.execute();
+                    try {
+                        main.makeHttpRequest("http://10.0.2.2:8080/rest/removeFavourite/" + Main.user.getId() +"/" + product.getId());
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
-                    main.setUser(user);
+                    Main.favourites.remove(product);
                     notifyDataSetChanged();
 
 
@@ -90,12 +94,15 @@ public class ProductAdapter extends BaseAdapter {
                 favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
                 favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
                 favouriteIcon.setOnClickListener(v -> {
-                    main.getFavourites().add(product);
-                    HttpGetRequest httpGetRequest = new HttpGetRequest();
-                    httpGetRequest.setLink("http://10.0.2.2:8080/rest/addFavourite/" + user.getId() +"/" +product.getId());
-                    httpGetRequest.execute();
+                    try {
+                        main.makeHttpRequest("http://10.0.2.2:8080/rest/addFavourite/" + Main.user.getId() +"/" +product.getId());
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
-                    main.setUser(user);
+                    Main.favourites.add(product);
                     notifyDataSetChanged();
 
                 });
@@ -124,7 +131,7 @@ public class ProductAdapter extends BaseAdapter {
                     Bundle args =  new Bundle();
                     args.putSerializable("product", (Serializable) product);
                     productView.setArguments(args);
-                    main.loadFragment(productView);
+                    main.loadFragment(productView, "productInfo");
                 });
             }
             return view;

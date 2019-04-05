@@ -30,11 +30,10 @@ public class HomeFragment extends Fragment{
         View view =  inflater.inflate(R.layout.fragment_home, null );
         Main main = (Main) getActivity();
         assert main != null;
-        deals = main.getDeals();
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.addItemDecoration(new DividerItemDecoration(main, LinearLayoutManager.HORIZONTAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(main, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setAdapter(new DealsAdapter(deals, main));
+        recyclerView.setAdapter(new DealsAdapter(Main.deals, main));
         return view;
     }
 

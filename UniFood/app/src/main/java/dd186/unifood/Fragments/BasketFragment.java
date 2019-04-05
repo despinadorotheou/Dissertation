@@ -4,12 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -21,10 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dd186.unifood.Adapters.CheckoutProductAdapter;
-import dd186.unifood.Adapters.ProductAdapter;
 import dd186.unifood.Entities.Category;
 import dd186.unifood.Entities.Deal;
 import dd186.unifood.Entities.Offer;
+import dd186.unifood.Entities.Order;
 import dd186.unifood.Entities.Product;
 import dd186.unifood.Entities.User;
 import dd186.unifood.Main;
@@ -32,9 +30,6 @@ import dd186.unifood.R;
 
 public class BasketFragment extends Fragment {
     TextView badge;
-    List<Product> products;
-    List<Offer> offers;
-    List<Deal> deals;
 
 
     @Nullable
@@ -43,9 +38,7 @@ public class BasketFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_basket, null );
         Main main = (Main) getActivity();
         assert main != null;
-        User user =  main.getUser();
         badge = main.getBasketNumTextView();
-        products = main.getBasketProducts();
         ListView listView = rootView.findViewById(R.id.basket_list);
         Button payByCard = rootView.findViewById(R.id.card_checkout_btn);
         Button payByCash = rootView.findViewById(R.id.cash_checkout_btn);
@@ -54,19 +47,14 @@ public class BasketFragment extends Fragment {
         TextView empty = rootView.findViewById(R.id.empty_basket);
         TextView discount = rootView.findViewById(R.id.discount_basket);
         TextView finalTotal = rootView.findViewById(R.id.finalTotal_basket);
-        if (!products.isEmpty()) {
-            offers = main.getOffers();
-            deals =  main.getDeals();
-            listView.setAdapter(new CheckoutProductAdapter(main,  products, listView,payByCard,payByCash,total,empty,badge,discount,finalTotal,tableLayout, this));
+        if (!Main.basket.isEmpty()) {
+            listView.setAdapter(new CheckoutProductAdapter(main,  Main.basket, listView,payByCard,payByCash,total,empty,badge,discount,finalTotal,tableLayout, this));
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 Fragment productView = new ProductInfoFragment();
                 Bundle args1 = new Bundle();
-                args1.putSerializable("product", (Serializable) products.get(position));
+                args1.putSerializable("product", (Serializable) Main.products.get(position));
                 productView.setArguments(args1);
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, productView, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
+                main.loadFragment(productView,"productInfo");
             });
             NumberFormat formatter = new DecimalFormat("#0.00");
             double totalPrice = findTotal();
@@ -85,13 +73,18 @@ public class BasketFragment extends Fragment {
             payByCash.setVisibility(View.INVISIBLE);
             tableLayout.setVisibility(View.INVISIBLE);
         }
+        if (Main.pendingOrder != null){
+            payByCard.setClickable(false);
+            payByCash.setClickable(false);
+        }
+
         return rootView;
     }
 
     //method used to calculate the total price of the products in the basket
     public double findTotal(){
         double totalPrice = 0;
-        for (Product p : products) {
+        for (Product p : Main.basket) {
             totalPrice += (p.getPrice()* p.getQuantityInBasket()) ;
         }
         return totalPrice;
@@ -101,13 +94,13 @@ public class BasketFragment extends Fragment {
     public double findDiscount(){
         // temporary list used to test if any of the offers or the deals apply without modifying the original list(products)
         List<Product> tester = new ArrayList<>();
-        for (Product p :products) {
+        for (Product p :Main.basket) {
             for (int i = 0; i<p.getQuantityInBasket(); i++){
                 tester.add(p);
             }
         }
         double discountValue=0;
-        for (Offer o:offers) {
+        for (Offer o:Main.offers) {
             //checks whether the offer is in the basket
             if (o.getQuantityInBasket()>0){
                 double priceBeforeDiscount = 0;
@@ -120,7 +113,7 @@ public class BasketFragment extends Fragment {
             }
         }
 
-        for (Deal d:deals) {
+        for (Deal d:Main.deals) {
             //list used to store products temporarily just to see if the deal applies
             List<Product> temp = new ArrayList<>();
             //the number of the products in the deal
