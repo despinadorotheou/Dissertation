@@ -1,5 +1,7 @@
-package com.dd186.admin.Domain;
+package com.dd186.admin.Domain.Order;
 
+import com.dd186.admin.Domain.Offer.OfferProduct;
+import com.dd186.admin.Domain.Product;
 import lombok.Data;
 import org.springframework.lang.NonNull;
 
@@ -10,8 +12,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Data
 @Entity
@@ -32,23 +32,19 @@ public class Order {
     private boolean paid;
     @Column(name = "order_userID")
     private int userid;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<OrderProduct> orderProducts;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderProduct> orderProducts = new ArrayList<>();
 
     public Order() {
     }
 
-    public Order(@NonNull List<OrderProduct> orderProducts, double value, Timestamp date) {
-        for(OrderProduct orderProduct : orderProducts) orderProduct.setOrder(this);
-        this.orderProducts = new HashSet<>(orderProducts);
-        this.date = date;
-//        date = new Timestamp(System.currentTimeMillis());
-        this.value = value;
+    public void addProduct(Product product, int quantity) {
+        OrderProduct orderProduct = new OrderProduct(this, product, quantity);
+        orderProducts.add(orderProduct);
     }
 
     public Order(double value) {
         this.value = value;
-//        date = new Timestamp(System.currentTimeMillis());
     }
 
     public int getId() {
@@ -59,8 +55,6 @@ public class Order {
         this.id = id;
     }
 
-
-
     public double getValue() {
         return value;
     }
@@ -70,14 +64,11 @@ public class Order {
     }
 
     public List<OrderProduct> getOrderProducts() {
-        return new ArrayList<>(orderProducts);
+        return orderProducts;
     }
 
     public void setOrderProducts(List<OrderProduct> orderProducts) {
-        if (orderProducts == null)
-            this.orderProducts = null;
-        else
-            this.orderProducts = new HashSet<>(orderProducts);
+        this.orderProducts = orderProducts;
     }
 
     public Timestamp getDate() {

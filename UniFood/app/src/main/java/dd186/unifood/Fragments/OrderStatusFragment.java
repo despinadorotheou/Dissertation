@@ -28,6 +28,8 @@ public class OrderStatusFragment extends Fragment {
 
     public static int isVisible = View.VISIBLE;
     public static String currentStatus = "Pending...";
+    public static Timer t;
+
     Main main;
     @Nullable
     @Override
@@ -76,17 +78,17 @@ public class OrderStatusFragment extends Fragment {
     }
 
     public void checkStatus(TextView status){
-        Timer t = new Timer(false);
+        t = new Timer(false);
         t.schedule(new TimerTask() {
             @Override
             public void run() {
-                Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
+                main.runOnUiThread(() -> {
                     try {
                         OrderStatusFragment.currentStatus = main.makeHttpRequest("http://10.0.2.2:8080/rest/checkStatus/" +Main.pendingOrder.getId());
                         status.setText(currentStatus);
                         if (currentStatus.equals("Collected!")){
-
                             t.cancel();
+
                         }
                     } catch (ExecutionException e) {
                         e.printStackTrace();

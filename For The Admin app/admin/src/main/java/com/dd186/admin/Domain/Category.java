@@ -1,5 +1,6 @@
 package com.dd186.admin.Domain;
 
+import com.dd186.admin.Domain.Deal.DealCategory;
 import lombok.Data;
 
 import javax.persistence.*;

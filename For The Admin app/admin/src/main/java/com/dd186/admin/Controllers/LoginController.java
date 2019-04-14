@@ -1,24 +1,18 @@
 package com.dd186.admin.Controllers;
 
-import com.dd186.admin.Domain.Order;
-import com.dd186.admin.Domain.OrderStatus;
-import com.dd186.admin.Domain.Product;
+import com.dd186.admin.Domain.Order.Order;
+import com.dd186.admin.Domain.Order.OrderStatus;
 import com.dd186.admin.Domain.User;
-import com.dd186.admin.Repositories.ProductRepository;
-import com.dd186.admin.Repositories.UserRepository;
 import com.dd186.admin.Services.OrderService;
-import com.dd186.admin.Services.ProductService;
 import com.dd186.admin.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 

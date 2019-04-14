@@ -1,6 +1,7 @@
 package com.dd186.admin.Domain;
 
 
+import com.dd186.admin.Domain.Order.Order;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -129,4 +130,34 @@ public class User {
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
+
+    public static Builder getBuilder(int id,String firstName, String lastName, String email) {
+        return new Builder(id, firstName,lastName,email);
+    }
+
+    public static class Builder {
+        User built;
+
+        /**
+         * Creates a new Builder instance.
+         * @param firstName The first name of the created Person object.
+         * @param lastName  The last name of the created Person object.
+         */
+        Builder(int id,String firstName, String lastName, String email) {
+            built = new User();
+            built.id = id;
+            built.name = firstName;
+            built.lastName = lastName;
+            built.email = email;
+        }
+
+        /**
+         * Builds the new Person object.
+         * @return  The created Person object.
+         */
+        public User build() {
+            return built;
+        }
+    }
+
 }

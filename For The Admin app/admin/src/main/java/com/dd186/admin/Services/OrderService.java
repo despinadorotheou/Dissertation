@@ -1,11 +1,10 @@
 package com.dd186.admin.Services;
 
-import com.dd186.admin.Domain.Order;
+import com.dd186.admin.Domain.Order.Order;
 import com.dd186.admin.Repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service("orderService")
@@ -33,5 +32,9 @@ public class OrderService {
 
     public Order findlastorder(int userId){
         return orderRepository.findTopByUseridOrderByDateDesc(userId);
+    }
+
+    public void delete(Order order){
+        orderRepository.delete(order);
     }
 }

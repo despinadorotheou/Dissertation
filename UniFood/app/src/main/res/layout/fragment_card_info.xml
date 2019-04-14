@@ -5,15 +5,46 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <EditText
+        android:id="@+id/card_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="99dp"
+        android:layout_marginLeft="99dp"
+        android:layout_marginTop="204dp"
+        android:layout_marginEnd="99dp"
+        android:layout_marginRight="99dp"
+        android:ems="10"
+        android:inputType="text"
+        android:maxLength="16" />
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="213dp"
+        android:layout_marginLeft="213dp"
+        android:layout_marginTop="252dp"
+        android:text="CVV Number:"
+        android:textColor="@color/colorAccent" />
+
+    <EditText
         android:id="@+id/year_expirity"
         android:layout_width="28dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="151dp"
-        android:layout_marginLeft="151dp"
-        android:layout_marginTop="240dp"
+        android:layout_marginStart="156dp"
+        android:layout_marginLeft="156dp"
+        android:layout_marginTop="274dp"
         android:ems="10"
         android:inputType="number"
         android:maxLength="2" />
@@ -63,10 +94,36 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="106dp"
+        android:layout_marginLeft="106dp"
+        android:layout_marginTop="253dp"
+        android:text="Expirity Date:"
+        android:textColor="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="99dp"
+        android:layout_marginLeft="99dp"
+        android:layout_marginTop="186dp"
+        android:text="Name on card:"
+        android:textColor="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/textView28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="101dp"
         android:layout_marginLeft="101dp"
-        android:layout_marginTop="219dp"
-        android:text="Expirity Date"
+        android:layout_marginTop="83dp"
+        android:text="Card Number:"
         android:textColor="@color/colorAccent" />
 
     <EditText
@@ -76,9 +133,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="101dp"
-        android:layout_marginLeft="101dp"
-        android:layout_marginTop="241dp"
+        android:layout_marginStart="106dp"
+        android:layout_marginLeft="106dp"
+        android:layout_marginTop="275dp"
         android:ems="10"
         android:inputType="number"
         android:maxLength="2" />
@@ -90,8 +147,8 @@
         android:layout_alignTop="@+id/textView22"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginStart="137dp"
-        android:layout_marginLeft="137dp"
+        android:layout_marginStart="142dp"
+        android:layout_marginLeft="142dp"
         android:layout_marginTop="34dp"
         android:text="/"
         android:textSize="18sp" />
@@ -113,5 +170,42 @@
         android:contentDescription="cards"
         app:srcCompat="@drawable/visa_maestro"
         tools:srcCompat="@drawable/visa_maestro" />
+
+    <EditText
+        android:id="@+id/cvv_num"
+        android:layout_width="87dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView25"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="27dp"
+        android:layout_marginLeft="27dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="113dp"
+        android:layout_marginRight="113dp"
+        android:layout_toEndOf="@+id/year_expirity"
+        android:layout_toRightOf="@+id/year_expirity"
+        android:ems="10"
+        android:inputType="number"
+        android:maxLength="3" />
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/year_expirity"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="104dp"
+        android:layout_marginLeft="104dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="115dp"
+        android:layout_marginRight="115dp"
+        android:background="@color/colorAccent"
+        android:onClick="payByCard"
+        android:text="Confirrm"
+        android:textColor="@color/colorBackground" />
 
 </RelativeLayout>

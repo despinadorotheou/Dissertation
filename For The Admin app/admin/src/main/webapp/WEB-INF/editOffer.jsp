@@ -1,4 +1,4 @@
-<%@ page import="com.dd186.admin.Domain.Offer" %>
+<%@ page import="com.dd186.admin.Domain.Offer.Offer" %>
 <!DOCTYPE html>
 <html lang="en">
 <% Offer offer = null;

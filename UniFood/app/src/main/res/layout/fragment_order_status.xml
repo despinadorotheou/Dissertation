@@ -69,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/holo_green_light"
+                android:onClick="editOrder"
                 android:text="Edit"
                 android:textColor="@color/colorBackground" />
 
@@ -78,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/holo_red_dark"
+                android:onClick="deleteOrder"
                 android:text="Delete"
                 android:textColor="@color/colorBackground" />
         </LinearLayout>

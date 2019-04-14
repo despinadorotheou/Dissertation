@@ -1,6 +1,6 @@
 package com.dd186.admin.Services;
 
-import com.dd186.admin.Domain.Offer;
+import com.dd186.admin.Domain.Offer.Offer;
 import com.dd186.admin.Repositories.OfferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +31,9 @@ public class OfferService {
 
     public void delete(Offer offer){
         offerRepository.delete(offer);
+    }
+
+    public Offer findLastOffer(){
+        return  offerRepository.findTopByOrderByIdDesc();
     }
 }

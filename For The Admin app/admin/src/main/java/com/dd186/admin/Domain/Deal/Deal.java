@@ -1,13 +1,11 @@
-package com.dd186.admin.Domain;
+package com.dd186.admin.Domain.Deal;
 
+import com.dd186.admin.Domain.Category;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Blob;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,8 +20,8 @@ public class Deal {
     private int id;
     @Column(name = "deal_description", nullable = false)
     private String description;
-    @OneToMany(mappedBy = "deal", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<DealCategory> dealCategories;
+    @OneToMany(mappedBy = "deal", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DealCategory> dealCategories = new ArrayList<>();
     @Column(name = "deal_value")
     private double value;
     @Column(name = "deal_image")
@@ -32,10 +30,11 @@ public class Deal {
     public Deal() {
     }
 
-    public Deal(DealCategory... dealCategories) {
-        for(DealCategory dealCategory : dealCategories) dealCategory.setDeal(this);
-        this.dealCategories = Stream.of(dealCategories).collect(Collectors.toSet());
+    public void addCategory(Category category, int quantity) {
+        DealCategory dealCategory = new DealCategory(this, category, quantity);
+        dealCategories.add(dealCategory);
     }
+
 
     public int getId() {
         return id;
@@ -46,14 +45,11 @@ public class Deal {
     }
 
     public List<DealCategory> getDealCategories() {
-        return new ArrayList<>(dealCategories);
+        return dealCategories;
     }
 
     public void setDealCategories(List<DealCategory> dealCategories) {
-        if (dealCategories == null)
-            this.dealCategories = null;
-        else
-            this.dealCategories = new HashSet<>(dealCategories);
+        this.dealCategories = dealCategories;
     }
 
     public double getValue() {

@@ -73,7 +73,7 @@ public class BasketFragment extends Fragment {
             payByCash.setVisibility(View.INVISIBLE);
             tableLayout.setVisibility(View.INVISIBLE);
         }
-        if (Main.pendingOrder != null){
+        if (Main.pendingOrder != null && !Main.editing){
             payByCard.setClickable(false);
             payByCash.setClickable(false);
         }

@@ -55,6 +55,7 @@ public class Main extends AppCompatActivity
     public static List<Deal> deals = new ArrayList<>();
     public static List<Order> orders = new ArrayList<>();
     public static List<Product> favourites = new ArrayList<>();
+    public static boolean editing = false;
     public int basketItemsNum = 0;
     public TextView basketNumTextView;
     int qInt =1;
@@ -118,18 +119,6 @@ public class Main extends AppCompatActivity
         });
         return true;
     }
-
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        Fragment fragment = null;
-//        switch (item.getItemId()) {
-//            case R.id.basket_actionbar:
-//                fragment = new BasketFragment();
-//                break;
-//        }
-//        return loadFragment(fragment);
-//    }
 
     public boolean loadFragment(Fragment fragment, String tag) {
         if (fragment != null) {
@@ -317,11 +306,6 @@ public class Main extends AppCompatActivity
         loadFragment(fragment, "offers");
     }
 
-    //method used to display all the set offers
-    public void payByCardPage(View view){
-        Fragment fragment = new CardInfoFragment();
-        loadFragment(fragment, "cardInfo");
-    }
 
     //ALL METHODS RELATED TO THE BASKET'S FUNCTIONALITIES //
 
@@ -351,13 +335,9 @@ public class Main extends AppCompatActivity
             product.setQuantityInBasket(quantityInBasket);
             basket.add(product);
         }
-        int num=0;
-        for (Product p:basket) {
-            num += p.getQuantityInBasket();
-        }
+        countBasketBadge();
         Fragment reload = new HomeFragment();
         loadFragment(reload, "home");
-        setBasketBadgeNum(num);
         Toast.makeText(getApplicationContext(),  "Added to the basket!", Toast.LENGTH_SHORT).show();
     }
 
@@ -388,13 +368,10 @@ public class Main extends AppCompatActivity
                 basket.add(product);
             }
         }
-        int num=0;
-        for (Product p:basket) {
-            num += p.getQuantityInBasket();
-        }
+
         Fragment reload = new OffersFragment();
         loadFragment(reload, "offers");
-        setBasketBadgeNum(num);
+        countBasketBadge();
         Toast.makeText(getApplicationContext(),  "Added to the basket!", Toast.LENGTH_SHORT).show();
     }
 
@@ -409,11 +386,7 @@ public class Main extends AppCompatActivity
                 o.setQuantityInBasket(0);
             }
         }
-        int num=0;
-        for (Product p:basket) {
-            num += p.getQuantityInBasket();
-        }
-        setBasketBadgeNum(num);
+        countBasketBadge();
     }
 
     public TextView getBasketNumTextView(){
@@ -432,7 +405,66 @@ public class Main extends AppCompatActivity
         String json = gson.toJson(id_quanity);
         ObjectMapper objectMapper = new ObjectMapper();
         HttpPostRequest httpPostRequest =  new HttpPostRequest();
-        httpPostRequest.execute("http://10.0.2.2:8080/rest/addOrder/cash/"+user.getId() + "/"+String.valueOf(finalTotal.getText()), json);
+        if (editing){
+            httpPostRequest.execute("http://10.0.2.2:8080/rest/editedOrder/cash/"+user.getId() + "/" +pendingOrder.getId()+ "/"+String.valueOf(finalTotal.getText()), json);
+
+        }else{
+            httpPostRequest.execute("http://10.0.2.2:8080/rest/addOrder/cash/"+user.getId() + "/"+String.valueOf(finalTotal.getText()), json);
+
+        }
+        pendingOrder = objectMapper.readValue(httpPostRequest.get(), new TypeReference<Order>() {});
+        afterPlaceOrder();
+    }
+
+    //on click method for the button edit in the order status fragment
+    public void editOrder(View view) throws ExecutionException, InterruptedException {
+        //to inform the admin that the order is being edited by the user
+        makeHttpRequest("http://10.0.2.2:8080/rest/editingOrder/" + pendingOrder.getId());
+        basket = fromMapToList(pendingOrder.getProducts());
+        countBasketBadge();
+        Fragment fragment = new BasketFragment();
+        loadFragment(fragment, "basket");
+        editing = true;
+    }
+
+    //on click method for the btn delete
+    public void deleteOrder(View view) throws ExecutionException, InterruptedException {
+        //to inform the admin that the user wants to delete the order
+        makeHttpRequest("http://10.0.2.2:8080/rest/deleteOrder/" + pendingOrder.getId());
+        //stop the timer
+        OrderStatusFragment.t.cancel();
+        Fragment fragment = new HomeFragment();
+        loadFragment(fragment,"home");
+        pendingOrder = null;
+        Toast.makeText(getApplicationContext(),  "Order successfully deleted!", Toast.LENGTH_SHORT).show();
+
+    }
+
+    //method used to display all the set offers
+    public void payByCardPage(View view){
+        Fragment fragment = new CardInfoFragment();
+        loadFragment(fragment, "cardInfo");
+    }
+
+    //on click method when the user clicks on the confirm button
+    public void payByCard(View view) throws ExecutionException, InterruptedException, IOException {
+        TextView finalTotal = findViewById(R.id.finalTotal_basket);
+        HashMap<String,String> id_quanity = new HashMap<>();
+        for (Product p:basket) {
+            id_quanity.put(String.valueOf(p.getId()), String.valueOf(p.getQuantityInBasket()));
+        }
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson =  gsonBuilder.create();
+        String json = gson.toJson(id_quanity);
+        ObjectMapper objectMapper = new ObjectMapper();
+        HttpPostRequest httpPostRequest =  new HttpPostRequest();
+        if (editing){
+            httpPostRequest.execute("http://10.0.2.2:8080/rest/editedOrder/card/"+user.getId() + "/" +pendingOrder.getId()+ "/"+String.valueOf(finalTotal.getText()), json);
+
+        }else{
+            httpPostRequest.execute("http://10.0.2.2:8080/rest/addOrder/card/"+user.getId() + "/"+String.valueOf(finalTotal.getText()), json);
+
+        }
         pendingOrder = objectMapper.readValue(httpPostRequest.get(), new TypeReference<Order>() {});
         afterPlaceOrder();
     }
@@ -478,13 +510,20 @@ public class Main extends AppCompatActivity
         setBasketBadgeNum(0);
         Fragment fragment =  new OrderStatusFragment();
         Bundle args = new Bundle();
-        //it's the first time the orderStatusFragment is called so the 1 stands for true
-        args.putInt("firstTime", 1);
+        if (editing){
+            args.putInt("firstTime", 0);
+        }else {
+            //it's the first time the orderStatusFragment is called so the 1 stands for true
+            args.putInt("firstTime", 1);
+
+        }
         fragment.setArguments(args);
         loadFragment(fragment, "orderStatus");
         Toast.makeText(getApplicationContext(), "Order sent!", Toast.LENGTH_SHORT).show();
         FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf(user.getId()));
+        editing = false;
     }
+
 
     //takes a map with the products ids and converts it to a list o products
     public List<Product> fromMapToList(HashMap<String, Integer> map){
@@ -504,4 +543,13 @@ public class Main extends AppCompatActivity
         }
         return list;
     }
+
+    public void countBasketBadge(){
+        int num=0;
+        for (Product p:basket) {
+            num += p.getQuantityInBasket();
+        }
+        setBasketBadgeNum(num);
+    }
+
 }

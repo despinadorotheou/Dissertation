@@ -1,4 +1,4 @@
-package com.dd186.admin.Domain;
+package com.dd186.admin.Domain.Order;
 
 public enum OrderStatus {
         PENDING,

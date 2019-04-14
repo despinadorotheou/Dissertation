@@ -1,4 +1,4 @@
-<%@ page import="com.dd186.admin.Domain.Deal" %>
+<%@ page import="com.dd186.admin.Domain.Deal.Deal" %>
 <!DOCTYPE html>
 <html lang="en">
 <% Deal deal = null;

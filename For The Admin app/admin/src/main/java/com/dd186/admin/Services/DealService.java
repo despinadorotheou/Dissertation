@@ -1,7 +1,6 @@
 package com.dd186.admin.Services;
 
-import com.dd186.admin.Domain.Deal;
-import com.dd186.admin.Domain.Product;
+import com.dd186.admin.Domain.Deal.Deal;
 import com.dd186.admin.Repositories.DealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

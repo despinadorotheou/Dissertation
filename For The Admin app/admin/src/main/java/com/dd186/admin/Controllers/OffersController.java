@@ -1,7 +1,7 @@
 package com.dd186.admin.Controllers;
 
-import com.dd186.admin.Domain.Offer;
-import com.dd186.admin.Domain.OfferProduct;
+import com.dd186.admin.Domain.Offer.Offer;
+import com.dd186.admin.Domain.Offer.OfferProduct;
 import com.dd186.admin.Domain.Product;
 import com.dd186.admin.Services.OfferService;
 import com.dd186.admin.Services.ProductService;
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -59,55 +60,62 @@ public class OffersController {
                                   @RequestParam(name = "image", required = false)MultipartFile image) throws IOException, SQLException {
         Product product1 = productService.findById(prod1);
         Product product2 = productService.findById(prod2);
-        Offer offer;
-        if (prod3 != -1) {
-            Product product3 = productService.findById(prod3);
-            if ((prod1 == prod2) && prod1 == prod3){
-                 offer = new Offer(new OfferProduct(product1,3));
-            } else if (prod1 == prod2){
-                 offer = new Offer(new OfferProduct(product1,2), new OfferProduct(product3,1) );
-            } else if (prod2 == prod3){
-                 offer = new Offer(new OfferProduct(product2,2), new OfferProduct(product1,1) );
-            } else if (prod1 == prod3){
-                 offer = new Offer(new OfferProduct(product1,2), new OfferProduct(product2,1) );
-            } else {
-                 offer = new Offer(new OfferProduct(product1,1), new OfferProduct(product2,1),  new OfferProduct(product3,1) );
-            }
-        }else{
-
-            if (prod1 == prod2){
-                offer = new Offer(new OfferProduct(product1,2) );
-            } else {
-                offer = new Offer(new OfferProduct(product1,1), new OfferProduct(product2,1) );
-            }
-
-        }
+        Offer offer = new Offer();
+        //if the item exists
         if (id != -1) {
             offer.setId(id);
         }
+
         if (!image.isEmpty()){
             Blob blob = new javax.sql.rowset.serial.SerialBlob(image.getBytes());
             offer.setImage(blob);
         } else if(id!=-1){
-            Offer lastDeal= offerService.findById(id);
-            offer.setImage(lastDeal.getImage());
+            Offer previous= offerService.findById(id);
+            offer.setImage(previous.getImage());
         }
+
         offer.setDescription(desc);
         offer.setValue(value);
+
+        if (prod3 != -1) {
+            Product product3 = productService.findById(prod3);
+            if ((prod1 == prod2) && prod1 == prod3){
+                offer.addProduct(product1,3);
+            } else if (prod1 == prod2){
+                offer.addProduct(product1,2);
+                offer.addProduct(product3,1);
+            } else if (prod2 == prod3){
+                offer.addProduct(product2,2);
+                offer.addProduct(product1,1);
+            } else if (prod1 == prod3){
+                offer.addProduct(product1,2);
+                offer.addProduct(product2,1);
+            } else {
+                offer.addProduct(product1,1);
+                offer.addProduct(product2,1);
+                offer.addProduct(product3,1);
+            }
+        }else{
+
+            if (prod1 == prod2){
+                offer.addProduct(product1,2);
+            } else {
+                offer.addProduct(product2,1);
+                offer.addProduct(product1,1);
+            }
+
+        }
         offerService.save(offer);
         return new ModelAndView(new RedirectView("/main/offers"));
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public ModelAndView delete(@RequestParam(value="offerId", required=false, defaultValue="-1") int offerId) {
-        ModelAndView modelAndView = new ModelAndView();
         Offer o = offerService.findById(offerId);
         if (o != null) {
             offerService.delete(o);
         }
-        modelAndView.addObject("offers", (List<Offer>) offerService.findAll());
-        modelAndView.setViewName("offersPage");
-        return modelAndView;
+        return new ModelAndView(new RedirectView("/main/offers"));
     }
 
     @RequestMapping(value = "/image", method = RequestMethod.GET)

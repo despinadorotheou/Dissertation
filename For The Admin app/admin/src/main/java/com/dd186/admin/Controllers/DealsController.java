@@ -1,9 +1,8 @@
 package com.dd186.admin.Controllers;
 
 import com.dd186.admin.Domain.Category;
-import com.dd186.admin.Domain.Deal;
-import com.dd186.admin.Domain.DealCategory;
-import com.dd186.admin.Domain.Product;
+import com.dd186.admin.Domain.Deal.Deal;
+import com.dd186.admin.Domain.Deal.DealCategory;
 import com.dd186.admin.Services.DealService;
 import com.dd186.admin.Services.ProductService;
 import org.apache.commons.io.IOUtils;
@@ -22,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -61,30 +59,9 @@ public class DealsController {
                                   @RequestParam(name = "value") double value,
                                   @RequestParam(name = "image", required = false)MultipartFile image
     ) throws IOException, SQLException {
-        Deal deal;
+        Deal deal = new Deal();
         Category category1 = productService.findByCategory(cat1);
         Category category2 = productService.findByCategory(cat2);
-        if (!cat3.equals("-1")) {
-            Category category3 = productService.findByCategory(cat3);
-            if ((Objects.equals(cat1, cat2)) && Objects.equals(cat1, cat3)){
-                deal = new Deal(new DealCategory(category1,3));
-            } else if (Objects.equals(cat1, cat2)){
-                deal = new Deal(new DealCategory(category1,2), new DealCategory(category3,1) );
-            } else if (Objects.equals(cat2, cat3)){
-                deal = new Deal(new DealCategory(category2,2), new DealCategory(category1,1) );
-            } else if (Objects.equals(cat1, cat3)){
-                deal = new Deal(new DealCategory(category1,2), new DealCategory(category2,1) );
-            } else {
-                deal = new Deal(new DealCategory(category1,1), new DealCategory(category2,1),  new DealCategory(category3,1) );
-            }
-        }else {
-            if (Objects.equals(cat1, cat2)){
-                deal = new Deal(new DealCategory(category1,2) );
-            } else {
-                deal = new Deal(new DealCategory(category1,1), new DealCategory(category2,1) );
-            }
-        }
-
         if (id != -1) {
             deal.setId(id);
         }
@@ -97,20 +74,43 @@ public class DealsController {
         }
         deal.setDescription(desc);
         deal.setValue(value);
+        if (!cat3.equals("-1")) {
+            Category category3 = productService.findByCategory(cat3);
+            if ((Objects.equals(cat1, cat2)) && Objects.equals(cat1, cat3)){
+                deal.addCategory(category1, 3);
+            } else if (Objects.equals(cat1, cat2)){
+                deal.addCategory(category1, 2);
+                deal.addCategory(category3, 1);
+            } else if (Objects.equals(cat2, cat3)){
+                deal.addCategory(category2, 2);
+                deal.addCategory(category1, 1);
+            } else if (Objects.equals(cat1, cat3)){
+                deal.addCategory(category1, 2);
+                deal.addCategory(category2, 1);
+            } else {
+                deal.addCategory(category1, 1);
+                deal.addCategory(category2, 1);
+                deal.addCategory(category3, 1);
+            }
+        }else {
+            if (Objects.equals(cat1, cat2)){
+                deal.addCategory(category2, 2);
+            } else {
+                deal.addCategory(category1, 1);
+                deal.addCategory(category2, 1);
+            }
+        }
         dealService.save(deal);
         return new ModelAndView(new RedirectView("/main/deals"));
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public ModelAndView delete(@RequestParam(value="dealId", required=false, defaultValue="-1") int dealId) {
-        ModelAndView modelAndView = new ModelAndView();
         Deal d = dealService.findById(dealId);
         if (d != null) {
             dealService.delete(d);
         }
-        modelAndView.addObject("deals",(List<Deal>)dealService.findAll());
-        modelAndView.setViewName("dealsPage");
-        return modelAndView;
+        return new ModelAndView(new RedirectView("/main/deals"));
     }
 
     @RequestMapping(value = "/image", method = RequestMethod.GET)

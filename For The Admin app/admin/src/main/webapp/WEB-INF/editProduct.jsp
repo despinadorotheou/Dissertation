@@ -124,7 +124,7 @@
             <tr>
                 <td colspan="2">
                     <input type="submit" value="Submit" class="btn btn-primary"/>
-                    <a class="btn btn-primary" href="/main" >Back</a>
+                    <a class="btn btn-primary" href="/main/products" >Back</a>
                 </td>
             </tr>
         </table>

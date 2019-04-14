@@ -1,6 +1,13 @@
 package com.dd186.admin.Controllers;
 
 import com.dd186.admin.Domain.*;
+import com.dd186.admin.Domain.Deal.Deal;
+import com.dd186.admin.Domain.Deal.DealCategory;
+import com.dd186.admin.Domain.Offer.Offer;
+import com.dd186.admin.Domain.Offer.OfferProduct;
+import com.dd186.admin.Domain.Order.Order;
+import com.dd186.admin.Domain.Order.OrderProduct;
+import com.dd186.admin.Domain.Order.OrderStatus;
 import com.dd186.admin.Services.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -154,7 +161,10 @@ public class Rest {
         User user = userService.findById(user_id);
 
         Timestamp date = new Timestamp(System.currentTimeMillis());
-        Order order = new Order(productsInMap(map),price, date);
+        Order order = new Order();
+        order =  productsInMap(map, order);
+        order.setDate(date);
+        order.setValue(price);
         order.setStatus(OrderStatus.PENDING);
         order.setPaid(false);
         order.setUserid(user_id);
@@ -173,13 +183,16 @@ public class Rest {
         return orderProperties.toString();
     }
 
-    //http://10.0.2.2:8080/rest/addOrder/cash/"+userID
+    //http://10.0.2.2:8080/rest/addOrder/card/"+userID
     @RequestMapping(value = "/addOrder/card/{userID}/{price}")
     public String addOrderCard(@PathVariable("userID") int user_id,@PathVariable("price") double price, @RequestBody HashMap<String,String> map) throws IOException {
         User user = userService.findById(user_id);
 
         Timestamp date = new Timestamp(System.currentTimeMillis());
-        Order order = new Order(productsInMap(map),price, date);
+        Order order = new Order();
+        order =  productsInMap(map, order);
+        order.setDate(date);
+        order.setValue(price);
         order.setStatus(OrderStatus.PENDING);
         order.setPaid(true);
         order.setUserid(user_id);
@@ -198,6 +211,25 @@ public class Rest {
         return orderProperties.toString();
     }
 
+    //http://10.0.2.2:8080/rest/editedOrder/"+user.getId() + "/" +pendingOrder.getId()+ "/"
+    @RequestMapping(value = "/editedOrder/{userID}/{orderID}/{price}")
+    public String addEditedOrderCash(@PathVariable("userID") int user_id,@PathVariable("orderID") int order_id,@PathVariable("price") double price, @RequestBody HashMap<String,String> map) throws IOException {
+        Order order = orderService.findById(order_id);
+        order = productsInMap(map, order);
+        order.setValue(price);
+        order.setStatus(OrderStatus.PENDING);
+        orderService.save(order);
+
+        JsonObject orderProperties = new JsonObject();
+        orderProperties.addProperty("id", order.getId());
+        Date orderDate=new Date(order.getDate().getTime());
+        orderProperties.addProperty("date", String.valueOf(orderDate));
+        orderProperties.addProperty("value", order.getValue());
+        orderProperties.add("products", mapFromOrderProductList(order.getOrderProducts()));
+        return orderProperties.toString();
+    }
+
+
     //http://10.0.2.2:8080/rest/checkStatus/" +pendingOrder.getId()
     @RequestMapping(value = "/checkStatus/{orderID}")
     public String checkStatus(@PathVariable("orderID") int order_id) throws IOException {
@@ -214,18 +246,31 @@ public class Rest {
         return "Something went wrong!";
     }
 
-    //method used to extract the products in the order from a map
-    private List<OrderProduct> productsInMap(HashMap<String,String> map){
-        List<OrderProduct> inOrder = new ArrayList<>();
+    //http://10.0.2.2:8080/rest/editingOrder/" +pendingOrder.getId()
+    @RequestMapping(value = "/editingOrder/{orderID}")
+    public void editingOrder(@PathVariable("orderID") int order_id) throws IOException {
+        Order order = orderService.findById(order_id);
+        order.setStatus(OrderStatus.EDITING);
+    }
+
+    //http://10.0.2.2:8080/rest/deleteOrder/" +pendingOrder.getId()
+    @RequestMapping(value = "/deleteOrder/{orderID}")
+    public void deleteOrder(@PathVariable("orderID") int order_id) throws IOException {
+        Order order = orderService.findById(order_id);
+        orderService.delete(order);
+    }
+
+
+    //method used to put the products that are in the map into the order
+    private Order productsInMap(HashMap<String,String> map, Order order){
         for (String i :map.keySet()) {
             Product product = productService.findById(Integer.parseInt(i));
             int quantity = Integer.parseInt(map.get(i));
             product.setQuantity(product.getQuantity()-quantity);
             productService.save(product);
-            OrderProduct orderProduct = new OrderProduct(product, quantity);
-            inOrder.add(orderProduct);
+            order.addProduct(product, quantity);
         }
-        return inOrder;
+        return order;
     }
 
 

@@ -1,10 +1,6 @@
 package com.dd186.admin.Controllers;
 
-import com.dd186.admin.Domain.Deal;
-import com.dd186.admin.Domain.Offer;
 import com.dd186.admin.Domain.Product;
-import com.dd186.admin.Services.DealService;
-import com.dd186.admin.Services.OfferService;
 import com.dd186.admin.Services.ProductService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,15 +86,12 @@ public class ProductController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public ModelAndView productMaster(@RequestParam(value="productId", required=false, defaultValue="-1") int productId) {
-        ModelAndView modelAndView = new ModelAndView();
         Product p = productService.findById(productId);
         if (p != null) {
             p.setCategory(null);
             productService.delete(p);
         }
-        modelAndView.addObject("products",(List<Product>)productService.findAll());
-        modelAndView.setViewName("main");
-        return modelAndView;
+        return new ModelAndView(new RedirectView("/main/products"));
     }
 
     @RequestMapping(value = "/image", method = RequestMethod.GET)

@@ -1,15 +1,11 @@
-package com.dd186.admin.Domain;
+package com.dd186.admin.Domain.Offer;
 
+import com.dd186.admin.Domain.Product;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Blob;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
 
 @Data
 @Entity
@@ -22,8 +18,8 @@ public class Offer {
     private int id;
     @Column(name = "offer_description", nullable = false)
     private String description;
-    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<OfferProduct> offerProducts;
+    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OfferProduct> offerProducts = new ArrayList<>() ;
     @Column(name = "offer_value")
     private double value;
     @Column(name = "offer_image")
@@ -32,9 +28,10 @@ public class Offer {
     public Offer() {
     }
 
-    public Offer(OfferProduct... offerProducts) {
-        for(OfferProduct offerProduct : offerProducts) offerProduct.setOffer(this);
-        this.offerProducts = Stream.of(offerProducts).collect(Collectors.toSet());
+
+    public void addProduct(Product product, int quantity) {
+        OfferProduct offerProduct = new OfferProduct(this, product, quantity);
+        offerProducts.add(offerProduct);
     }
 
     public int getId() {
@@ -62,14 +59,11 @@ public class Offer {
     }
 
     public List<OfferProduct> getOfferProducts() {
-        return new ArrayList<>(offerProducts);
+        return offerProducts;
     }
 
     public void setOfferProducts(List<OfferProduct> offerProducts) {
-        if (offerProducts == null)
-            this.offerProducts = null;
-        else
-            this.offerProducts = new HashSet<>(offerProducts);
+        this.offerProducts = offerProducts;
     }
 
     public Blob getImage() {

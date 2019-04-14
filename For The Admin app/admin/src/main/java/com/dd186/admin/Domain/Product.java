@@ -1,5 +1,6 @@
 package com.dd186.admin.Domain;
 
+import com.dd186.admin.Domain.Offer.OfferProduct;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.Set;
 public class Product implements Serializable{
 
     @Id
-    @GeneratedValue(strategy= GenerationType.TABLE)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name="productID", nullable=false)
     private int id;
     @Column(name="product_name", nullable=false)
@@ -30,7 +31,7 @@ public class Product implements Serializable{
     @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "productID"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Category category;
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<OfferProduct> offerProducts;
     @Column(name = "preference")
     private String preference;
