@@ -3,6 +3,7 @@ package com.dd186.admin.Services;
 import com.dd186.admin.Domain.Offer.Offer;
 import com.dd186.admin.Repositories.OfferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public class OfferService {
     OfferRepository offerRepository;
 
     @Autowired
-    public OfferService(OfferRepository offerRepository){
+    public OfferService(@Qualifier("offerRepository") OfferRepository offerRepository){
         this.offerRepository = offerRepository;
     }
 

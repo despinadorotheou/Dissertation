@@ -25,9 +25,8 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product save(Product product) {
+    public void save(Product product) {
         productRepository.save(product);
-        return product;
     }
 
     public void delete(Product product){
