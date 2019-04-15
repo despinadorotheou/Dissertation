@@ -30,10 +30,6 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public Order findlastorder(int userId){
-        return orderRepository.findTopByUseridOrderByDateDesc(userId);
-    }
-
     public void delete(Order order){
         orderRepository.delete(order);
     }

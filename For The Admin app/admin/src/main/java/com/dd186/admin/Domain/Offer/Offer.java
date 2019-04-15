@@ -28,6 +28,10 @@ public class Offer {
     public Offer() {
     }
 
+    public Offer(String description, double value) {
+        this.description = description;
+        this.value = value;
+    }
 
     public void addProduct(Product product, int quantity) {
         OfferProduct offerProduct = new OfferProduct(this, product, quantity);

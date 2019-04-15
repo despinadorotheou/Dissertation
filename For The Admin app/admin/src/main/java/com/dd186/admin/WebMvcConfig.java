@@ -12,9 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 
-//@ComponentScan({"com.dd186.admin.Services" , "com.dd186.admin.Controllers", "com.dd186.admin"})
-//@EntityScan("com.dd186.admin.Domain")
-//@EnableJpaRepositories("com.dd186.admin.Repositories")
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 

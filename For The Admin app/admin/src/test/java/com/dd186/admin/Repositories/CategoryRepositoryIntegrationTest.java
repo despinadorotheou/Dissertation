@@ -1,11 +1,9 @@
 package com.dd186.admin.Repositories;
 
-import com.dd186.admin.Domain.Role;
-import com.dd186.admin.Domain.User;
+import com.dd186.admin.Domain.Category;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -16,56 +14,56 @@ import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class RoleRepositoryIntegrationTest {
+public class CategoryRepositoryIntegrationTest {
 
     @Autowired
     private TestEntityManager entityManager;
-    @Qualifier("roleRepository")
     @Autowired
-    private RoleRepository roleRepository;
+    private CategoryRepository categoryRepository;
 
     @Test
-    public void whenFindByRole_thenReturnTheRole() {
+    public void whenFindByCategory_thenReturnTheRole() {
 
         // given
-        Role newRole = new Role("Developer");
-        entityManager.persist(newRole);
+        Category category = new Category("Soft Drinks");
+        entityManager.persist(category);
         entityManager.flush();
 
         // when
-        Role found = roleRepository.findByRole(newRole.getRole());
+        Category found = categoryRepository.findByCategory(category.getCategory());
 
         // then
-        assertThat(found.getRole())
-                .isEqualTo(newRole.getRole());
+        assertThat(found.getCategory())
+                .isEqualTo(category.getCategory());
     }
 
     @Test
-    public void saveRole() {
+    public void saveCategory() {
 
         // given
-        Role newRole = new Role("Developer");
-        entityManager.persist(newRole);
+        Category category = new Category("Soft Drinks");
+        entityManager.persist(category);
         entityManager.flush();
 
         // when
-        Role found = roleRepository.findByRole(newRole.getRole());
+        Category found = categoryRepository.findByCategory(category.getCategory());
 
         // then
         assertNotNull(found);
     }
 
     @Test
-    public void deleteRole() {
+    public void deleteCategory() {
 
         // given
-        Role newRole = new Role("Developer");
-        entityManager.persist(newRole);
+        Category category = new Category("Soft Drinks");
+        entityManager.persist(category);
         entityManager.flush();
 
+
         // when
-        roleRepository.delete(newRole);
-        Role found = roleRepository.findByRole(newRole.getRole());
+        categoryRepository.delete(category);
+        Category found = categoryRepository.findByCategory(category.getCategory());
 
         // then
         assertNull(found);

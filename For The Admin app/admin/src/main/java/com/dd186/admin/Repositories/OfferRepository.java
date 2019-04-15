@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository("offerRepository")
 public interface OfferRepository  extends JpaRepository<Offer, Integer> {
     Offer findById(int id);
-    Offer findTopByOrderByIdDesc();
 }

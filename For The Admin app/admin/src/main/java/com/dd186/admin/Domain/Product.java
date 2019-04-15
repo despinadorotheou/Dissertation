@@ -54,6 +54,11 @@ public class Product implements Serializable{
         this.category = category;
     }
 
+    public Product(String name, Double price) {
+        this.name = name;
+        this.price = price;
+    }
+
     public String getName() {
         return name;
     }

@@ -173,13 +173,12 @@ public class Rest {
         user.getOrders().add(order);
         userService.saveUser(user);
 
-        Order order1 = orderService.findlastorder(user_id);
         JsonObject orderProperties = new JsonObject();
-        orderProperties.addProperty("id", order1.getId());
-        Date orderDate=new Date(order1.getDate().getTime());
+        orderProperties.addProperty("id", order.getId());
+        Date orderDate=new Date(order.getDate().getTime());
         orderProperties.addProperty("date", String.valueOf(orderDate));
-        orderProperties.addProperty("value", order1.getValue());
-        orderProperties.add("products", mapFromOrderProductList(order1.getOrderProducts()));
+        orderProperties.addProperty("value", order.getValue());
+        orderProperties.add("products", mapFromOrderProductList(order.getOrderProducts()));
         return orderProperties.toString();
     }
 
@@ -201,13 +200,12 @@ public class Rest {
         user.getOrders().add(order);
         userService.saveUser(user);
 
-        Order order1 = orderService.findlastorder(user_id);
         JsonObject orderProperties = new JsonObject();
-        orderProperties.addProperty("id", order1.getId());
-        Date orderDate=new Date(order1.getDate().getTime());
+        orderProperties.addProperty("id", order.getId());
+        Date orderDate=new Date(order.getDate().getTime());
         orderProperties.addProperty("date", String.valueOf(orderDate));
-        orderProperties.addProperty("value", order1.getValue());
-        orderProperties.add("products", mapFromOrderProductList(order1.getOrderProducts()));
+        orderProperties.addProperty("value", order.getValue());
+        orderProperties.add("products", mapFromOrderProductList(order.getOrderProducts()));
         return orderProperties.toString();
     }
 

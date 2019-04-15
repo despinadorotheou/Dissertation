@@ -30,6 +30,11 @@ public class Deal {
     public Deal() {
     }
 
+    public Deal(String description, double value) {
+        this.description = description;
+        this.value = value;
+    }
+
     public void addCategory(Category category, int quantity) {
         DealCategory dealCategory = new DealCategory(this, category, quantity);
         dealCategories.add(dealCategory);

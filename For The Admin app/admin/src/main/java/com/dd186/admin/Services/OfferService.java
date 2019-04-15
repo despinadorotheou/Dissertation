@@ -33,7 +33,4 @@ public class OfferService {
         offerRepository.delete(offer);
     }
 
-    public Offer findLastOffer(){
-        return  offerRepository.findTopByOrderByIdDesc();
-    }
 }

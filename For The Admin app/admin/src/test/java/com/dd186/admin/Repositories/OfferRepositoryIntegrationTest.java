@@ -1,6 +1,6 @@
 package com.dd186.admin.Repositories;
 
-import com.dd186.admin.Domain.Product;
+import com.dd186.admin.Domain.Offer.Offer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,61 +15,58 @@ import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class ProductRepositoryIntegrationTest {
+public class OfferRepositoryIntegrationTest {
+
     @Autowired
     private TestEntityManager entityManager;
-    @Qualifier("productRepository")
+    @Qualifier("offerRepository")
     @Autowired
-    private ProductRepository productRepository;
+    private OfferRepository offerRepository;
 
     @Test
-    public void whenFindById_thenReturnProduct() {
+    public void whenFindById_thenReturnTheOffer() {
 
         // given
-        Product milkBottle = new Product("Milk Bottle", 1.00);
-        int id = entityManager.persistAndGetId(milkBottle, Integer.class);
+        Offer offer = new Offer("Offer 1", 2.00);
+        int id = entityManager.persistAndGetId(offer, Integer.class);
         entityManager.flush();
 
-
         // when
-        Product found = productRepository.findById(id);
+        Offer found = offerRepository.findById(id);
 
         // then
         assertThat(found.getId())
-                .isEqualTo(milkBottle.getId());
+                .isEqualTo(offer.getId());
     }
 
     @Test
-    public void saveProduct() {
+    public void saveOffer() {
 
         // given
-        Product milkBottle = new Product("Milk Bottle", 1.00);
-        int id = entityManager.persistAndGetId(milkBottle, Integer.class);
+        Offer offer = new Offer("Offer 1", 2.00);
+        int id = entityManager.persistAndGetId(offer, Integer.class);
         entityManager.flush();
 
-
         // when
-        Product found = productRepository.findById(id);
+        Offer found = offerRepository.findById(id);
 
         // then
         assertNotNull(found);
     }
 
     @Test
-    public void deleteProduct() {
+    public void deleteOffer() {
 
         // given
-        Product milkBottle = new Product("Milk Bottle", 1.00);
-        int id = entityManager.persistAndGetId(milkBottle, Integer.class);
+        Offer offer = new Offer("Offer 1", 2.00);
+        int id = entityManager.persistAndGetId(offer, Integer.class);
         entityManager.flush();
 
-
         // when
-        productRepository.delete(milkBottle);
-        Product found = productRepository.findById(id);
+        offerRepository.delete(offer);
+        Offer found = offerRepository.findById(id);
 
         // then
         assertNull(found);
     }
-
 }

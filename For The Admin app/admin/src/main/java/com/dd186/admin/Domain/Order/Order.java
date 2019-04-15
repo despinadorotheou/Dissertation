@@ -35,6 +35,11 @@ public class Order {
     public Order() {
     }
 
+    public Order(double value, int userid) {
+        this.value = value;
+        this.userid = userid;
+    }
+
     public void addProduct(Product product, int quantity) {
         OrderProduct orderProduct = new OrderProduct(this, product, quantity);
         orderProducts.add(orderProduct);

@@ -1,6 +1,6 @@
 package com.dd186.admin.Repositories;
 
-import com.dd186.admin.Domain.Product;
+import com.dd186.admin.Domain.Deal.Deal;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,61 +15,58 @@ import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class ProductRepositoryIntegrationTest {
+public class DealRepositoryIntegrationTest {
+
     @Autowired
     private TestEntityManager entityManager;
-    @Qualifier("productRepository")
+    @Qualifier("dealRepository")
     @Autowired
-    private ProductRepository productRepository;
+    private DealRepository dealRepository;
 
     @Test
-    public void whenFindById_thenReturnProduct() {
+    public void whenFindById_thenReturnTheDeal() {
 
         // given
-        Product milkBottle = new Product("Milk Bottle", 1.00);
-        int id = entityManager.persistAndGetId(milkBottle, Integer.class);
+        Deal deal = new Deal("Deal 1", 2.00);
+        int id = entityManager.persistAndGetId(deal, Integer.class);
         entityManager.flush();
 
-
         // when
-        Product found = productRepository.findById(id);
+        Deal found = dealRepository.findById(id);
 
         // then
         assertThat(found.getId())
-                .isEqualTo(milkBottle.getId());
+                .isEqualTo(deal.getId());
     }
 
     @Test
-    public void saveProduct() {
+    public void saveDeal() {
 
         // given
-        Product milkBottle = new Product("Milk Bottle", 1.00);
-        int id = entityManager.persistAndGetId(milkBottle, Integer.class);
+        Deal deal = new Deal("Deal 1", 2.00);
+        int id = entityManager.persistAndGetId(deal, Integer.class);
         entityManager.flush();
 
-
         // when
-        Product found = productRepository.findById(id);
+        Deal found = dealRepository.findById(id);
 
         // then
         assertNotNull(found);
     }
 
     @Test
-    public void deleteProduct() {
+    public void deleteDeal() {
 
         // given
-        Product milkBottle = new Product("Milk Bottle", 1.00);
-        int id = entityManager.persistAndGetId(milkBottle, Integer.class);
+        Deal deal = new Deal("Deal 1", 2.00);
+        int id = entityManager.persistAndGetId(deal, Integer.class);
         entityManager.flush();
 
-
         // when
-        productRepository.delete(milkBottle);
-        Product found = productRepository.findById(id);
+        dealRepository.delete(deal);
+        Deal found = dealRepository.findById(id);
 
         // then
         assertNull(found);
     }
-
 }
