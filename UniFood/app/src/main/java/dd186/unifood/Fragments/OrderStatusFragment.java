@@ -20,15 +20,16 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import dd186.unifood.Adapters.ProductAdapterVertical;
-import dd186.unifood.Entities.Order;
 import dd186.unifood.Main;
 import dd186.unifood.R;
+
 
 public class OrderStatusFragment extends Fragment {
 
     public static int isVisible = View.VISIBLE;
     public static String currentStatus = "Pending...";
     public static Timer t;
+
 
     Main main;
     @Nullable
@@ -41,9 +42,10 @@ public class OrderStatusFragment extends Fragment {
         orderProducts.setAdapter(new ProductAdapterVertical(main,main.fromMapToList(Main.pendingOrder.getProducts())));
         TextView orderId = view.findViewById(R.id.order_num);
         orderId.setText("Order="+ Main.pendingOrder.getId());
-        TextView status = view.findViewById(R.id.order_status_txt);
-        status.setText(currentStatus);
+        main.setStatus(view.findViewById(R.id.order_status_txt));
+        main.setTextStatus(currentStatus);
         LinearLayout edit_delete = view.findViewById(R.id.edit_delete_layout);
+        main.setEdit_delete(edit_delete);
         edit_delete.setVisibility(isVisible);
         Bundle args = getArguments();
         int firstTime = args.getInt("firstTime");
@@ -51,7 +53,7 @@ public class OrderStatusFragment extends Fragment {
             //start a 5 minutes timer
             setTimer(edit_delete);
             // start a timer that checks the status of an order every 10seconds
-            checkStatus(status);
+            checkStatus();
         }
         return view;
     }
@@ -62,10 +64,7 @@ public class OrderStatusFragment extends Fragment {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                if (currentStatus.equals("Ready for collection!")){
-                    OrderStatusFragment.isVisible = View.GONE;
-                    edit_delete.setVisibility(View.GONE); //(or GONE)
-                }
+
             }
 
             @Override
@@ -77,7 +76,7 @@ public class OrderStatusFragment extends Fragment {
 
     }
 
-    public void checkStatus(TextView status){
+    public void checkStatus(){
         t = new Timer(false);
         t.schedule(new TimerTask() {
             @Override
@@ -85,9 +84,27 @@ public class OrderStatusFragment extends Fragment {
                 main.runOnUiThread(() -> {
                     try {
                         OrderStatusFragment.currentStatus = main.makeHttpRequest("http://10.0.2.2:8080/rest/checkStatus/" +Main.pendingOrder.getId());
-                        status.setText(currentStatus);
+                        main.setTextStatus(currentStatus);
+                        if (currentStatus.equals("Ready for collection!")){
+                            OrderStatusFragment.isVisible = View.GONE;
+                            main.setGoneEditDelete(); //(or GONE)
+                        }
                         if (currentStatus.equals("Collected!")){
                             t.cancel();
+                            //5 mins
+                            CountDownTimer timer = new CountDownTimer(300000, 1000) {
+
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                }
+
+                                @Override
+                                public void onFinish() {
+                                    Main.pendingOrder = null;
+                                    Fragment fragment = new HomeFragment();
+                                    main.loadFragment(fragment, "home");
+                                }
+                            }.start();
 
                         }
                     } catch (ExecutionException e) {

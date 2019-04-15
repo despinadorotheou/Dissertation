@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -48,6 +49,7 @@ import dd186.unifood.Fragments.HomeFragment;
 
 public class Main extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
+
     public static List<Product> products = new ArrayList<>();
     public static User user;
     public static List<Product> basket = new ArrayList<>();
@@ -61,6 +63,9 @@ public class Main extends AppCompatActivity
     int qInt =1;
     SharedPreferences userDetails;
     public static Order pendingOrder = null;
+    public TextView status;
+    public LinearLayout edit_delete;
+
 
 
 
@@ -74,9 +79,8 @@ public class Main extends AppCompatActivity
         try {
             user = objectMapper.readValue(extra, new TypeReference<User>() {});
             products = extractProductsFromJson(makeHttpRequest("http://10.0.2.2:8080/rest/products"));
-            offers = objectMapper.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/offers"), new TypeReference<List<Offer>>() {});
             deals = objectMapper.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/deals"), new TypeReference<List<Deal>>() {});
-            favourites = user.getFavouriteProducts();
+            offers = objectMapper.readValue(makeHttpRequest("http://10.0.2.2:8080/rest/offers"), new TypeReference<List<Offer>>() {});
             String basketStr = userDetails.getString("basket", "");
             assert basketStr != null;
             if (!basketStr.equals("")){
@@ -93,14 +97,14 @@ public class Main extends AppCompatActivity
                 setBasketBadgeNum(counter);
             }
         } catch (Exception e) {
-            System.out.println("Something wrong with the deserialisationdd");
+            System.out.println("Something wrong with the deserialisation");
             e.printStackTrace();
         }
+        favourites = user.getFavouriteProducts();
         orders = user.getOrders();
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
         loadFragment(new HomeFragment(), "home");
-
 
     }
 
@@ -405,13 +409,7 @@ public class Main extends AppCompatActivity
         String json = gson.toJson(id_quanity);
         ObjectMapper objectMapper = new ObjectMapper();
         HttpPostRequest httpPostRequest =  new HttpPostRequest();
-        if (editing){
-            httpPostRequest.execute("http://10.0.2.2:8080/rest/editedOrder/cash/"+user.getId() + "/" +pendingOrder.getId()+ "/"+String.valueOf(finalTotal.getText()), json);
-
-        }else{
-            httpPostRequest.execute("http://10.0.2.2:8080/rest/addOrder/cash/"+user.getId() + "/"+String.valueOf(finalTotal.getText()), json);
-
-        }
+        httpPostRequest.execute("http://10.0.2.2:8080/rest/addOrder/cash/"+user.getId() + "/"+String.valueOf(finalTotal.getText()), json);
         pendingOrder = objectMapper.readValue(httpPostRequest.get(), new TypeReference<Order>() {});
         afterPlaceOrder();
     }
@@ -440,6 +438,22 @@ public class Main extends AppCompatActivity
 
     }
 
+    public void confirmChanges(View view) throws ExecutionException, InterruptedException, IOException {
+        TextView finalTotal = findViewById(R.id.finalTotal_basket);
+        HashMap<String,String> id_quanity = new HashMap<>();
+        for (Product p:basket) {
+            id_quanity.put(String.valueOf(p.getId()), String.valueOf(p.getQuantityInBasket()));
+        }
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson =  gsonBuilder.create();
+        String json = gson.toJson(id_quanity);
+        ObjectMapper objectMapper = new ObjectMapper();
+        HttpPostRequest httpPostRequest =  new HttpPostRequest();
+        httpPostRequest.execute("http://10.0.2.2:8080/rest/editedOrder/" +pendingOrder.getId()+ "/"+String.valueOf(finalTotal.getText()), json);
+        pendingOrder = objectMapper.readValue(httpPostRequest.get(), new TypeReference<Order>() {});
+        afterPlaceOrder();
+    }
+
     //method used to display all the set offers
     public void payByCardPage(View view){
         Fragment fragment = new CardInfoFragment();
@@ -458,13 +472,7 @@ public class Main extends AppCompatActivity
         String json = gson.toJson(id_quanity);
         ObjectMapper objectMapper = new ObjectMapper();
         HttpPostRequest httpPostRequest =  new HttpPostRequest();
-        if (editing){
-            httpPostRequest.execute("http://10.0.2.2:8080/rest/editedOrder/card/"+user.getId() + "/" +pendingOrder.getId()+ "/"+String.valueOf(finalTotal.getText()), json);
-
-        }else{
-            httpPostRequest.execute("http://10.0.2.2:8080/rest/addOrder/card/"+user.getId() + "/"+String.valueOf(finalTotal.getText()), json);
-
-        }
+        httpPostRequest.execute("http://10.0.2.2:8080/rest/addOrder/card/"+user.getId() + "/"+String.valueOf(finalTotal.getText()), json);
         pendingOrder = objectMapper.readValue(httpPostRequest.get(), new TypeReference<Order>() {});
         afterPlaceOrder();
     }
@@ -552,4 +560,19 @@ public class Main extends AppCompatActivity
         setBasketBadgeNum(num);
     }
 
+    public void setStatus(TextView status) {
+        this.status = status;
+    }
+
+    public void setTextStatus(String str){
+        status.setText(str);
+    }
+
+    public void setEdit_delete(LinearLayout linearLayout){
+        this.edit_delete = linearLayout;
+    }
+
+    public void setGoneEditDelete(){
+        edit_delete.setVisibility(View.GONE);
+    }
 }

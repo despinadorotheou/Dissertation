@@ -47,6 +47,7 @@ public class BasketFragment extends Fragment {
         TextView empty = rootView.findViewById(R.id.empty_basket);
         TextView discount = rootView.findViewById(R.id.discount_basket);
         TextView finalTotal = rootView.findViewById(R.id.finalTotal_basket);
+        Button confirmChanges = rootView.findViewById(R.id.confirm_changes_btn);
         if (!Main.basket.isEmpty()) {
             listView.setAdapter(new CheckoutProductAdapter(main,  Main.basket, listView,payByCard,payByCash,total,empty,badge,discount,finalTotal,tableLayout, this));
             listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -67,6 +68,11 @@ public class BasketFragment extends Fragment {
             double totalWithDiscount = totalPrice - discountValue;
             finalTotal.setText(formatter.format(totalWithDiscount));
             empty.setVisibility(View.INVISIBLE);
+            if (Main.editing){
+                confirmChanges.setVisibility(View.VISIBLE);
+                payByCard.setVisibility(View.GONE);
+                payByCash.setVisibility(View.GONE);
+            }
         } else {
             listView.setVisibility(View.INVISIBLE);
             payByCard.setVisibility(View.INVISIBLE);
@@ -77,6 +83,7 @@ public class BasketFragment extends Fragment {
             payByCard.setClickable(false);
             payByCash.setClickable(false);
         }
+
 
         return rootView;
     }

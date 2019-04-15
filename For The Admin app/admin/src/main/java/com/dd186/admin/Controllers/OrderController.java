@@ -51,59 +51,18 @@ public class OrderController {
         order.setStatus(OrderStatus.READY);
         orderService.save(order);
         User user = userService.findById(order.getUserid());
-        JSONObject body = new JSONObject();
-        body.put("to", "/topics/" + user.getId());
-        body.put("priority", "high");
-
-        JSONObject notification = new JSONObject();
-        notification.put("title", "UniFood");
-        notification.put("body", "Your order is ready for collection! \n Your order number is " + orderId + "." );
-
-        JSONObject data = new JSONObject();
-        data.put("Key-1", "JSA Data 1");
-        data.put("Key-2", "JSA Data 2");
-
-        body.put("notification", notification);
-        body.put("data", data);
-
-        /**
-         {
-         "notification": {
-         "title": "UniFood",
-         "body": "Happy Message!"
-         },
-         "data": {
-         "Key-1": "JSA Data 1",
-         "Key-2": "JSA Data 2"
-         },
-         "to": "/topics/userID",
-         "priority": "high"
-         }
-        */
-
-        HttpEntity<String> request = new HttpEntity<>(body.toString());
-
-        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
-        CompletableFuture.allOf(pushNotification).join();
-
-        try {
-            String firebaseResponse = pushNotification.get();
-
-            System.out.println(new ResponseEntity<>(firebaseResponse, HttpStatus.OK));
-        } catch (InterruptedException | ExecutionException e) {
-            System.out.println(new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST));
-            e.printStackTrace();
-        }
-
+        sendNotification("Your order #"+ orderId + " is ready for collection!", user.getId() );
         return new ModelAndView(new RedirectView("/main"));
 
     }
 
     @RequestMapping(value = "/order/collected", method = RequestMethod.GET)
-    public ModelAndView orderCollected(@RequestParam(value="orderId") int orderId) {
+    public ModelAndView orderCollected(@RequestParam(value="orderId") int orderId) throws JSONException {
         Order order = orderService.findById(orderId);
         order.setStatus(OrderStatus.COLLECTED);
         orderService.save(order);
+        User user = userService.findById(order.getUserid());
+        sendNotification("Your order #"+ orderId + " was collected!", user.getId() );
         return new ModelAndView(new RedirectView("/main"));
     }
 
@@ -129,6 +88,52 @@ public class OrderController {
         modelAndView.addObject("products",(List<Product>)productService.findAll());
         modelAndView.setViewName("productsPage");
         return modelAndView;
+    }
+
+    private void sendNotification(String msg, int topic) throws JSONException {
+        JSONObject body = new JSONObject();
+        body.put("to", "/topics/" + topic);
+        body.put("priority", "high");
+
+        JSONObject notification = new JSONObject();
+        notification.put("title", "UniFood");
+        notification.put("body", msg );
+
+        JSONObject data = new JSONObject();
+        data.put("Key-1", "JSA Data 1");
+        data.put("Key-2", "JSA Data 2");
+
+        body.put("notification", notification);
+        body.put("data", data);
+
+        /**
+         {
+         "notification": {
+         "title": "UniFood",
+         "body": "Happy Message!"
+         },
+         "data": {
+         "Key-1": "JSA Data 1",
+         "Key-2": "JSA Data 2"
+         },
+         "to": "/topics/userID",
+         "priority": "high"
+         }
+         */
+
+        HttpEntity<String> request = new HttpEntity<>(body.toString());
+
+        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
+        CompletableFuture.allOf(pushNotification).join();
+
+        try {
+            String firebaseResponse = pushNotification.get();
+
+            System.out.println(new ResponseEntity<>(firebaseResponse, HttpStatus.OK));
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println(new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST));
+            e.printStackTrace();
+        }
     }
 
 }

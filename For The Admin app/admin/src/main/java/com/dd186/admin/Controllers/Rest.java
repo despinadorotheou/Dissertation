@@ -212,12 +212,17 @@ public class Rest {
     }
 
     //http://10.0.2.2:8080/rest/editedOrder/"+user.getId() + "/" +pendingOrder.getId()+ "/"
-    @RequestMapping(value = "/editedOrder/{userID}/{orderID}/{price}")
-    public String addEditedOrderCash(@PathVariable("userID") int user_id,@PathVariable("orderID") int order_id,@PathVariable("price") double price, @RequestBody HashMap<String,String> map) throws IOException {
-        Order order = orderService.findById(order_id);
-        order = productsInMap(map, order);
+    @RequestMapping(value = "/editedOrder/{orderID}/{price}")
+    public String addEditedOrder(@PathVariable("orderID") int order_id,@PathVariable("price") double price, @RequestBody HashMap<String,String> map) throws IOException {
+        Order previous = orderService.findById(order_id);
+        Order order = new Order();
         order.setValue(price);
         order.setStatus(OrderStatus.PENDING);
+        order.setDate(previous.getDate());
+        order.setId(order_id);
+        order.setUserid(previous.getUserid());
+        order.setPaid(previous.isPaid());
+        order = productsInMap(map, order);
         orderService.save(order);
 
         JsonObject orderProperties = new JsonObject();
@@ -251,6 +256,7 @@ public class Rest {
     public void editingOrder(@PathVariable("orderID") int order_id) throws IOException {
         Order order = orderService.findById(order_id);
         order.setStatus(OrderStatus.EDITING);
+        orderService.save(order);
     }
 
     //http://10.0.2.2:8080/rest/deleteOrder/" +pendingOrder.getId()
