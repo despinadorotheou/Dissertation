@@ -35,6 +35,7 @@ public class UserServiceIntegrationTest {
                 mockBCryptPasswordEncoder);
 
         user = User.getBuilder(1,"Deborah", "Dor", "test123@test.com").build();
+        user.setPassword("$2a$10$P6ENyTd74quDcQSsKiAqV.U3hcsvn.d/79pw3UyRvjLKCdechChyq");
 
         Mockito.when(mockUserRepository.save(any()))
                 .thenReturn(user);
@@ -91,6 +92,18 @@ public class UserServiceIntegrationTest {
 
         // Verify the results
         assertEquals(email, result.getEmail());
+    }
+
+    @Test
+    public void testMatchPass() {
+        // Setup
+        String pass = "12345";
+
+        // Run the test
+        boolean result = userServiceUnderTest.passMatch(pass, user.getPassword());
+
+        // Verify the results
+        assertEquals(false, result);
     }
 
 

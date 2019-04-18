@@ -1,5 +1,6 @@
 package com.dd186.admin;
 
+import com.dd186.admin.Services.AndroidPushNotificationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -21,6 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         return bCryptPasswordEncoder;
     }
+
 
 
 

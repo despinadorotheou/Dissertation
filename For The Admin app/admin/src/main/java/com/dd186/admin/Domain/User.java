@@ -5,6 +5,7 @@ import com.dd186.admin.Domain.Order.Order;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -28,7 +29,7 @@ public class User {
     private int active;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_favourite", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "productID"))
-    private Set<Product> favProduct;
+    private Set<Product> favProduct = new HashSet<>();
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;

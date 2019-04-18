@@ -42,16 +42,13 @@ public class OrderController {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private UserService userService;
 
-    @RequestMapping(value = "/order/ready", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/order/ready", method = RequestMethod.GET)
     public ModelAndView orderReady(@RequestParam(value="orderId") int orderId) throws JSONException {
         Order order = orderService.findById(orderId);
         order.setStatus(OrderStatus.READY);
         orderService.save(order);
-        User user = userService.findById(order.getUserid());
-        sendNotification("Your order #"+ orderId + " is ready for collection!", user.getId() );
+        sendNotification("Your order #"+ orderId + " is ready for collection!", order.getUserid() );
         return new ModelAndView(new RedirectView("/main"));
 
     }
@@ -61,8 +58,7 @@ public class OrderController {
         Order order = orderService.findById(orderId);
         order.setStatus(OrderStatus.COLLECTED);
         orderService.save(order);
-        User user = userService.findById(order.getUserid());
-        sendNotification("Your order #"+ orderId + " was collected!", user.getId() );
+        sendNotification("Your order #"+ orderId + " was collected!", order.getUserid() );
         return new ModelAndView(new RedirectView("/main"));
     }
 

@@ -119,7 +119,7 @@ public class OffersController {
     }
 
     @RequestMapping(value = "/image", method = RequestMethod.GET)
-    public void getImageAsByteArray(@RequestParam( name = "dealId") int id, HttpServletResponse response) throws IOException, SQLException {
+    public void getImageAsByteArray(@RequestParam( name = "offerId") int id, HttpServletResponse response) throws IOException, SQLException {
         Offer offer = offerService.findById(id);
         InputStream in = offer.getImage().getBinaryStream();
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);

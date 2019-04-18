@@ -64,8 +64,9 @@ public class Rest {
                     category.addProperty("quantityInDeal", dealCategory.getQuantity());
                     categoriesInDeal.add(category);
                 }
-
-                deal.addProperty("image",Base64.encodeBase64String(d.getImage().getBytes(1, (int) d.getImage().length())) );
+                if (d.getImage() != null) {
+                    deal.addProperty("image", Base64.encodeBase64String(d.getImage().getBytes(1, (int) d.getImage().length())));
+                }
                 deal.add("categoriesInDeal",categoriesInDeal);
                 toRet.add(deal);
             }
@@ -86,7 +87,9 @@ public class Rest {
                 offer.addProperty("id", o.getId());
                 offer.addProperty("description", o.getDescription());
                 offer.addProperty("value", o.getValue());
-                offer.addProperty("image",Base64.encodeBase64String(o.getImage().getBytes(1, (int) o.getImage().length())) );
+                if (o.getImage()!= null) {
+                    offer.addProperty("image", Base64.encodeBase64String(o.getImage().getBytes(1, (int) o.getImage().length())));
+                }
                 offer.add("productsInOffer", mapFromOfferProductList(o.getOfferProducts()));
                 toRet.add(offer);
             }
@@ -108,10 +111,14 @@ public class Rest {
                 userProperties.addProperty("lastName",user.getLastName());
                 userProperties.addProperty("email",user.getEmail());
                 userProperties.addProperty("password",user.getPassword());
-                List<Product> favourites = new ArrayList<>();
-                favourites.addAll(user.getFavProduct());
-                userProperties.add("favouriteProducts", toIntegerList(favourites));
-                userProperties.add("orders", createOrderList(new ArrayList<>(user.getOrders())));
+                if (user.getFavProduct() != null) {
+                    List<Product> favourites = new ArrayList<>();
+                    favourites.addAll(user.getFavProduct());
+                    userProperties.add("favouriteProducts", toIntegerList(favourites));
+                }
+                if (user.getOrders() != null) {
+                    userProperties.add("orders", createOrderList(new ArrayList<>(user.getOrders())));
+                }
                 return userProperties.toString();
             } else return "invalid";
         } else return "invalid";
@@ -137,9 +144,7 @@ public class Rest {
     public void addFavourite(@PathVariable("userID") int user_id, @PathVariable("productID") int product_id){
         User user = userService.findById(user_id);
         Product product =  productService.findById(product_id);
-        List<Product> favourites = new ArrayList<>(user.getFavProduct());
-        favourites.add(product);
-        user.setFavProduct(new HashSet<>(favourites));
+        user.getFavProduct().add(product);
         userService.saveUser(user);
 
     }
@@ -149,9 +154,7 @@ public class Rest {
     public void removeFavourite(@PathVariable("userID") int user_id, @PathVariable("productID") int product_id){
         User user = userService.findById(user_id);
         Product product =  productService.findById(product_id);
-        List<Product> favourites = new ArrayList<>(user.getFavProduct());
-        favourites.remove(product);
-        user.setFavProduct(new HashSet<>(favourites));
+        user.getFavProduct().remove(product);
         userService.saveUser(user);
     }
 
@@ -251,17 +254,19 @@ public class Rest {
 
     //http://10.0.2.2:8080/rest/editingOrder/" +pendingOrder.getId()
     @RequestMapping(value = "/editingOrder/{orderID}")
-    public void editingOrder(@PathVariable("orderID") int order_id) throws IOException {
+    public String editingOrder(@PathVariable("orderID") int order_id) throws IOException {
         Order order = orderService.findById(order_id);
         order.setStatus(OrderStatus.EDITING);
         orderService.save(order);
+        return "ok";
     }
 
     //http://10.0.2.2:8080/rest/deleteOrder/" +pendingOrder.getId()
     @RequestMapping(value = "/deleteOrder/{orderID}")
-    public void deleteOrder(@PathVariable("orderID") int order_id) throws IOException {
+    public String deleteOrder(@PathVariable("orderID") int order_id) throws IOException {
         Order order = orderService.findById(order_id);
         orderService.delete(order);
+        return "ok";
     }
 
 
@@ -291,7 +296,9 @@ public class Rest {
                 product.addProperty("description", p.getDescription());
                 product.addProperty("price", p.getPrice());
                 product.addProperty("quantity", p.getQuantity());
-                product.addProperty("image", Base64.encodeBase64String(p.getImage().getBytes(1, (int) p.getImage().length())));
+                if (p.getImage() != null) {
+                    product.addProperty("image", Base64.encodeBase64String(p.getImage().getBytes(1, (int) p.getImage().length())));
+                }
                 product.addProperty("preference", p.getPreference());
                 product.addProperty("ingredients", p.getIngredients());
                 JsonObject category = new JsonObject();

@@ -60,7 +60,7 @@
                         <td><c:out value="${offer.getDescription()}"/></td>
                         <td><c:out value="${offer.getValue()}"/></td>
                         <c:if test="${offer.getImage() != null}">
-                            <td><a class="btn btn-primary" href="/main/offers/image?dealId=${offer.getId()}">See Image</a></td>
+                            <td><a class="btn btn-primary" href="/main/offers/image?offerId=${offer.getId()}">See Image</a></td>
                         </c:if>
                         <c:if test="${offer.getImage() == null}">
                             <td><c:out value="No Image"/></td>

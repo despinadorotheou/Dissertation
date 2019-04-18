@@ -3,7 +3,9 @@ package com.dd186.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -18,12 +20,8 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Qualifier("dataSource")
-    @Autowired
-    private DataSource dataSource;
 
     @Value("${spring.queries.users-query}")
     private String usersQuery;
@@ -31,6 +29,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${spring.queries.roles-query}")
     private String rolesQuery;
 
+    @Autowired
+    public SecurityConfiguration( BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    @Bean
+    public DataSource dataSource(){
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setUrl("jdbc:mysql://localhost:3306/app");
+        dataSource.setUsername( "root" );
+        dataSource.setPassword( "Deborahdor98!" );
+        return dataSource;
+    }
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
@@ -38,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                  jdbcAuthentication()
                 .usersByUsernameQuery(usersQuery)
                 .authoritiesByUsernameQuery(rolesQuery)
-                .dataSource(dataSource)
+                .dataSource(dataSource())
                 .passwordEncoder(bCryptPasswordEncoder);
     }
 
@@ -63,11 +74,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .accessDeniedPage("/access-denied");
     }
 
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        web
-//                .ignoring()
-//                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
-//    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+    }
 
 }
