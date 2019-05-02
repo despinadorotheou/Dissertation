@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import dd186.unifood.Entities.Offer;
 import dd186.unifood.Entities.Product;
@@ -44,12 +45,24 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
 
     @Override
     public void onBindViewHolder(@NonNull OfferViewHolder holder, final int position) {
-        byte[] img = Base64.decode(offers.get(position).getImage(), Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
-        holder.imageView.setImageBitmap(bitmap);
+        if (offers.get(position).getImage() != null){
+            byte[] img = Base64.decode(offers.get(position).getImage(), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
+            holder.imageView.setImageBitmap(bitmap);
+
+        } else {
+            holder.imageView.setImageResource(R.drawable.ic_empty_image);
+        }
+
         holder.txtview.setText(offers.get(position).getDescription());
         holder.button.setOnClickListener(v -> {
-            main.addOfferToBasket(offers.get(position));
+            try {
+                main.addOfferToBasket(offers.get(position));
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         });
     }
 
@@ -70,18 +83,6 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.OfferViewHol
         }
     }
 
-
-
-//            boolean outOfStock = false;
-//            for (Product p:offer.getProductsInOffer()){
-//                if (p.getQuantity() <= 0){
-//                    outOfStock = true;
-//                    break;
-//                }
-//            }
-//            if (outOfStock){
-//                view.setVisibility(View.GONE);
-//            }
 
 
 }

@@ -23,7 +23,7 @@ public class OrderRepositoryIntegrationTest {
     private OrderRepository orderRepository;
 
     @Test
-    public void whenFindById_thenReturnTheOffer() {
+    public void testFindOrderById() {
 
         // given
         Order order = new Order(2.0, 1);
@@ -39,22 +39,21 @@ public class OrderRepositoryIntegrationTest {
     }
 
     @Test
-    public void saveOffer() {
+    public void testSaveOrder() {
 
         // given
         Order order = new Order(2.0, 1);
-        int id = entityManager.persistAndGetId(order, Integer.class);
-        entityManager.flush();
 
         // when
-        Order found = orderRepository.findById(id);
+        orderRepository.save(order);
 
         // then
+        Order found = orderRepository.findById(order.getId());
         assertNotNull(found);
     }
 
     @Test
-    public void deleteOffer() {
+    public void testDeleteOrder() {
 
         // given
         Order order = new Order(2.0, 1);
@@ -63,9 +62,9 @@ public class OrderRepositoryIntegrationTest {
 
         // when
         orderRepository.delete(order);
-        Order found = orderRepository.findById(id);
 
         // then
+        Order found = orderRepository.findById(id);
         assertNull(found);
     }
 }

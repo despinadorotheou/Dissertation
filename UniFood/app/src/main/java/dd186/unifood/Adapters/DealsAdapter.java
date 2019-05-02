@@ -39,17 +39,15 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHold
 
     @Override
     public void onBindViewHolder(@NonNull DealViewHolder holder, final int position) {
-        byte[] img = Base64.decode(dealList.get(position).getImage(), Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
-        holder.imageView.setImageBitmap(bitmap);
+        if (dealList.get(position).getImage() != null){
+            byte[] img = Base64.decode(dealList.get(position).getImage(), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
+            holder.imageView.setImageBitmap(bitmap);
+
+        } else {
+            holder.imageView.setImageResource(R.drawable.ic_empty_image);
+        }
         holder.txtview.setText(dealList.get(position).getDescription());
-//        holder.imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int id = dealList.get(position).getId();
-//                Toast.makeText(context, id + " is selected", Toast.LENGTH_SHORT).show();
-//            }
-//        });
     }
 
     @Override

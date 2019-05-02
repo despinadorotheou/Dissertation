@@ -20,6 +20,11 @@ public class Deal {
         this.value = value;
     }
 
+    public Deal(String description, double value) {
+        this.description = description;
+        this.value = value;
+    }
+
     public int getId() {
         return id;
     }

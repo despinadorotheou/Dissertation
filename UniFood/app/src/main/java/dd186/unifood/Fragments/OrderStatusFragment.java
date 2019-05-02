@@ -2,7 +2,6 @@ package dd186.unifood.Fragments;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,11 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import dd186.unifood.Adapters.ProductAdapterVertical;
 import dd186.unifood.Main;
@@ -38,22 +35,24 @@ public class OrderStatusFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_order_status, null );
         main = (Main) getActivity();
         assert main != null;
-        ListView orderProducts = view.findViewById(R.id.pending_order_list);
-        orderProducts.setAdapter(new ProductAdapterVertical(main,main.fromMapToList(Main.pendingOrder.getProducts())));
-        TextView orderId = view.findViewById(R.id.order_num);
-        orderId.setText("Order="+ Main.pendingOrder.getId());
-        main.setStatus(view.findViewById(R.id.order_status_txt));
-        main.setTextStatus(currentStatus);
-        LinearLayout edit_delete = view.findViewById(R.id.edit_delete_layout);
-        main.setEdit_delete(edit_delete);
-        edit_delete.setVisibility(isVisible);
-        Bundle args = getArguments();
-        int firstTime = args.getInt("firstTime");
-        if (firstTime == 1){
-            //start a 5 minutes timer
-            setTimer(edit_delete);
-            // start a timer that checks the status of an order every 10seconds
-            checkStatus();
+        if (Main.pendingOrder != null) {
+            ListView orderProducts = view.findViewById(R.id.pending_order_list);
+            orderProducts.setAdapter(new ProductAdapterVertical(main, main.fromMapToList(Main.pendingOrder.getProducts())));
+            TextView orderId = view.findViewById(R.id.order_num);
+            orderId.setText("Order=" + Main.pendingOrder.getId());
+            main.setStatus(view.findViewById(R.id.order_status_txt));
+            main.setTextStatus(currentStatus);
+            LinearLayout edit_delete = view.findViewById(R.id.edit_delete_layout);
+            main.setEdit_delete(edit_delete);
+            edit_delete.setVisibility(isVisible);
+            Bundle args = getArguments();
+            int firstTime = args.getInt("firstTime");
+            if (firstTime == 1) {
+                //start a 5 minutes timer
+                setTimer(edit_delete);
+                // start a timer that checks the status of an order every 10seconds
+                checkStatus();
+            }
         }
         return view;
     }
@@ -82,8 +81,7 @@ public class OrderStatusFragment extends Fragment {
             @Override
             public void run() {
                 main.runOnUiThread(() -> {
-                    try {
-                        OrderStatusFragment.currentStatus = main.makeHttpRequest("http://10.0.2.2:8080/rest/checkStatus/" +Main.pendingOrder.getId());
+                        OrderStatusFragment.currentStatus = Main.makeARequest.get("http://10.0.2.2:8080/rest/checkStatus/" +Main.pendingOrder.getId());
                         main.setTextStatus(currentStatus);
                         if (currentStatus.equals("Ready for collection!")){
                             OrderStatusFragment.isVisible = View.GONE;
@@ -107,11 +105,6 @@ public class OrderStatusFragment extends Fragment {
                             }.start();
 
                         }
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 });
             }
         }, 0, 10000);

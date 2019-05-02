@@ -23,7 +23,7 @@ public class ProductRepositoryIntegrationTest {
     private ProductRepository productRepository;
 
     @Test
-    public void whenFindById_thenReturnProduct() {
+    public void testFindProductById() {
 
         // given
         Product milkBottle = new Product("Milk Bottle", 1.00);
@@ -40,23 +40,22 @@ public class ProductRepositoryIntegrationTest {
     }
 
     @Test
-    public void saveProduct() {
+    public void testSaveProduct() {
 
         // given
         Product milkBottle = new Product("Milk Bottle", 1.00);
-        int id = entityManager.persistAndGetId(milkBottle, Integer.class);
-        entityManager.flush();
 
 
         // when
-        Product found = productRepository.findById(id);
+        productRepository.save(milkBottle);
 
         // then
+        Product found = productRepository.findById(milkBottle.getId());
         assertNotNull(found);
     }
 
     @Test
-    public void deleteProduct() {
+    public void testDeleteProduct() {
 
         // given
         Product milkBottle = new Product("Milk Bottle", 1.00);

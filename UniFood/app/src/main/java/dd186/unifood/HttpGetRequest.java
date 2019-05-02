@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,9 +34,7 @@ public class HttpGetRequest extends AsyncTask<URL,Void, String> {
     }
 
     public String makeHttpRequest(URL url) throws IOException {
-
         String jsonResponse = "";
-
         HttpURLConnection httpURLConnection = null;
         InputStream inputStream = null;
         try{
@@ -48,12 +47,15 @@ public class HttpGetRequest extends AsyncTask<URL,Void, String> {
             //then read the input stream and parse the response.
             if(httpURLConnection.getResponseCode() == 200){
                 inputStream = httpURLConnection.getInputStream();
-                jsonResponse = readFromStream(inputStream);            }
-
-
-        }catch (IOException e){
-            //todo handle
-        } finally {
+                jsonResponse = readFromStream(inputStream);
+            }
+        } catch (ConnectException e) {
+            //something went wrong with the connection
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally
+         {
             if (httpURLConnection!=null){
                 httpURLConnection.disconnect();
             }
@@ -62,8 +64,9 @@ public class HttpGetRequest extends AsyncTask<URL,Void, String> {
             }
         }
         return jsonResponse;
-
     }
+
+
     public  String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         if (inputStream != null){

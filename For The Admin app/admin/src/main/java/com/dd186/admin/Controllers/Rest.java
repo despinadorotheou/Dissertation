@@ -265,7 +265,29 @@ public class Rest {
     @RequestMapping(value = "/deleteOrder/{orderID}")
     public String deleteOrder(@PathVariable("orderID") int order_id) throws IOException {
         Order order = orderService.findById(order_id);
+        for (OrderProduct op:order.getOrderProducts()) {
+            op.getProduct().setQuantity(op.getProduct().getQuantity()+op.getQuantity());
+            productService.save(op.getProduct());
+        }
         orderService.delete(order);
+        return "ok";
+    }
+
+    //"http://10.0.2.2:8080/rest/decreaseQuantity/" + product.getId() + "/" + quantityInBasket
+    @RequestMapping(value = "/decreaseQuantity/{productID}/{amount}")
+    public String decreaseQuantity(@PathVariable("productID") int product_id,@PathVariable("amount") int amount ) throws IOException {
+        Product product = productService.findById(product_id);
+        product.setQuantity(product.getQuantity()-amount);
+        productService.save(product);
+        return "ok";
+    }
+
+    //"http://10.0.2.2:8080/rest/increaseQuantity/" + product.getId() + "/" + quantityInBasket
+    @RequestMapping(value = "/increaseQuantity/{productID}/{amount}")
+    public String increaseQuantity(@PathVariable("productID") int product_id,@PathVariable("amount") int amount ) throws IOException {
+        Product product = productService.findById(product_id);
+        product.setQuantity(product.getQuantity()+amount);
+        productService.save(product);
         return "ok";
     }
 
@@ -275,8 +297,6 @@ public class Rest {
         for (String i :map.keySet()) {
             Product product = productService.findById(Integer.parseInt(i));
             int quantity = Integer.parseInt(map.get(i));
-            product.setQuantity(product.getQuantity()-quantity);
-            productService.save(product);
             order.addProduct(product, quantity);
         }
         return order;

@@ -32,12 +32,10 @@ public class OffersFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_offers, null );
-        Bundle args = getArguments();
         Main main = (Main) getActivity();
         assert main != null;
         RecyclerView recyclerView ;
         recyclerView =  rootView.findViewById(R.id.offer_list);
-        assert args != null;
         recyclerView.addItemDecoration(new DividerItemDecoration(main, LinearLayoutManager.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(main, LinearLayoutManager.VERTICAL, false));
         // remove the offer if any of its items is out of stock
@@ -52,7 +50,7 @@ public class OffersFragment extends Fragment {
                         break;
                     }
                 }
-                if (product.getQuantity() <= 1){
+                if (product.getQuantity() <= 2){
                     outOfStock=true;
                     break;
                 }

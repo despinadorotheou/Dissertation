@@ -79,8 +79,8 @@ public class DealControllerIntegrationTest {
 
         mvc.perform(multipart("/main/deals/add").file(multipartFile)
                 .param("id", "-1")
-                .param("category1", "1")
-                .param("category2", "1")
+                .param("category1", "Drinks")
+                .param("category2", "Drinks")
                 .param("description", "milk")
                 .param("value", "1.00")
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
@@ -108,9 +108,9 @@ public class DealControllerIntegrationTest {
 
 
         mvc.perform(multipart("/main/deals/add").file(multipartFile)
-                .param("id", "-1")
-                .param("category1", "1")
-                .param("category2", "1")
+                .param("id", "1")
+                .param("category1", "Drinks")
+                .param("category2", "Drinks")
                 .param("description", "milk")
                 .param("value", "1.00")
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
@@ -144,7 +144,7 @@ public class DealControllerIntegrationTest {
 
     @Test
     @WithMockUser(value = "dd186@student.le.ac.uk")
-    public void testDeleteOffer()
+    public void testDeleteDeal()
             throws Exception {
         Deal deal = new Deal("deal 1", 1.00);
         deal.setId(1);

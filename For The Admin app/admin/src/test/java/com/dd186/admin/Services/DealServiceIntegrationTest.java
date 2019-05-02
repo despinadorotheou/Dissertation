@@ -33,9 +33,9 @@ public class DealServiceIntegrationTest {
     }
 
     @Test
-    public void testFindOfferById() {
+    public void testFindDealById() {
         // Setup
-        Mockito.when(dealServiceUnderTest.findById(anyInt()))
+        Mockito.when(mockDealRepository.findById(anyInt()))
                 .thenReturn(deal);
         final int id = 1;
 
@@ -47,9 +47,9 @@ public class DealServiceIntegrationTest {
     }
 
     @Test
-    public void testSaveOffer() {
+    public void testSaveDeal() {
         // Setup
-        Mockito.when(dealServiceUnderTest.findById(anyInt()))
+        Mockito.when(mockDealRepository.findById(anyInt()))
                 .thenReturn(null).thenReturn(deal);
         final int id = 1;
 
@@ -65,9 +65,9 @@ public class DealServiceIntegrationTest {
     }
 
     @Test
-    public void testDeleteOffer() {
+    public void testDeleteDeal() {
         // Setup
-        Mockito.when(dealServiceUnderTest.findById(anyInt()))
+        Mockito.when(mockDealRepository.findById(anyInt()))
                 .thenReturn(deal).thenReturn(null);
 
         // Run the test
@@ -83,7 +83,7 @@ public class DealServiceIntegrationTest {
     }
 
     @Test
-    public void testFindAllOffers() {
+    public void testFindAllDeals() {
         // Setup
         Deal deal1 = new Deal("Mock deal 2", 1.00);
         List<Deal> deals = new ArrayList<>();

@@ -17,18 +17,16 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 //import org.apache.commons.codec.binary.Base64;
 import dd186.unifood.Entities.Product;
-import dd186.unifood.Entities.User;
+import dd186.unifood.Fragments.HomeFragment;
 import dd186.unifood.Fragments.ProductInfoFragment;
-import dd186.unifood.HttpGetRequest;
 import dd186.unifood.Main;
 import dd186.unifood.R;
-
-import static dd186.unifood.Main.user;
 
 public class ProductAdapter extends BaseAdapter {
 
     private List<Product> products;
     private Main main;
+
 
     public ProductAdapter(Main main, List<Product> products){
         this.main =main;
@@ -62,9 +60,14 @@ public class ProductAdapter extends BaseAdapter {
             ImageView image = new ImageView(context);
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(150,150);
             image.setLayoutParams(params);
-            byte[] img = Base64.decode(product.getImage(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
-            image.setImageBitmap(bitmap);
+            if (product.getImage() != null){
+                byte[] img = Base64.decode(product.getImage(), Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
+                image.setImageBitmap(bitmap);
+
+            } else {
+                image.setImageResource(R.drawable.ic_empty_image);
+            }
             view.addView(image);
             ImageView favouriteIcon = new ImageView(context);
             boolean productInFavourites = false;
@@ -77,13 +80,7 @@ public class ProductAdapter extends BaseAdapter {
                 favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
                 favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
                 favouriteIcon.setOnClickListener(v -> {
-                    try {
-                        main.makeHttpRequest("http://10.0.2.2:8080/rest/removeFavourite/" + Main.user.getId() +"/" + product.getId());
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    Main.makeARequest.get("http://10.0.2.2:8080/rest/removeFavourite/" + Main.user.getId() +"/" + product.getId());
                     favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
                     Main.favourites.remove(product);
                     notifyDataSetChanged();
@@ -94,13 +91,7 @@ public class ProductAdapter extends BaseAdapter {
                 favouriteIcon.setBackgroundResource(R.drawable.ic_favorite_border);
                 favouriteIcon.setLayoutParams(new ViewGroup.LayoutParams(30,30));
                 favouriteIcon.setOnClickListener(v -> {
-                    try {
-                        main.makeHttpRequest("http://10.0.2.2:8080/rest/addFavourite/" + Main.user.getId() +"/" +product.getId());
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    Main.makeARequest.get("http://10.0.2.2:8080/rest/addFavourite/" + Main.user.getId() +"/" +product.getId());
                     favouriteIcon.setBackgroundResource(R.drawable.ic_favorite);
                     Main.favourites.add(product);
                     notifyDataSetChanged();
@@ -127,11 +118,7 @@ public class ProductAdapter extends BaseAdapter {
             }
             else {
                 view.setOnClickListener(v -> {
-                    Fragment productView = new ProductInfoFragment();
-                    Bundle args =  new Bundle();
-                    args.putSerializable("product", (Serializable) product);
-                    productView.setArguments(args);
-                    main.loadFragment(productView, "productInfo");
+                    main.productInfoPage(product);
                 });
             }
             return view;

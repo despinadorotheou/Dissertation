@@ -260,7 +260,6 @@ public class RestControllerIntegrationTest {
     @Test
     public void givenOrderId_whenDeleteOrder_thenRemoveOrder()
             throws Exception {
-
         Order order = new Order();
         order.setId(1);
         order.setStatus(OrderStatus.PENDING);
@@ -271,6 +270,39 @@ public class RestControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string("ok"));
+    }
+
+    @Test
+    public void givenProductId_whenIncreaseQuantity_thenIncreaseQuantity()
+            throws Exception {
+        Category category = new Category("Cold Drinks");
+        Product product = new Product(1, "milk", "semi",1.00, 50,category );
+
+
+        given(productService.findById(anyInt())).willReturn(product);
+
+        mvc.perform(get("/rest/increaseQuantity/1/2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+        assertEquals(50+2, product.getQuantity());
+
+    }
+
+    @Test
+    public void givenProductId_whenDecreaseQuantity_thenDecreaseQuantity()
+            throws Exception {
+        Category category = new Category("Cold Drinks");
+        Product product = new Product(1, "milk", "semi",1.00, 50,category );
+
+
+        given(productService.findById(anyInt())).willReturn(product);
+
+        mvc.perform(get("/rest/decreaseQuantity/1/2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+        assertEquals(50-2, product.getQuantity());
 
     }
 

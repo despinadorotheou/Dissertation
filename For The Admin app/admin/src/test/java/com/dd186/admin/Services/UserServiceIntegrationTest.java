@@ -98,12 +98,13 @@ public class UserServiceIntegrationTest {
     public void testMatchPass() {
         // Setup
         String pass = "12345";
+        Mockito.when(mockBCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(true);
 
         // Run the test
         boolean result = userServiceUnderTest.passMatch(pass, user.getPassword());
 
         // Verify the results
-        assertEquals(false, result);
+        assertEquals(true, result);
     }
 
 

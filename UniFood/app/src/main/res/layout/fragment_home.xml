@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/colorPrimary">
 
 
     <Button
-        android:id="@+id/button9"
+        android:id="@+id/setoffers_btn"
         android:layout_width="match_parent"
-        android:layout_height="74dp"
+        android:layout_height="65dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="417dp"
+        android:layout_marginTop="406dp"
         android:background="@color/colorPrimary"
         android:onClick="setOfOffers"
         android:text="Set Offers"
         android:textColor="@color/colorBackground" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/drinks_category_btn"
         android:layout_width="match_parent"
-        android:layout_height="74dp"
+        android:layout_height="65dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="346dp"
+        android:layout_marginTop="341dp"
         android:background="@color/colorPrimary"
         android:onClick="drinks"
         android:text="Drinks"
         android:textColor="@color/colorBackground" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/coffee_category_btn"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_alignParentStart="true"
@@ -42,14 +42,14 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="282dp"
+        android:layout_marginTop="276dp"
         android:background="@color/colorPrimary"
         android:onClick="coffee"
         android:text="COFFEE"
         android:textColor="@color/colorBackground" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/snacks_category_btn"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_alignParentStart="true"
@@ -57,14 +57,14 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="214dp"
         android:background="@color/colorPrimary"
         android:onClick="snacks"
         android:text="Snacks"
         android:textColor="@color/colorBackground" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/sandwich_category_btn"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_alignParentStart="true"
@@ -72,7 +72,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="156dp"
+        android:layout_marginTop="151dp"
         android:background="@color/colorPrimary"
         android:onClick="sandwiches"
         android:text="Sandwiches"
@@ -81,7 +81,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="123dp"
+        android:layout_height="117dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="35dp" />
 
@@ -96,7 +96,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="7dp"
         android:text="Deals"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorBackground"
         android:textSize="20sp" />
 
 </RelativeLayout>

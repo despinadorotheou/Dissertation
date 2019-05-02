@@ -16,5 +16,6 @@
         android:layout_height="75dp"
         android:text="grapse]"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/colorBackground"
         android:textSize="13dp" />
 </LinearLayout>

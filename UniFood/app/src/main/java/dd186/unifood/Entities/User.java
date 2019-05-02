@@ -27,6 +27,12 @@ public class User {
     public User() {
     }
 
+    public User(int id, String name, String lastName) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+    }
+
     public int getId() {
         return id;
     }
@@ -71,12 +77,13 @@ public class User {
         List<Product> products = Main.products;
         List<Product> toRet =  new ArrayList<>();
         for (Integer i:favouriteProducts) {
-            for (Product p : products) {
-                if (p.getId() == i){
-                    toRet.add(p);
-                    break;
+            if (products!=null)
+                for (Product p : products) {
+                    if (p.getId() == i){
+                        toRet.add(p);
+                        break;
+                    }
                 }
-            }
         }
         return  toRet;
     }

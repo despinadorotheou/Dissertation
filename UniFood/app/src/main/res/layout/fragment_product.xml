@@ -80,7 +80,6 @@
         android:layout_marginLeft="97dp"
         android:layout_marginTop="49dp"
         android:backgroundTint="@color/colorBackground"
-        android:onClick="addToBasket"
         android:text="Add to the Basket"
         android:textColor="@color/colorPrimary" />
 
@@ -101,7 +100,6 @@
             android:layout_height="38dp"
             android:layout_weight="1"
             android:backgroundTint="@color/colorPrimaryLight"
-            android:onClick="decreaseInteger"
             android:text="-"
             android:textColor="@color/colorBackground" />
 
@@ -118,7 +116,6 @@
             android:layout_height="38dp"
             android:layout_weight="1"
             android:backgroundTint="@color/colorPrimaryLight"
-            android:onClick="increaseInteger"
             android:text="+"
             android:textColor="@color/colorBackground" />
 
@@ -129,12 +126,11 @@
         android:id="@+id/vegan_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="258dp"
-        android:layout_marginEnd="136dp"
-        android:layout_marginRight="136dp">
+        android:layout_marginStart="243dp"
+        android:layout_marginTop="47dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
             android:id="@+id/imageView3"
@@ -172,17 +168,16 @@
         android:id="@+id/vegetarian_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="255dp"
-        android:layout_marginEnd="117dp"
-        android:layout_marginRight="117dp">
+        android:layout_alignTop="@+id/product_img"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="235dp"
+        android:layout_marginTop="-3dp">
 
         <ImageView
             android:id="@+id/vegetarian_img"
             android:layout_width="67dp"
             android:layout_height="50dp"
+            android:layout_alignTop="@+id/vegetarian_layout"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"

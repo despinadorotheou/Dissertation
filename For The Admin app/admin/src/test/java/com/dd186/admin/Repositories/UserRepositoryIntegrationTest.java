@@ -26,7 +26,7 @@ public class UserRepositoryIntegrationTest {
     private UserRepository userRepository;
 
     @Test
-    public void whenFindById_thenReturnUser() {
+    public void testFindUserById() {
 
         // given
         User alex = new User("Alex", "Johnson", "aj123@student.le.ac.uk", "$2a$10$P6ENyTd74quDcQSsKiAqV.U3hcsvn.d/79pw3UyRvjLKCdechChyq");
@@ -43,7 +43,7 @@ public class UserRepositoryIntegrationTest {
     }
 
     @Test
-    public void whenFindByEmail_thenReturnUser() {
+    public void testFindUserByEmail() {
 
         // given
         User alex = new User("Alex", "Johnson", "aj123@student.le.ac.uk", "$2a$10$P6ENyTd74quDcQSsKiAqV.U3hcsvn.d/79pw3UyRvjLKCdechChyq");
@@ -59,22 +59,22 @@ public class UserRepositoryIntegrationTest {
     }
 
     @Test
-    public void saveUser() {
+    public void testSaveUser() {
 
         // given
         User alex = new User("Alex", "Johnson", "aj123@student.le.ac.uk", "$2a$10$P6ENyTd74quDcQSsKiAqV.U3hcsvn.d/79pw3UyRvjLKCdechChyq");
-        entityManager.persist(alex);
-        entityManager.flush();
+
 
         // when
-        User found = userRepository.findByEmail(alex.getEmail());
+        userRepository.save(alex);
 
         // then
+        User found = userRepository.findByEmail(alex.getEmail());
         assertNotNull(found);
     }
 
     @Test
-    public void deleteUser() {
+    public void testDeleteUser() {
 
         // given
         User alex = new User("Alex", "Johnson", "aj123@student.le.ac.uk", "$2a$10$P6ENyTd74quDcQSsKiAqV.U3hcsvn.d/79pw3UyRvjLKCdechChyq");

@@ -29,9 +29,11 @@ import dd186.unifood.Entities.User;
 import dd186.unifood.Main;
 import dd186.unifood.R;
 
+import static dd186.unifood.Main.products;
+
 public class SearchFragment extends Fragment {
 
-    List<Product> products = new ArrayList<>();
+
     List<Product> currentDisplayedProducts;
     User user ;
     EditText searchInput;
@@ -41,6 +43,7 @@ public class SearchFragment extends Fragment {
     int maxFilter = 10;
     boolean veganFilterApplied = false;
     boolean vegetarianFilterApplied = false;
+    List<Product> searchProducts;
 
     @Nullable
     @Override
@@ -51,10 +54,45 @@ public class SearchFragment extends Fragment {
         assert main != null;
         Bundle args = getArguments();
         assert args != null;
-        products = (List<Product>) args.getSerializable("products");
-        currentDisplayedProducts = products;
+        searchProducts = new ArrayList<>();
+        String filter = args.getString("filter");
+        switch (filter){
+            case "Drinks":
+                for (Product p : products) {
+                    if (p.getCategory().getCategory().equals("Drinks")) {
+                        searchProducts.add(p);
+                    }
+                }
+                break;
+            case "Snacks":
+                for (Product p : products) {
+                    if (p.getCategory().getCategory().equals("Snacks")) {
+                        searchProducts.add(p);
+                    }
+                }
+                break;
+            case "Sandwiches":
+                for (Product p : products) {
+                    if (p.getCategory().getCategory().equals("Sandwiches")) {
+                        searchProducts.add(p);
+                    }
+                }
+                break;
+            case "Coffee":
+                for (Product p : products) {
+                    if (p.getCategory().getCategory().equals("Coffee")) {
+                        searchProducts.add(p);
+                    }
+                }
+                break;
+            case "None":
+                searchProducts = products;
+                break;
+        }
+
+        currentDisplayedProducts = searchProducts;
         searchInput = rootView.findViewById(R.id.search_input);
-        gridView.setAdapter(new ProductAdapter(main,products));
+        gridView.setAdapter(new ProductAdapter(main, searchProducts));
         Spinner searchFilter = rootView.findViewById(R.id.spinner_filter);
         String[] items = new String[]{"Name", "Ingredients"};
         ArrayAdapter<String> adapter =  new ArrayAdapter<>(Objects.requireNonNull(this.getContext()),R.layout.spinner_item, items);
@@ -77,11 +115,11 @@ public class SearchFragment extends Fragment {
         Switch vegan = rootView.findViewById(R.id.vegan_switch);
         Switch vegetarian = rootView.findViewById(R.id.vegetaterian_switch);
         vegan.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            //list used to store the products that was displayed on the screen before sleekbar changes
+            //list used to store the products that was displayed on the screen before seekbar changes
             List<Product> result = new ArrayList<>();
             if (isChecked) {
                 veganFilterApplied = true;
-                for (Product p : products) {
+                for (Product p : searchProducts) {
                     if (p.getPreference().equals("Vegan")&& p.getPrice()<=maxFilter) {
                         result.add(p);
                     }
@@ -89,7 +127,7 @@ public class SearchFragment extends Fragment {
                 vegetarian.setClickable(false);
             } else {
                 veganFilterApplied = false;
-                for (Product p : products) {
+                for (Product p : searchProducts) {
                     if (p.getPrice()<=maxFilter) {
                         result.add(p);
                     }
@@ -100,11 +138,11 @@ public class SearchFragment extends Fragment {
             gridView.setAdapter(new ProductAdapter(main, result));
         });
         vegetarian.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            //list used to store the products that was displayed on the screen before sleekbar changes
+            //list used to store the products that was displayed on the screen before seekbar changes
             List<Product> result = new ArrayList<>();
             if (isChecked) {
                 vegetarianFilterApplied = true;
-                for (Product p : products) {
+                for (Product p : searchProducts) {
                     if ((p.getPreference().equals("Vegetarian") || p.getPreference().equals("Vegan"))&& p.getPrice()<=maxFilter) {
                         result.add(p);
                     }
@@ -113,7 +151,7 @@ public class SearchFragment extends Fragment {
             } else {
                 vegetarianFilterApplied = false;
                 vegan.setClickable(true);
-                for (Product p : products) {
+                for (Product p : searchProducts) {
                     if (p.getPrice()<=maxFilter) {
                         result.add(p);
                     }
@@ -142,7 +180,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 List<Product> result = new ArrayList<>();
-                for (Product p : products) {
+                for (Product p : searchProducts) {
                     if (veganFilterApplied) {
                         if (p.getPrice()<=progressNum && p.getPreference().equals("Vegan")) {
                             result.add(p);
@@ -172,7 +210,6 @@ public class SearchFragment extends Fragment {
             public void beforeTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 //do nothing
             }
-
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 List<Product> result = new ArrayList<>();

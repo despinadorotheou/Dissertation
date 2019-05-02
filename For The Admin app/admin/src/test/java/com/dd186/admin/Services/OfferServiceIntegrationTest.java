@@ -35,7 +35,7 @@ public class OfferServiceIntegrationTest {
     @Test
     public void testFindOfferById() {
         // Setup
-        Mockito.when(offerServiceUnderTest.findById(anyInt()))
+        Mockito.when(mockOfferRepository.findById(anyInt()))
                 .thenReturn(offer);
         final int id = 1;
 
@@ -49,7 +49,7 @@ public class OfferServiceIntegrationTest {
     @Test
     public void testSaveOffer() {
         // Setup
-        Mockito.when(offerServiceUnderTest.findById(anyInt()))
+        Mockito.when(mockOfferRepository.findById(anyInt()))
                 .thenReturn(null).thenReturn(offer);
         final int id = 1;
 

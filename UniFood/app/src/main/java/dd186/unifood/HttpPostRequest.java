@@ -26,12 +26,7 @@ public class HttpPostRequest extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            Order order = objectMapper.readValue(s, new TypeReference<Order>() {});
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
 

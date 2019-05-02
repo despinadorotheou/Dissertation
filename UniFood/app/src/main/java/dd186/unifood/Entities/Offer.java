@@ -26,6 +26,11 @@ public class Offer {
         this.value = value;
     }
 
+    public Offer(String description, double value) {
+        this.description = description;
+        this.value = value;
+    }
+
     public int getId() {
         return id;
     }
@@ -43,18 +48,18 @@ public class Offer {
     }
 
     public List<Product> getProductsInOffer() {
-        List<Product> favProducts = new ArrayList<>();
+        List<Product> offerProducts = new ArrayList<>();
         for (String s:productsInOffer.keySet()) {
             for (int i = 0; i< productsInOffer.get(s); i++) {
                 for (Product p : Main.products) {
                     if (Integer.parseInt(s) == p.getId()) {
-                        favProducts.add(p);
+                        offerProducts.add(p);
                         break;
                     }
                 }
             }
         }
-        return favProducts;
+        return offerProducts;
     }
 
     public void setProductsInOffer(HashMap<String, Integer> productsInOffer) {

@@ -53,9 +53,14 @@ public class ProductAdapterVertical extends BaseAdapter {
             ImageView image = new ImageView(context);
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(100,100);
             image.setLayoutParams(params);
-            byte[] img = Base64.decode(product.getImage(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
-            image.setImageBitmap(bitmap);
+            if (product.getImage() != null){
+                byte[] img = Base64.decode(product.getImage(), Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0,img.length);
+                image.setImageBitmap(bitmap);
+
+            } else {
+                image.setImageResource(R.drawable.ic_empty_image);
+            }
             view.addView(image);
             LinearLayout view2 =  new LinearLayout(context);
             view2.setOrientation(LinearLayout.VERTICAL);

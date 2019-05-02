@@ -24,7 +24,7 @@ public class OfferRepositoryIntegrationTest {
     private OfferRepository offerRepository;
 
     @Test
-    public void whenFindById_thenReturnTheOffer() {
+    public void testFindOfferById() {
 
         // given
         Offer offer = new Offer("Offer 1", 2.00);
@@ -40,22 +40,21 @@ public class OfferRepositoryIntegrationTest {
     }
 
     @Test
-    public void saveOffer() {
+    public void testSaveOffer() {
 
         // given
         Offer offer = new Offer("Offer 1", 2.00);
-        int id = entityManager.persistAndGetId(offer, Integer.class);
-        entityManager.flush();
 
         // when
-        Offer found = offerRepository.findById(id);
+        offerRepository.save(offer);
 
         // then
+        Offer found = offerRepository.findById(offer.getId());
         assertNotNull(found);
     }
 
     @Test
-    public void deleteOffer() {
+    public void testDeleteOffer() {
 
         // given
         Offer offer = new Offer("Offer 1", 2.00);

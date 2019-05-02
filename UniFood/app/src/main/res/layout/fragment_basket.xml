@@ -17,7 +17,6 @@
         android:layout_marginLeft="146dp"
         android:layout_marginTop="94dp"
         android:backgroundTint="@color/colorBackground"
-        android:onClick="confirmChanges"
         android:text="Confirm"
         android:textColor="@color/colorPrimary"
         android:visibility="gone" />
@@ -149,7 +148,6 @@
         android:layout_marginLeft="87dp"
         android:layout_marginTop="93dp"
         android:backgroundTint="@color/colorBackground"
-        android:onClick="payByCardPage"
         android:text="Pay By Card"
         android:textColor="@color/colorPrimary" />
 
@@ -163,7 +161,6 @@
         android:layout_toEndOf="@+id/card_checkout_btn"
         android:layout_toRightOf="@+id/card_checkout_btn"
         android:backgroundTint="@color/colorBackground"
-        android:onClick="payInCash"
         android:text="Pay by Cash"
         android:textColor="@color/colorPrimary" />
 

@@ -24,7 +24,7 @@ public class DealRepositoryIntegrationTest {
     private DealRepository dealRepository;
 
     @Test
-    public void whenFindById_thenReturnTheDeal() {
+    public void testFindDealById() {
 
         // given
         Deal deal = new Deal("Deal 1", 2.00);
@@ -40,22 +40,21 @@ public class DealRepositoryIntegrationTest {
     }
 
     @Test
-    public void saveDeal() {
+    public void testSaveDeal() {
 
         // given
         Deal deal = new Deal("Deal 1", 2.00);
-        int id = entityManager.persistAndGetId(deal, Integer.class);
-        entityManager.flush();
+
 
         // when
-        Deal found = dealRepository.findById(id);
-
+        dealRepository.save(deal);
         // then
+        Deal found = dealRepository.findById(deal.getId());
         assertNotNull(found);
     }
 
     @Test
-    public void deleteDeal() {
+    public void testDeleteDeal() {
 
         // given
         Deal deal = new Deal("Deal 1", 2.00);

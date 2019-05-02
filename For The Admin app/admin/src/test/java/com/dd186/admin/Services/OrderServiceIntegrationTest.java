@@ -33,9 +33,9 @@ public class OrderServiceIntegrationTest {
     }
 
     @Test
-    public void testFindOfferById() {
+    public void testFindOrderById() {
         // Setup
-        Mockito.when(orderServiceUnderTest.findById(anyInt()))
+        Mockito.when(mockOrderRepository.findById(anyInt()))
                 .thenReturn(order);
         final int id = 1;
 
@@ -47,9 +47,9 @@ public class OrderServiceIntegrationTest {
     }
 
     @Test
-    public void testSaveOffer() {
+    public void testSaveOrder() {
         // Setup
-        Mockito.when(orderServiceUnderTest.findById(anyInt()))
+        Mockito.when(mockOrderRepository.findById(anyInt()))
                 .thenReturn(null).thenReturn(order);
         final int id = 1;
 
@@ -65,9 +65,9 @@ public class OrderServiceIntegrationTest {
     }
 
     @Test
-    public void testDeleteOffer() {
+    public void testDeleteOrder() {
         // Setup
-        Mockito.when(orderServiceUnderTest.findById(anyInt()))
+        Mockito.when(mockOrderRepository.findById(anyInt()))
                 .thenReturn(order).thenReturn(null);
 
         // Run the test
@@ -83,7 +83,7 @@ public class OrderServiceIntegrationTest {
     }
 
     @Test
-    public void testFindAllOffers() {
+    public void testFindAllOrders() {
         // Setup
         Order order1 = new Order(3.0, 1);
         List<Order> deals = new ArrayList<>();

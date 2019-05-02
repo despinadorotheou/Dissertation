@@ -25,7 +25,7 @@ public class RoleRepositoryIntegrationTest {
     private RoleRepository roleRepository;
 
     @Test
-    public void whenFindByRole_thenReturnTheRole() {
+    public void testFindRoleByRoleName() {
 
         // given
         Role newRole = new Role("Developer");
@@ -41,22 +41,21 @@ public class RoleRepositoryIntegrationTest {
     }
 
     @Test
-    public void saveRole() {
+    public void testSaveRole() {
 
         // given
         Role newRole = new Role("Developer");
-        entityManager.persist(newRole);
-        entityManager.flush();
 
         // when
-        Role found = roleRepository.findByRole(newRole.getRole());
+        roleRepository.save(newRole);
 
         // then
+        Role found = roleRepository.findByRole(newRole.getRole());
         assertNotNull(found);
     }
 
     @Test
-    public void deleteRole() {
+    public void testDeleteRole() {
 
         // given
         Role newRole = new Role("Developer");

@@ -64,7 +64,7 @@ public class OfferControllerIntegrationTest {
 
     @Test
     @WithMockUser(value = "dd186@student.le.ac.uk")
-    public void testAddNewProduct()
+    public void testAddNewOffer()
             throws Exception {
 
         File file = new File("src/test/java/com/dd186/admin/images/test_image.jpg");
@@ -92,7 +92,7 @@ public class OfferControllerIntegrationTest {
 
     @Test
     @WithMockUser(value = "dd186@student.le.ac.uk")
-    public void testAddProduct()
+    public void testAddOffer()
             throws Exception {
         Offer offer = new Offer("offer 1", 1.00);
         offer.setId(1);
