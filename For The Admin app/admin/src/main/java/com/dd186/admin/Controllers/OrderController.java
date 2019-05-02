@@ -95,13 +95,22 @@ public class OrderController {
         notification.put("title", "UniFood");
         notification.put("body", msg );
 
+        JSONObject data = new JSONObject();
+        data.put("Key-1", "Unifood Data 1");
+        data.put("Key-2", "Unifood Data 2");
+
         body.put("notification", notification);
+        body.put("data", data);
 
         /*
          {
          "notification": {
          "title": "UniFood",
          "body": "Happy Message!"
+         },
+         "data": {
+         "Key-1": "JSA Data 1",
+         "Key-2": "JSA Data 2"
          },
          "to": "/topics/userID",
          "priority": "high"
