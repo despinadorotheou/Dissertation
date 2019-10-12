@@ -1,3 +1,11 @@
+Description
+
+The canteen of the university needs an application which will be used by students and staff to order food fast and easy while they are in the campus. By using the application, the users should be able to search for a meal and purchase it. Therefore, that application would help the users save some time of the time they usually spent in large queues during their lunch break. 
+I have developed an Android application that serve this purpose. The application is designed in such a way to provide users with the ability to search for product through various ways such as searching for daily offers and deals, as well as an extremely fast checkout. 
+Furthermore, I have developed a web application that administrators can use to modify the database’s data without any MySQL, or Computer Science knowledge, in general, and send said data to the Android application using the RESTful API. Moreover, the web application provides the administrators with the ability to handle all the upcoming orders made by the Android application’s users and notify them about their order’s status. 
+Due to the fact that the project is large and consists of two very different applications, the implementation challenges were many. Those challenges needed be tackled and solved fast using a wide variety of different techniques.
+
+
 Instructions
 
 Software Requirements 
